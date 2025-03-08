@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.dto.ProductDto;
+import com.scms.scms_be.model.dto.ProductDto;
 import com.scms.scms_be.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,23 +26,23 @@ public class ProductController {
     @Autowired
     private final ProductService productService;
 
-    @PostMapping("/admin/product")
+    @PostMapping("/scms/add-product")
     public ResponseEntity<ProductDto> addProduct(@ModelAttribute ProductDto productDto) throws IOException {
        
         return ResponseEntity.ok(productService.addProduct(productDto));
     }
 
-    @GetMapping("/auth/get-all-product")
+    @GetMapping("/get-all-product")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
         return ResponseEntity.ok(productService.getAllProduct());
     }
     
-    @GetMapping("/auth/get-product/{productId}")
+    @GetMapping("/get-product/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Integer productId) {
         return ResponseEntity.ok(productService.getProductById(productId));
     }
 
-    @PutMapping("/admin/update-product/{productId}")
+    @PutMapping("/scms/update-product/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Integer productId,
                                                  @RequestBody ProductDto newProduct) throws IOException {
         return ResponseEntity.ok(productService.updateProduct(productId, newProduct));

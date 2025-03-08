@@ -1,4 +1,4 @@
-package com.scms.scms_be.dto;
+package com.scms.scms_be.model.dto;
 
 import lombok.*;
 

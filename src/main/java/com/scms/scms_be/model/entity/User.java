@@ -1,4 +1,4 @@
-package com.scms.scms_be.entity;
+package com.scms.scms_be.model.entity;
 
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "account")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,9 +26,9 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountId;
+    private Long userId;
 
-    private String employeeId;
+    private Long employeeId;
     private String username;
     private String email;
     private String password;

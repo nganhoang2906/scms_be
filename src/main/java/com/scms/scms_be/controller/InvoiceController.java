@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.entity.Invoice;
+import com.scms.scms_be.model.entity.Invoice;
 import com.scms.scms_be.service.InvoiceService;
 
 import lombok.RequiredArgsConstructor;

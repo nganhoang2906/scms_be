@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import com.scms.scms_be.dto.ProductItem;
-import com.scms.scms_be.entity.Invoice;
+import com.scms.scms_be.model.dto.ProductItem;
+import com.scms.scms_be.model.entity.Invoice;
 import com.scms.scms_be.repository.InvoiceRepository;
 
 @Service

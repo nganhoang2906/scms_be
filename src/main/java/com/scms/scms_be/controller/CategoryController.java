@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.dto.CategoryDto;
-import com.scms.scms_be.entity.Category;
+import com.scms.scms_be.model.dto.CategoryDto;
+import com.scms.scms_be.model.entity.Category;
 import com.scms.scms_be.service.CategoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,27 +27,27 @@ public class CategoryController {
     @Autowired
     private final CategoryService categoryService;
     
-    @PostMapping("/admin/category")
+    @PostMapping("/sysad/add-category")
     public ResponseEntity<Category> createCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
     }
 
-    @GetMapping("/auth/get-all-category")
+    @GetMapping("/get-all-category")
     public ResponseEntity<List<Category>> getAllCategory() {
         return ResponseEntity.ok(categoryService.getAllCategory());
     }
-    @GetMapping("/auth/get-category/{categoryId}")
+    @GetMapping("/get-category/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Integer categoryId) {
         return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
     }
     
-    @PutMapping("/admin/update-category/{categoryId}")
+    @PutMapping("/sysad/update-category/{categoryId}")
     public ResponseEntity<Category> updateCategory(@PathVariable Integer categoryId,
                                                  @RequestBody CategoryDto  categoryDto) {
         return ResponseEntity.ok(categoryService.updateCategory(categoryId, categoryDto));
     }
 
-    @DeleteMapping ("/admin/delete-category/{categoryId}")
+    @DeleteMapping ("/sysad/delete-category/{categoryId}")
     public ResponseEntity<CategoryDto> deleteCategory(@PathVariable Integer categoryId) {
         return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
     }

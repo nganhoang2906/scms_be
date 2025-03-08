@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.scms.scms_be.dto.CategoryDto;
-import com.scms.scms_be.entity.Category;
+import com.scms.scms_be.model.dto.CategoryDto;
+import com.scms.scms_be.model.entity.Category;
 import com.scms.scms_be.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;

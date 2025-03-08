@@ -1,4 +1,4 @@
-package com.scms.scms_be.entity;
+package com.scms.scms_be.model.entity;
 
 
 import jakarta.persistence.*;

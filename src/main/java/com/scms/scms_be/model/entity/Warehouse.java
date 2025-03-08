@@ -1,31 +1,33 @@
-package com.scms.scms_be.entity;
-
+package com.scms.scms_be.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
+@Table(name = "warehouse")
 @Data
-@Table(name = "partner")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Partner {
+public class Warehouse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private Long companyId;
-    private String partnerCompanyId;
-    private String relationship;
+    private Long warehouseId;
 
-    @Temporal(TemporalType.DATE)
-    private String relationshipStartDate;
+    private Long companyId;
+    private String warehouseCode;
+    private String warehouseName;
+    private String address;
+    private String description;
+    private double maxCapacity;
+    private double usedSpace;
+    private String warehouseType;
+    private String status;
 }

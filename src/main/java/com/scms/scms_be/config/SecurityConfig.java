@@ -33,10 +33,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**", "/public/**").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/user/**").hasAnyAuthority("USER")
-                        .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
+                .authorizeHttpRequests(request-> request.requestMatchers("/**", "/public/**").permitAll()
+                        .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
+                        .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN","S-ADMIN")
+                        .requestMatchers("/**").hasAnyAuthority("USER","C-ADMIN","S-ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

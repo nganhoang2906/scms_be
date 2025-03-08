@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.scms.scms_be.dto.ProductDto;
-import com.scms.scms_be.entity.Category;
-import com.scms.scms_be.entity.Product;
+import com.scms.scms_be.model.dto.ProductDto;
+import com.scms.scms_be.model.entity.Category;
+import com.scms.scms_be.model.entity.Product;
 import com.scms.scms_be.repository.CategoryRepository;
 import com.scms.scms_be.repository.ProductRepository;
 

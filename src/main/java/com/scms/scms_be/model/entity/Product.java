@@ -1,10 +1,10 @@
-package com.scms.scms_be.entity;
+package com.scms.scms_be.model.entity;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scms.scms_be.dto.ProductDto;
+import com.scms.scms_be.model.dto.ProductDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

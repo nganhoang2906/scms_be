@@ -1,8 +1,8 @@
-package com.scms.scms_be.dto;
+package com.scms.scms_be.model.dto;
 
 import java.util.List;
 
-import com.scms.scms_be.entity.User;
+import com.scms.scms_be.model.entity.User;
 
 import lombok.Data;
 
@@ -19,7 +19,6 @@ public class UserDto {
     private Long employeeId;
     private String username;
     private String email;
-    private String password;
     private String role;
     private String status;
     private String otp;

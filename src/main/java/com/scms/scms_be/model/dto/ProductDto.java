@@ -1,8 +1,8 @@
-package com.scms.scms_be.dto;
+package com.scms.scms_be.model.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.scms.scms_be.entity.Product;
+import com.scms.scms_be.model.entity.Product;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.scms.scms_be.entity;
+package com.scms.scms_be.model.entity;
 
 import java.util.Date;
 
@@ -25,7 +25,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long  employeeId;
     
-    private int companyId;
+    private Long companyId;
     private String employeeCode;
     private String employeeName;
     private String position;
@@ -37,6 +37,8 @@ public class Employee {
     private String gender;
     private String nationalId;
     private String address;
+    private String email;
+    private String phoneNumber;
 
     @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -46,4 +48,6 @@ public class Employee {
     private byte[] avatar;
 
     private String status;
+
+   
 }
