@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.validation.constraints.Email;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +24,6 @@ public class RegisterRequest {
     private String country;
     private String phoneNumber;
     private String companyCode;
-    private String employeeCode;
     private String position;
 
 }

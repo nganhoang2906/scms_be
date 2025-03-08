@@ -88,7 +88,6 @@ public class AuthService {
         // Tạo Employee cho User
         Employee employee = new Employee();
         employee.setCompanyId(company.getCompanyId());
-        employee.setEmployeeCode(registrationRequest.getEmployeeCode()); // Mã nhân viên duy nhất
         employee.setEmployeeName(registrationRequest.getUsername());
         employee.setEmail(registrationRequest.getEmail());
         employee.setPhoneNumber(registrationRequest.getPhoneNumber());
