@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.scms.scms_be.service.UserDetailService;
+import com.scms.scms_be.service.General.UserDetailService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -2,7 +2,7 @@ package com.scms.scms_be.model.dto;
 
 import java.util.List;
 
-import com.scms.scms_be.model.entity.User;
+import com.scms.scms_be.model.entity.General.User;
 
 import lombok.Data;
 
