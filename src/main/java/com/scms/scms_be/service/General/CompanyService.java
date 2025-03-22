@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.entity.General.Company;
-import com.scms.scms_be.model.entity.General.User;
 import com.scms.scms_be.repository.General.CompanyRepository;
-import com.scms.scms_be.repository.General.UserRepository;
 
 @Service
 public class CompanyService {
@@ -64,12 +62,4 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public void deleteCompany(Long companyId) {
-        // Kiểm tra công ty có tồn tại không
-        Company company = companyRepository.findById(companyId)
-            .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
-
-        //   Xóa công ty
-        companyRepository.delete(company);
-        }
 }

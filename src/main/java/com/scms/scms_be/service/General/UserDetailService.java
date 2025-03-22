@@ -17,10 +17,14 @@ public class UserDetailService implements UserDetailsService {
     private UserRepository userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepo.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy User với email: " + email));
+    public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
+        System.out.println("DEBUG: Tìm kiếm User với email hoặc username: " + emailOrUsername);
+
+        return userRepo.findByEmail(emailOrUsername)
+                .or(() -> userRepo.findByUsername(emailOrUsername)) // Tìm cả username
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy User với email hoặc username: " + emailOrUsername));
     }
+
 
 
 }

@@ -40,6 +40,25 @@ public class UserService {
         }
     }
   
+    public UserDto getUserByEmployeeId(Long employeeId){
+        UserDto response = new UserDto();
+        try {
+            List<User> result = usersRepo.findByEmployeeEmployeeId(employeeId);
+            if (!result.isEmpty()) {
+                response.setOurUsersList(result);
+                response.setStatusCode(200);
+                response.setMessage("Successful");
+            } else {
+                response.setStatusCode(404);
+                response.setMessage("Not found user");
+            }
+            return response;
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setError("Error occurred " + e.getMessage());
+            return response;
+        }
+    }
 
     public UserDto getUserById(long id) {
         UserDto response = new UserDto();
@@ -53,26 +72,6 @@ public class UserService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setError("Error occurred " + e.getMessage());
-            return response;
-        }
-    }
-
-    public UserDto deleteUser(Long userid) {
-        UserDto response = new UserDto();
-        try {
-            Optional<User> userOptional = usersRepo.findById(userid);
-            if (userOptional.isPresent()) {
-                usersRepo.deleteById(userid);
-                response.setStatusCode(200);
-                response.setMessage("Successful");
-            } else {
-                response.setStatusCode(404);
-                response.setMessage("Not found user for delete");
-            }
-            return response;
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setError("Error to delete user " + e.getMessage());
             return response;
         }
     }

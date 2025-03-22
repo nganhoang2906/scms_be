@@ -32,14 +32,14 @@ public class DepartmentController {
     }
 
     //   Lấy danh sách phòng ban trong công ty 
-    @GetMapping("/comad/all-department-in-company")
-    public ResponseEntity<List<Department>> getAllDepartment(@RequestParam Long companyId) {
+    @GetMapping("/comad/all-department-in-com/{companyId}")
+    public ResponseEntity<List<Department>> getAllDepartment(@PathVariable Long companyId) {
         return ResponseEntity.ok(departmentService.getAllDepartmentInCompany(companyId));
     }
 
-    @GetMapping("/sysad/all-department")
-    public ResponseEntity<List<Department>> getAllDepartment() {
-        return ResponseEntity.ok(departmentService.getAllDepartment());
+    @GetMapping("/comad/get-department/{departmentId}")
+    public ResponseEntity<Department> getDepartmentById(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(departmentService.getDepartmentById( departmentId));
     }
 
     //   Cập nhật phòng ban 
@@ -50,10 +50,5 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.updateDepartment( departmentId, updatedDept));
     }
 
-    //  Xóa phòng ban (chỉ S-Admin)
-    @DeleteMapping("/sysad/delete-department/{departmentId}")
-    public ResponseEntity<String> deleteDepartment( @PathVariable Long departmentId  ) {
-        departmentService.deleteDepartment( departmentId);
-        return ResponseEntity.ok("Phòng ban đã được xóa!");
-    }
+   
 }

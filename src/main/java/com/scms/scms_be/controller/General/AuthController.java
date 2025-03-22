@@ -28,7 +28,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.registerCompany(request));
     }
 
-
     @PostMapping("/otp-register")
     public ResponseEntity<UserDto> verifyOtp(@RequestBody VerifyOtpRequest request) {
         return ResponseEntity.ok(authService.verifyOtp(request));

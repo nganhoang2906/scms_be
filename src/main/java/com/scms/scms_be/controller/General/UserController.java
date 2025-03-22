@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,22 +28,22 @@ public class UserController {
     public ResponseEntity<UserDto> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-    
 
+    @GetMapping("/comad/get-user-by-employeeId/{employeeId}")
+    public ResponseEntity<UserDto> getUserByEmployeeId(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
+    }
+    
     @GetMapping("/comad/get-user/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping("/comad/update/{userId}")
+    @PutMapping("/update-user/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody User newUser) {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
-    @DeleteMapping("/sysad/delete/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.deleteUser(userId));
-    }
 
     @GetMapping("/get-profile")
     public ResponseEntity<UserDto> getProfile() {

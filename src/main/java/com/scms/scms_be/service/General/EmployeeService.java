@@ -31,7 +31,7 @@ public class EmployeeService {
     @Autowired
     private DepartmentRepository departmentRepo;
 
-    // ✅ Tạo tài khoản nhân viên + User
+    // Tạo tài khoản nhân viên + User
     public Employee createEmployee(EmployeeRequest request) {
     
          if (userRepo.findByEmail(request.getEmail()).isPresent()) {
@@ -41,17 +41,17 @@ public class EmployeeService {
         if (employeeRepo.findByEmail(request.getEmail()).isPresent()) {
             throw new CustomException("Email đã được sử dụng trong Employee!", HttpStatus.BAD_REQUEST);
         }
-        // ✅ Kiểm tra `employeeCode`
+        // Kiểm tra `employeeCode`
         if (employeeRepo.findByEmployeeCode(request.getEmployeeCode()).isPresent()) {
             throw new CustomException("Mã nhân viên đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        // ✅ Kiểm tra `identityNumber`
+        // Kiểm tra `identityNumber`
         if (employeeRepo.findByIdentityNumber(request.getIdentityNumber()).isPresent()) {
             throw new CustomException("Số CCCD/CMND đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        // ✅ Kiểm tra `username` trong `User`
+        // Kiểm tra `username` trong `User`
         if (userRepo.findByUsername(request.getUsername()).isPresent()) {
             throw new CustomException("Tên đăng nhập đã được sử dụng!", HttpStatus.BAD_REQUEST);
         }
@@ -60,7 +60,7 @@ public class EmployeeService {
           Department department = departmentRepo.findById(request.getDepartmentId())
                 .orElseThrow(() -> new CustomException("Phòng ban không tồn tại!", HttpStatus.NOT_FOUND));
 
-            // ✅ Tạo Employee
+            // Tạo Employee
             Employee employee = new Employee();
             employee.setEmployeeCode(request.getEmployeeCode());
             employee.setEmployeeName(request.getEmployeeName());
@@ -77,7 +77,7 @@ public class EmployeeService {
 
             Employee savedEmployee = employeeRepo.save(employee);
 
-            // ✅ Tạo User liên kết với Employee
+            // Tạo User liên kết với Employee
             User newUser = new User(
                     savedEmployee,
                     request.getEmail(),
@@ -94,7 +94,7 @@ public class EmployeeService {
             return savedEmployee;
     }
 
-    // ✅ Lấy danh sách tất cả nhân viên
+    // Lấy danh sách tất cả nhân viên
     public List<Employee> getAllEmployeesInCompany(Long companyId) {
         return employeeRepo.findByDepartmentCompanyCompanyId(companyId);
     }
@@ -103,18 +103,18 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    // ✅ Lấy thông tin nhân viên theo ID
+    // Lấy thông tin nhân viên theo ID
     public Employee getEmployeeById(Long employeeId) {
         return employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
     }
 
-    // ✅ Cập nhật thông tin nhân viên (bất kỳ ai cũng có thể cập nhật)
+    // Cập nhật thông tin nhân viên (bất kỳ ai cũng có thể cập nhật)
     public Employee updateEmployee(Long employeeId, Employee updatedEmployee) {
         Employee existingEmployee = employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
 
-        // ✅ Gán trực tiếp giá trị từ `updatedEmployee`
+        // Gán trực tiếp giá trị từ `updatedEmployee`
         existingEmployee.setEmployeeName(updatedEmployee.getEmployeeName());
         existingEmployee.setPosition(updatedEmployee.getPosition());
         existingEmployee.setGender(updatedEmployee.getGender());
@@ -130,11 +130,5 @@ public class EmployeeService {
         return employeeRepo.save(existingEmployee);
     }
 
-    // ✅ Xóa nhân viên (bất kỳ ai cũng có thể xóa)
-    public void deleteEmployee(Long employeeId) {
-        Employee employee = employeeRepo.findById(employeeId)
-                .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
-
-        employeeRepo.delete(employee);
-    }
+   
 }

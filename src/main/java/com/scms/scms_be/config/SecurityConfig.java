@@ -34,11 +34,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/**", "/public/**").permitAll()
+                .authorizeHttpRequests(request-> request
                         .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
-                        .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN","S-ADMIN")
-                        .requestMatchers("/**").hasAnyAuthority("USER","C-ADMIN","S-ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
+                        .requestMatchers("/comsys/**").hasAnyAuthority("C-A-ADMIN","S-ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("USER","C-ADMIN")
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()   )
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthFilter, UsernamePasswordAuthenticationFilter.class

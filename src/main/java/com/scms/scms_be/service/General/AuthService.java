@@ -285,6 +285,12 @@ public class AuthService {
                 return response;
             }
 
+            if (!users.getStatus().equals("Active")) {
+                response.setStatusCode(403);
+                response.setMessage("Tài khoản đã bị khóa.");
+                return response;
+            }
+
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
                             loginRequest.getPassword()));
