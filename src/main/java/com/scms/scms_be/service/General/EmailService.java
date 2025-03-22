@@ -18,9 +18,9 @@ public class EmailService {
             message.setSubject("Mã OTP của bạn");
             message.setText("Mã OTP của bạn là: " + otp + ". Vui lòng nhập mã này để xác thực tài khoản.");
             mailSender.send(message);
-            System.out.println("  Email đã được gửi thành công đến: " + to);
+            System.out.println(" Email đã được gửi thành công đến: " + to);
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi gửi email: " + e.getMessage());
+            System.err.println(" Lỗi khi gửi email: " + e.getMessage());
         }
     }
 }

@@ -20,7 +20,6 @@ public class ManufactureLineService {
     @Autowired
     private ManufacturePlantRepository plantRepo;
 
-    // Tạo ManufactureLine
     public ManufactureLine createLine(Long plantId, ManufactureLine line) {
         ManufacturePlant plant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
@@ -33,18 +32,15 @@ public class ManufactureLineService {
         return lineRepo.save(line);
     }
 
-    // Lấy tất cả ManufactureLine của nhà máy
     public List<ManufactureLine> getAllLinesInPlant(Long plantId) {
         return lineRepo.findByPlantPlantId(plantId);
     }
 
-    // Lấy ManufactureLine theo ID
     public ManufactureLine getLineById(Long lineId) {
         return lineRepo.findById(lineId)
                 .orElseThrow(() -> new CustomException("Dây chuyền không tồn tại!", HttpStatus.NOT_FOUND));
     }
 
-    // Cập nhật ManufactureLine
     public ManufactureLine updateLine(Long lineId, ManufactureLine updatedLine) {
         ManufactureLine existingLine = lineRepo.findById(lineId)
                 .orElseThrow(() -> new CustomException("Dây chuyền không tồn tại!", HttpStatus.NOT_FOUND));

@@ -30,12 +30,12 @@ public class ManufacturePlantController {
         return ResponseEntity.ok(plantService.createPlant(companyId, plant));
     }
 
-    @GetMapping("/comad/mf-plant-in-com/{companyId}")
+    @GetMapping("/user/mf-plant-in-com/{companyId}")
     public ResponseEntity<List<ManufacturePlant>> getAllPlants(@PathVariable Long companyId) {
         return ResponseEntity.ok(plantService.getAllPlantsInCompany(companyId));
     }
 
-    @GetMapping("/comad/mf-plant/{plantId}")
+    @GetMapping("/user/mf-plant/{plantId}")
     public ResponseEntity<ManufacturePlant> getPlantById(@PathVariable Long plantId) {
         return ResponseEntity.ok(plantService.getPlantById(plantId));
     }

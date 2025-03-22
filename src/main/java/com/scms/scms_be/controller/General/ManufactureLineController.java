@@ -2,6 +2,9 @@ package com.scms.scms_be.controller.General;
 
 import com.scms.scms_be.model.entity.General.ManufactureLine;
 import com.scms.scms_be.service.General.ManufactureLineService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequiredArgsConstructor
 public class ManufactureLineController {
 
     @Autowired
@@ -24,13 +27,13 @@ public class ManufactureLineController {
     }
 
     // Lấy tất cả ManufactureLine của một nhà máy
-    @GetMapping("/comad/all-mf-line-in-plant/{plantId}")
+    @GetMapping("/user/all-mf-line-in-plant/{plantId}")
     public ResponseEntity<List<ManufactureLine>> getAllLines(@PathVariable Long plantId) {
         return ResponseEntity.ok(lineService.getAllLinesInPlant(plantId));
     }
 
     // Lấy ManufactureLine theo ID
-    @GetMapping("/comad/get-mf-line/{lineId}")
+    @GetMapping("/user/get-mf-line/{lineId}")
     public ResponseEntity<ManufactureLine> getLineById(@PathVariable Long lineId) {
         return ResponseEntity.ok(lineService.getLineById(lineId));
     }

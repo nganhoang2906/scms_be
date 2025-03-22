@@ -20,7 +20,6 @@ public class ManufacturePlantService {
     @Autowired
     private CompanyRepository companyRepo;
 
-    // Tạo ManufacturePlant
     public ManufacturePlant createPlant(Long companyId, ManufacturePlant plant) {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
@@ -33,18 +32,15 @@ public class ManufacturePlantService {
         return plantRepo.save(plant);
     }
 
-    // Lấy tất cả ManufacturePlant của công ty
     public List<ManufacturePlant> getAllPlantsInCompany(Long companyId) {
         return plantRepo.findByCompanyCompanyId(companyId);
     }
 
-    // Lấy ManufacturePlant theo ID
     public ManufacturePlant getPlantById(Long plantId) {
         return plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
     }
 
-    // Cập nhật ManufacturePlant
     public ManufacturePlant updatePlant(Long plantId, ManufacturePlant updatedPlant) {
         ManufacturePlant existingPlant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));

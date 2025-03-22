@@ -11,10 +11,8 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.request.DepartmentRequest;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Department;
-import com.scms.scms_be.model.entity.General.Employee;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.DepartmentRepository;
-import com.scms.scms_be.repository.General.EmployeeRepository;
 
 @Service
 public class DepartmentService {

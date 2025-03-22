@@ -31,7 +31,6 @@ public class EmployeeService {
     @Autowired
     private DepartmentRepository departmentRepo;
 
-    // Tạo tài khoản nhân viên + User
     public Employee createEmployee(EmployeeRequest request) {
     
          if (userRepo.findByEmail(request.getEmail()).isPresent()) {
@@ -94,7 +93,6 @@ public class EmployeeService {
             return savedEmployee;
     }
 
-    // Lấy danh sách tất cả nhân viên
     public List<Employee> getAllEmployeesInCompany(Long companyId) {
         return employeeRepo.findByDepartmentCompanyCompanyId(companyId);
     }
@@ -103,7 +101,6 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    // Lấy thông tin nhân viên theo ID
     public Employee getEmployeeById(Long employeeId) {
         return employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
