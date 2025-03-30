@@ -43,4 +43,8 @@ public class Employee {
     private byte[] avatar;
 
     private String status;
+    
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private User user;
+    
 }

@@ -127,5 +127,12 @@ public class EmployeeService {
         return employeeRepo.save(existingEmployee);
     }
 
+    public boolean deleteEmployeeById(Long id) {
+        if (employeeRepo.existsById(id)) {
+            employeeRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
    
 }

@@ -18,14 +18,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.scms.scms_be.model.dto.ProductItem;
-import com.scms.scms_be.model.entity.Invoice;
-import com.scms.scms_be.repository.InvoiceRepository;
+import com.scms.scms_be.model.entity.Invoiceee;
+import com.scms.scms_be.repository.InvoiceeeRepository;
 
 @Service
-public class InvoiceService {
+public class InvoiceeeService {
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceeeRepository invoiceRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -142,7 +142,7 @@ public class InvoiceService {
             }
 
             // Lưu vào database
-            Invoice invoice = new Invoice();
+            Invoiceee invoice = new Invoiceee();
             invoice.setEmail(email);
             invoice.setName(name);
             invoice.setCompany(company);
@@ -162,9 +162,9 @@ public class InvoiceService {
     }
 
     // API lấy tất cả hóa đơn
-    public ResponseEntity<List<Invoice>> getAllInvoices() {
+    public ResponseEntity<List<Invoiceee>> getAllInvoices() {
         try {
-            List<Invoice> invoices = invoiceRepository.findAll();
+            List<Invoiceee> invoices = invoiceRepository.findAll();
             return ResponseEntity.ok(invoices);
         } catch (Exception e) {
             e.printStackTrace();

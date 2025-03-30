@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,11 +44,20 @@ public class EmployeeController {
     }
 
     //   Chỉnh sửa thông tin cá nhân (chỉ user đó có thể sửa)
-    @PutMapping("/update-employee/{employeeId}")
+    @PutMapping("/user/update-employee/{employeeId}")
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable Long employeeId,
             @RequestBody Employee updatedEmployee) {
         return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));
+    }
+    @DeleteMapping("/comad/delete-employee/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+        boolean deleted = employeeService.deleteEmployeeById(id);
+        if (deleted) {
+            return ResponseEntity.ok("Employee and related user deleted successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
   
 }

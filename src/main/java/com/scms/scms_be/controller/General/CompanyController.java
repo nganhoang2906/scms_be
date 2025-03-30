@@ -24,7 +24,6 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-
     @GetMapping("/get-company/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long companyId) {
         Optional<Company> company = companyService.getCompanyById(companyId);

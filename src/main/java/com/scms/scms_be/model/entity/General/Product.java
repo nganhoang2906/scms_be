@@ -17,6 +17,8 @@ public class Product {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
+    private Long currentCompanyId;
+
     private String serialNumber;
     private Long batchId;
     private String qrCode;

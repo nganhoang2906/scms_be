@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.model.entity.Invoice;
-import com.scms.scms_be.service.InvoiceService;
+import com.scms.scms_be.model.entity.Invoiceee;
+import com.scms.scms_be.service.InvoiceeeService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class InvoiceController {
 
     @Autowired
-    private final InvoiceService invoiceService;
+    private final InvoiceeeService invoiceService;
 
     // Gọi service để tạo hóa đơn
     @PostMapping("/auth/invoice/generate-and-save")
@@ -31,7 +31,7 @@ public class InvoiceController {
     
       // API để lấy tất cả hóa đơn
     @GetMapping("/auth/get-all-invoice")
-    public ResponseEntity<List<Invoice>> getAllInvoices() {
+    public ResponseEntity<List<Invoiceee>> getAllInvoices() {
         return invoiceService.getAllInvoices();
     }
 }

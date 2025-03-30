@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.model.dto.request.DepartmentRequest;
 import com.scms.scms_be.model.entity.General.Department;
 import com.scms.scms_be.service.General.DepartmentService;
 
@@ -48,5 +47,14 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.updateDepartment( departmentId, updatedDept));
     }
 
+    @DeleteMapping("/comad/delete-department/{id}")
+    public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
+        boolean deleted = departmentService.deleteDepartmentById(id);
+        if (deleted) {
+            return ResponseEntity.ok("Department and related employees/users deleted successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
    
 }

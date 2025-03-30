@@ -1,6 +1,7 @@
 package com.scms.scms_be.service.General;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -72,5 +73,13 @@ public class DepartmentService {
         return departmentRepository.save(existingDepartment);
     }
 
+    public boolean deleteDepartmentById(Long id) {
+        Optional<Department> department = departmentRepository.findById(id);
+        if (department.isPresent()) {
+            departmentRepository.delete(department.get());
+            return true;
+        }
+        return false;
+    }
     
 }

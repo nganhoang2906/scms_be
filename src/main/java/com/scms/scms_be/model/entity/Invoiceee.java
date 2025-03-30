@@ -5,11 +5,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="invoice")
+@Table(name="invoiceee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Invoice {
+public class Invoiceee {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
