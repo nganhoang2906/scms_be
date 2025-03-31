@@ -45,11 +45,6 @@ public class EmployeeService {
             throw new CustomException("Mã nhân viên đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        // Kiểm tra `identityNumber`
-        if (employeeRepo.findByIdentityNumber(request.getIdentityNumber()).isPresent()) {
-            throw new CustomException("Số CCCD/CMND đã tồn tại!", HttpStatus.BAD_REQUEST);
-        }
-
         // Kiểm tra `username` trong `User`
         if (userRepo.findByUsername(request.getUsername()).isPresent()) {
             throw new CustomException("Tên đăng nhập đã được sử dụng!", HttpStatus.BAD_REQUEST);
@@ -65,7 +60,6 @@ public class EmployeeService {
             employee.setEmployeeName(request.getEmployeeName());
             employee.setPosition(request.getPosition());
             employee.setGender(request.getGender());
-            employee.setIdentityNumber(request.getIdentityNumber());
             employee.setAddress(request.getAddress());
             employee.setEmail(request.getEmail());
             employee.setPhoneNumber(request.getPhoneNumber());
@@ -115,7 +109,6 @@ public class EmployeeService {
         existingEmployee.setEmployeeName(updatedEmployee.getEmployeeName());
         existingEmployee.setPosition(updatedEmployee.getPosition());
         existingEmployee.setGender(updatedEmployee.getGender());
-        existingEmployee.setIdentityNumber(updatedEmployee.getIdentityNumber());
         existingEmployee.setAddress(updatedEmployee.getAddress());
         existingEmployee.setEmail(updatedEmployee.getEmail());
         existingEmployee.setPhoneNumber(updatedEmployee.getPhoneNumber());

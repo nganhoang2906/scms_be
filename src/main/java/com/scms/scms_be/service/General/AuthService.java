@@ -75,7 +75,7 @@ public class AuthService {
     
             if (existingCompany.isPresent()) {
                 resp.setStatusCode(500);
-                resp.setError("Công ty đã tồn tại.");
+                resp.setMessage("Công ty đã tồn tại.");
                 return resp;
             } else {
                 // Nếu công ty chưa tồn tại, tạo mới và User sẽ là "C-ADMIN"
@@ -129,9 +129,7 @@ public class AuthService {
                 employee.setDepartment(managementDepartment);
                 employee.setEmployeeCode(registrationRequest.getEmployeeCode());
                 employee.setPosition("Quản lý"); // Mặc định là quản lý
-                employee.setIdentityNumber(registrationRequest.getIdentityNumber());
                 employee.setEmail(registrationRequest.getEmail());
-             
                 employee.setStatus("Active");
                 employee = employeeRepo.save(employee);
 
@@ -152,7 +150,7 @@ public class AuthService {
                 User savedUser = usersRepo.save(newUser);
         
                 // Gửi OTP qua email
-                emailService.sendOTPtoEmail(registrationRequest.getEmail(), otp);
+                emailService.sendOtpToEmail(registrationRequest.getEmail(), otp);
     
                 resp.setOurUsers(savedUser);
                 resp.setStatusCode(200);
@@ -165,9 +163,8 @@ public class AuthService {
         return resp;
     }
     
-
-      // Verify OTP
-      public UserDto verifyOtp(VerifyOtpRequest verifyOtpRequest) {
+    // Verify OTP
+    public UserDto verifyOtp(VerifyOtpRequest verifyOtpRequest) {
         UserDto resp = new UserDto();
         try {
             Optional<User> userOptional = usersRepo.findByEmail(verifyOtpRequest.getEmail());
@@ -194,7 +191,7 @@ public class AuthService {
         return resp;
     }
 
-    public UserDto send_Otp_toEmail(String email) {
+    public UserDto sendVerifyOtp(String email) {
         UserDto resp = new UserDto();
         try {
             Optional<User> userOptional = usersRepo.findByEmail(email);
@@ -206,10 +203,10 @@ public class AuthService {
                 user.setOtp(otp);
                 usersRepo.save(user);
                 
-                emailService.sendOTPtoEmail(email, otp);
+                emailService.sendOtpToEmail(email, otp);
                 
                 resp.setStatusCode(200);
-                resp.setMessage("OTP đã được gửi lại thành công.");
+                resp.setMessage("OTP đã được gửi thành công.");
             } else {
                 resp.setStatusCode(404);
                 resp.setMessage("Không tìm thấy người dùng.");
@@ -221,19 +218,45 @@ public class AuthService {
         return resp;
     }
 
-    public UserDto verifyOtp_forgotPassword(VerifyOtpRequest verifyOtpRequest) {
+    public UserDto sendForgotPasswordVerifyOtp(String email) {
+        UserDto resp = new UserDto();
+        try {
+            Optional<User> userOptional = usersRepo.findByEmail(email);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                
+                String otp = String.format("%06d", new Random().nextInt(999999));
+                
+                user.setOtp(otp);
+                usersRepo.save(user);
+                
+                emailService.sendOtpToEmail(email, otp);
+                
+                resp.setStatusCode(200);
+                resp.setMessage("OTP đã được gửi thành công.");
+            } else {
+                resp.setStatusCode(404);
+                resp.setMessage("Không tìm thấy người dùng.");
+            }
+        } catch (Exception e) {
+            resp.setStatusCode(500);
+            resp.setError(e.getMessage());
+        }
+        return resp;
+    }
+
+    public UserDto verifyForgotPasswordOtp(VerifyOtpRequest verifyOtpRequest) {
         UserDto resp = new UserDto();
         try {
             Optional<User> userOptional = usersRepo.findByEmail(verifyOtpRequest.getEmail());
-            if(userOptional.isPresent()){
+            if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                if(user.getOtp() != null && user.getOtp().equals(verifyOtpRequest.getOtp())){
-                    
-                    user.setOtp(null);
+                if (user.getOtp() != null && user.getOtp().equals(verifyOtpRequest.getOtp())) {
+                    user.setVerified(true);
+                    user.setOtp(null); 
                     usersRepo.save(user);
-
                     resp.setStatusCode(200);
-                    resp.setMessage("Xác thực OTP thành công. Bạn có thể đặt lại mật khẩu ngay bây giờ.");
+                    resp.setMessage("Xác thực OTP thành công. Bạn có thể thay đổi mật khẩu ngay bây giờ.");
                 } else {
                     resp.setStatusCode(400);
                     resp.setMessage("OTP không hợp lệ hoặc đã hết hạn.");
@@ -243,14 +266,13 @@ public class AuthService {
                 resp.setMessage("Không tìm thấy người dùng.");
             }
         } catch (Exception e) {
-            resp.setStatusCode(500);    
+            resp.setStatusCode(500);
             resp.setError(e.getMessage());
         }
         return resp;
-
     }
 
-    public UserDto reset_password(ResetPasswordRequest resetPasswordRequest) {
+    public UserDto resetPassword(ResetPasswordRequest resetPasswordRequest) {
         UserDto resp = new UserDto();
         try{
             Optional<User> userOptional = usersRepo.findByEmail(resetPasswordRequest.getEmail());

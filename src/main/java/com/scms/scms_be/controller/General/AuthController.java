@@ -28,26 +28,30 @@ public class AuthController {
         return ResponseEntity.ok(authService.registerCompany(request));
     }
 
-    @PostMapping("/otp-register")
+    @PostMapping("/verify-otp")
     public ResponseEntity<UserDto> verifyOtp(@RequestBody VerifyOtpRequest request) {
         return ResponseEntity.ok(authService.verifyOtp(request));
     }
 
-    @PostMapping("/send-otp-toEmail")
-    public ResponseEntity<UserDto> resendVerifyOtp(@RequestBody String email ) {
-        return ResponseEntity.ok(authService.send_Otp_toEmail(email));
+    @PostMapping("/send-verify-otp")
+    public ResponseEntity<UserDto> sendVerifyOtp(@RequestBody String email ) {
+        return ResponseEntity.ok(authService.sendVerifyOtp(email));
     }
 
-    @PostMapping("/verify-otp-forgot-password")
-    public ResponseEntity<UserDto> verifyOtp_forgotPassword(@RequestBody VerifyOtpRequest request) {
-        return ResponseEntity.ok(authService.verifyOtp_forgotPassword(request));
+    @PostMapping("/forgot-password")
+    public ResponseEntity<UserDto> sendForgotPasswordVerifyOtp(@RequestBody String email ) {
+        return ResponseEntity.ok(authService.sendForgotPasswordVerifyOtp(email));
     }
 
-    @PostMapping("/resend-otp-forgot-password")
-    public ResponseEntity<UserDto> reset_password(@RequestBody ResetPasswordRequest request) {
-        return ResponseEntity.ok(authService.reset_password(request));
+    @PostMapping("/verify-forgot-password-otp")
+    public ResponseEntity<UserDto> verifyForgotPasswordOtp(@RequestBody VerifyOtpRequest request) {
+        return ResponseEntity.ok(authService.verifyForgotPasswordOtp(request));
     }
-    
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<UserDto> resetPassword(@RequestBody ResetPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetPassword(request));
+    }
     
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {

@@ -1,8 +1,8 @@
 package com.scms.scms_be.model.dto.request;
 
-import lombok.Data;
-
 import java.util.Date;
+
+import lombok.Data;
 
 @Data
 public class RegisterComanyRequest {
@@ -25,12 +25,5 @@ public class RegisterComanyRequest {
     private String employeeCode;          // Mã nhân viên (duy nhất)
     private String username;              // Tên đầy đủ nhân viên (Người đăng ký)
     private String position;              // Chức vụ trong công ty
-    private Date dateOfBirth;             // Ngày sinh
-    private String gender;                // Giới tính (Male/Female/Other)
-    private String identityNumber;        // Số CCCD/CMND
-    private String employmentStartDate;   // Ngày bắt đầu làm việc tại công ty
-
-    // Thông tin tài khoản
-    private String emailUser;             // Email đăng nhập (có thể trùng email công ty)
     private String password;              // Mật khẩu tài khoản
 }

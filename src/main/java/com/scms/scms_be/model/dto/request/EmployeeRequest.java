@@ -1,7 +1,8 @@
 package com.scms.scms_be.model.dto.request;
 
-import lombok.Data;
 import java.util.Date;
+
+import lombok.Data;
 
 @Data
 public class EmployeeRequest {
@@ -10,7 +11,6 @@ public class EmployeeRequest {
     private String employeeName;
     private String position;
     private String gender;
-    private String identityNumber;
     private String address;
     private String email;
     private String phoneNumber;
