@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.entity.Manufaacturing;
+package com.scms.scms_be.model.entity.Manufacturing;
 
 import com.scms.scms_be.model.entity.General.Item;
 
@@ -14,24 +14,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "bom_detail")
+@Table(name = "manufacture_stage")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BOMDetail {
-     @Id
+@AllArgsConstructor
+public class ManufactureStage {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "bom_id", nullable = false)
-    private BOM bom;
+    private Long stageId;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
-
-    private Long quantity;
-    private String note;
     
+    private String stageName;
+    private Integer orderIndex;
+    private Integer estimatedTime; // minutes
+    private String description;
 }

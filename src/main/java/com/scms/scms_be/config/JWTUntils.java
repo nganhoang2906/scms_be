@@ -32,7 +32,7 @@ public class JWTUntils {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("roles", userDetails.getAuthorities().stream()
                 .map(Object::toString)
-                .toList());  // chuyển sang list<String>
+                .toList());
     
         return Jwts.builder()
                 .claims(claims)
@@ -42,7 +42,6 @@ public class JWTUntils {
                 .signWith(key)
                 .compact();
     }
-    
 
     public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails) {
         return Jwts.builder()

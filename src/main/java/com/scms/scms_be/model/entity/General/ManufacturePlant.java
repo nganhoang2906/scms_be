@@ -1,7 +1,16 @@
 package com.scms.scms_be.model.entity.General;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "manufacture_plant")
@@ -15,13 +24,13 @@ public class ManufacturePlant {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company; // Mỗi nhà máy thuộc một công ty
+    private Company company;
 
     @Column(unique = true, nullable = false)
-    private String plantCode; // Mã nhà máy duy nhất
+    private String plantCode;
 
     @Column(nullable = false)
-    private String plantName; // Tên nhà máy
+    private String plantName;
 
-    private String description; // Mô tả nhà máy
+    private String description;
 }

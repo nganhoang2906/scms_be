@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.entity.General;
 
-
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;

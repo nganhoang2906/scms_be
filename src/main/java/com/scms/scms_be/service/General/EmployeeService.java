@@ -19,7 +19,7 @@ import com.scms.scms_be.repository.General.UserRepository;
 @Service
 public class EmployeeService {
 
-   @Autowired
+    @Autowired
     private EmployeeRepository employeeRepo;
 
     @Autowired
@@ -32,59 +32,56 @@ public class EmployeeService {
     private DepartmentRepository departmentRepo;
 
     public Employee createEmployee(EmployeeRequest request) {
-    
-         if (userRepo.findByEmail(request.getEmail()).isPresent()) {
+
+        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
             throw new CustomException("Email đã được sử dụng trong User!", HttpStatus.BAD_REQUEST);
         }
-        
+
         if (employeeRepo.findByEmail(request.getEmail()).isPresent()) {
             throw new CustomException("Email đã được sử dụng trong Employee!", HttpStatus.BAD_REQUEST);
         }
-        // Kiểm tra `employeeCode`
+        // Kiểm tra 'employeeCode'
         if (employeeRepo.findByEmployeeCode(request.getEmployeeCode()).isPresent()) {
             throw new CustomException("Mã nhân viên đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        // Kiểm tra `username` trong `User`
+        // Kiểm tra 'username' trong 'User'
         if (userRepo.findByUsername(request.getUsername()).isPresent()) {
             throw new CustomException("Tên đăng nhập đã được sử dụng!", HttpStatus.BAD_REQUEST);
         }
 
-        
-          Department department = departmentRepo.findById(request.getDepartmentId())
+        Department department = departmentRepo.findById(request.getDepartmentId())
                 .orElseThrow(() -> new CustomException("Phòng ban không tồn tại!", HttpStatus.NOT_FOUND));
 
-            // Tạo Employee
-            Employee employee = new Employee();
-            employee.setEmployeeCode(request.getEmployeeCode());
-            employee.setEmployeeName(request.getEmployeeName());
-            employee.setPosition(request.getPosition());
-            employee.setGender(request.getGender());
-            employee.setAddress(request.getAddress());
-            employee.setEmail(request.getEmail());
-            employee.setPhoneNumber(request.getPhoneNumber());
-            employee.setDateOfBirth(request.getDateOfBirth());
-            employee.setEmploymentStartDate(request.getEmploymentStartDate());
-            employee.setStatus(request.getStatus());
-            employee.setDepartment(department);
+        // Tạo Employee
+        Employee employee = new Employee();
+        employee.setEmployeeCode(request.getEmployeeCode());
+        employee.setEmployeeName(request.getEmployeeName());
+        employee.setPosition(request.getPosition());
+        employee.setGender(request.getGender());
+        employee.setAddress(request.getAddress());
+        employee.setEmail(request.getEmail());
+        employee.setPhoneNumber(request.getPhoneNumber());
+        employee.setDateOfBirth(request.getDateOfBirth());
+        employee.setEmploymentStartDate(request.getEmploymentStartDate());
+        employee.setStatus(request.getStatus());
+        employee.setDepartment(department);
 
-            Employee savedEmployee = employeeRepo.save(employee);
+        Employee savedEmployee = employeeRepo.save(employee);
 
-            // Tạo User liên kết với Employee
-            User newUser = new User(
-                    savedEmployee,
-                    request.getEmail(),
-                    request.getUsername(),
-                    passwordEncoder.encode(request.getPassword()), // Mã hóa password
-                    "USER",
-                    null, // OTP không cần thiết
-                    "Active",
-                    true
-            );
-
-            userRepo.save(newUser);
-
-            return savedEmployee;
+        // Tạo User liên kết với Employee
+        User newUser = new User(
+            savedEmployee,
+            request.getEmail(),
+            request.getUsername(),
+            passwordEncoder.encode(request.getPassword()),
+            "USER",
+            null,
+            "Active",
+            true
+        );
+        userRepo.save(newUser);
+        return savedEmployee;
     }
 
     public List<Employee> getAllEmployeesInCompany(Long companyId) {
@@ -100,12 +97,10 @@ public class EmployeeService {
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
     }
 
-    // Cập nhật thông tin nhân viên (bất kỳ ai cũng có thể cập nhật)
     public Employee updateEmployee(Long employeeId, Employee updatedEmployee) {
         Employee existingEmployee = employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
 
-        // Gán trực tiếp giá trị từ `updatedEmployee`
         existingEmployee.setEmployeeName(updatedEmployee.getEmployeeName());
         existingEmployee.setPosition(updatedEmployee.getPosition());
         existingEmployee.setGender(updatedEmployee.getGender());
@@ -127,5 +122,5 @@ public class EmployeeService {
         }
         return false;
     }
-   
+
 }

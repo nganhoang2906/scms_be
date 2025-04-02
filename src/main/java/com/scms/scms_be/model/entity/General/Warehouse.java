@@ -1,8 +1,17 @@
 package com.scms.scms_be.model.entity.General;
 
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "warehouse")
@@ -16,22 +25,22 @@ public class Warehouse {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company; // Mỗi kho hàng thuộc một công ty
+    private Company company;
 
     @Column(unique = true, nullable = false)
-    private String warehouseCode; // Mã kho hàng duy nhất
+    private String warehouseCode;
 
     @Column(nullable = false)
-    private String warehouseName; // Tên kho hàng
+    private String warehouseName;
 
-    private String description; // Mô tả kho
-
-    @Column(nullable = false)
-    private double maxCapacity; // Sức chứa tối đa
+    private String description;
 
     @Column(nullable = false)
-    private String warehouseType; // Loại kho hàng (cold storage, general storage, etc.)
+    private double maxCapacity;
 
     @Column(nullable = false)
-    private String status; // Trạng thái (Active, Inactive)
+    private String warehouseType;
+
+    @Column(nullable = false)
+    private String status;
 }

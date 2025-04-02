@@ -1,7 +1,6 @@
 package com.scms.scms_be.service.General;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,13 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 
-        // Kiểm tra `companyCode` có bị trùng không
+        // Kiểm tra 'companyCode' có bị trùng không
         if (!company.getCompanyCode().equals(companyDetails.getCompanyCode()) &&
                 companyRepository.existsByCompanyCode(companyDetails.getCompanyCode())) {
             throw new CustomException("Mã công ty '" + companyDetails.getCompanyCode() + "' đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        // Kiểm tra `taxCode` có bị trùng không
+        // Kiểm tra 'taxCode' có bị trùng không
         if (!company.getTaxCode().equals(companyDetails.getTaxCode()) &&
                 companyRepository.existsByTaxCode(companyDetails.getTaxCode())) {
             throw new CustomException("Mã số thuế '" + companyDetails.getTaxCode() + "' đã tồn tại!", HttpStatus.BAD_REQUEST);

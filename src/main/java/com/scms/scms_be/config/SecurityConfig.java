@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.scms.scms_be.service.General.UserDetailService;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

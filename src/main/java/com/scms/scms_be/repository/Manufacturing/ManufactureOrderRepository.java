@@ -3,7 +3,7 @@ package com.scms.scms_be.repository.Manufacturing;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.scms.scms_be.model.entity.Manufaacturing.ManufactureOrder;
+import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 
 @Repository
 public interface ManufactureOrderRepository extends JpaRepository<ManufactureOrder, Long> {

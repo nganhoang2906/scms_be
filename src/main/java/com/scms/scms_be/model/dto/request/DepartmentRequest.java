@@ -7,6 +7,6 @@ import lombok.Data;
 public class DepartmentRequest {
     private String departmentCode;
     private String departmentName;
-    private Long companyId; // Truyền ID thay vì cả object Company
+    private Long companyId;
 }
 

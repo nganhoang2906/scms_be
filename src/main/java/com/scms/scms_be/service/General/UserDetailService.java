@@ -23,7 +23,4 @@ public class UserDetailService implements UserDetailsService {
                 .or(() -> userRepo.findByUsername(emailOrUsername)) // Tìm cả username
                 .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy User với email hoặc username: " + emailOrUsername));
     }
-
-
-
 }

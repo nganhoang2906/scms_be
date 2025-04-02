@@ -1,6 +1,5 @@
 package com.scms.scms_be.controller.General;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.createProduct(itemId, product));
     }
 
-    @GetMapping("/user/all-product-in-item/{itemId}")
+    @GetMapping("/user/get-all-product-in-item/{itemId}")
     public ResponseEntity<List<Product>> getAllByItem(@PathVariable Long itemId) {
         return ResponseEntity.ok(productService.getAllByItem(itemId));
     }

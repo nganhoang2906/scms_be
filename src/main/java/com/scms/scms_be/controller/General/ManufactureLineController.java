@@ -1,15 +1,20 @@
 package com.scms.scms_be.controller.General;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.scms.scms_be.model.entity.General.ManufactureLine;
 import com.scms.scms_be.service.General.ManufactureLineService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +32,7 @@ public class ManufactureLineController {
     }
 
     // Lấy tất cả ManufactureLine của một nhà máy
-    @GetMapping("/user/all-mf-line-in-plant/{plantId}")
+    @GetMapping("/user/get-all-mf-line-in-plant/{plantId}")
     public ResponseEntity<List<ManufactureLine>> getAllLines(@PathVariable Long plantId) {
         return ResponseEntity.ok(lineService.getAllLinesInPlant(plantId));
     }

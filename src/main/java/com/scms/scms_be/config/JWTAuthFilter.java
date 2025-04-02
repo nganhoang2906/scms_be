@@ -1,10 +1,7 @@
 package com.scms.scms_be.config;
 
-import com.scms.scms_be.service.General.UserDetailService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +12,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.scms.scms_be.service.General.UserDetailService;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
@@ -34,7 +36,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        // ✅ Kiểm tra header chứa Bearer token
+        // Kiểm tra header chứa Bearer token
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -51,7 +53,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // ✅ Nếu user đã được xác thực thì bỏ qua
+        // Nếu user đã được xác thực thì bỏ qua
         if (usernameOrEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailService.loadUserByUsername(usernameOrEmail);
 

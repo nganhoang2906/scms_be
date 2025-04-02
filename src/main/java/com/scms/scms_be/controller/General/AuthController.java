@@ -39,7 +39,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.sendVerifyOtp(email));
     }
 
-    @PostMapping("/auth/verify-forgot-password-otp")
+    @PostMapping("/auth/verify-otp-forgot-password")
     public ResponseEntity<UserDto> verifyForgotPasswordOtp(@RequestBody VerifyOtpRequest request) {
         return ResponseEntity.ok(authService.verifyForgotPasswordOtp(request));
     }

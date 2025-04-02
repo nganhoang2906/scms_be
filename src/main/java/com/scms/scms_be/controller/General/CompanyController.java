@@ -1,7 +1,6 @@
 package com.scms.scms_be.controller.General;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.CompanyDto;
-import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.service.General.CompanyService;
 
 import lombok.RequiredArgsConstructor;
-
 
 @RestController
 @RequiredArgsConstructor

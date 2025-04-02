@@ -25,36 +25,37 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    //   Chỉ `C-ADMIN` mới có thể tạo nhân viên
+    // Tạo mới nhân viên
     @PostMapping("/comad/create-employee")
     public ResponseEntity<Employee> createEmployee( @RequestBody EmployeeRequest employeeRequest) {
         return ResponseEntity.ok(employeeService.createEmployee( employeeRequest));
     }
 
-    //   Lấy danh sách nhân viên trong công ty
-    @GetMapping("/comad/all-employee-in-com/{companyId}")
+    // Lấy danh sách nhân viên trong công ty
+    @GetMapping("/comad/get-all-employee-in-com/{companyId}")
     public ResponseEntity<List<Employee>> getAllEmployeeInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
     }
 
-    //   Lấy nhân viên theo ID (chỉ xem trong công ty)
+    // Lấy nhân viên theo ID (chỉ xem trong công ty)
     @GetMapping("/user/get-employee/{employeeId}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long employeeId) {
         return ResponseEntity.ok(employeeService.getEmployeeById( employeeId));
     }
 
-    //   Chỉnh sửa thông tin cá nhân (chỉ user đó có thể sửa)
+    // Chỉnh sửa thông tin cá nhân (chỉ user đó có thể sửa)
     @PutMapping("/user/update-employee/{employeeId}")
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable Long employeeId,
             @RequestBody Employee updatedEmployee) {
         return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));
     }
+
     @DeleteMapping("/comad/delete-employee/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         boolean deleted = employeeService.deleteEmployeeById(id);
         if (deleted) {
-            return ResponseEntity.ok("Employee and related user deleted successfully.");
+            return ResponseEntity.ok("Nhân viên và tài khoản liên quan đã được xóa thành công");
         } else {
             return ResponseEntity.notFound().build();
         }

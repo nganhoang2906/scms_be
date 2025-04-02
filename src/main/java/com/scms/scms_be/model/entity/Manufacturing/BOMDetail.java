@@ -1,6 +1,6 @@
-package com.scms.scms_be.model.entity.Manufaacturing;
+package com.scms.scms_be.model.entity.Manufacturing;
 
-import java.util.Date;
+import com.scms.scms_be.model.entity.General.Item;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,24 +14,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "manufacture_process")
+@Table(name = "bom_detail")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ManufactureProcess {
+@NoArgsConstructor
+public class BOMDetail {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name = "mo_id", nullable = false)
-    private ManufactureOrder mo;
+    @JoinColumn(name = "bom_id", nullable = false)
+    private BOM bom;
 
     @ManyToOne
-    @JoinColumn(name = "stage_id", nullable = false)
-    private ManufactureStage stage;
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
+    private Long quantity;
+    private String note;
     
-    private Date startedOn;
-    private Date finishedOn;
-    private String status;
 }

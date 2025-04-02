@@ -39,8 +39,8 @@ public class UserService {
             return response;
         }
     }
-  
-    public UserDto getUserByEmployeeId(Long employeeId){
+
+    public UserDto getUserByEmployeeId(Long employeeId) {
         UserDto response = new UserDto();
         try {
             List<User> result = usersRepo.findByEmployeeEmployeeId(employeeId);
@@ -64,7 +64,7 @@ public class UserService {
         UserDto response = new UserDto();
         try {
             User userbyId = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-            response.setOurUsers(userbyId);
+            response.setOurUser(userbyId);
             response.setStatusCode(200);
             response.setMessage("Found user with id: " + id + " successfully");
             return response;
@@ -87,16 +87,15 @@ public class UserService {
                 existingUser.setRole(updateUser.getRole());
                 existingUser.setStatus(updateUser.getStatus());
 
-            // Fix: Check if the password is not null and not empty
-            if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-            }
-
+                if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
+                    existingUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+                }
 
                 User saveOurUser = usersRepo.save(existingUser);
-                response.setOurUsers(saveOurUser);
+                response.setOurUser(saveOurUser);
                 response.setStatusCode(200);
                 response.setMessage("User Update Successful");
+
             } else {
                 response.setStatusCode(404);
                 response.setMessage("Not found user for Update");
@@ -114,7 +113,7 @@ public class UserService {
         try {
             Optional<User> userOptional = usersRepo.findByUsername(username);
             if (userOptional.isPresent()) {
-                response.setOurUsers(userOptional.get());
+                response.setOurUser(userOptional.get());
                 response.setStatusCode(200);
                 response.setMessage("Successful");
             } else {

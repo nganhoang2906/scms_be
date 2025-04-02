@@ -28,7 +28,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.createItem(companyId, item));
     }
 
-    @GetMapping("/user/all-item-in-com/{companyId}")
+    @GetMapping("/user/get-all-item-in-com/{companyId}")
     public ResponseEntity<List<Item>> getAll(@PathVariable Long companyId) {
         return ResponseEntity.ok(itemService.getAllItemsByCompany(companyId));
     }

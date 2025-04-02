@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class EmployeeRequest {
-    // Thông tin Employee
     private String employeeCode;
     private String employeeName;
     private String position;
@@ -17,9 +16,7 @@ public class EmployeeRequest {
     private Date dateOfBirth;
     private Date employmentStartDate;
     private String status;
-    private Long departmentId; // Chỉ cần ID, không cần toàn bộ đối tượng Department
-
-    // Thông tin User
+    private Long departmentId;
     private String username;
     private String password;
 }

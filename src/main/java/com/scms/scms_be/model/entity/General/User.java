@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.entity.General;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -64,7 +63,6 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -84,6 +82,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
     
 }

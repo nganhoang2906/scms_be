@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.request.BOMRequest;
-import com.scms.scms_be.model.entity.Manufaacturing.BOM;
-import com.scms.scms_be.model.entity.Manufaacturing.BOMDetail;
+import com.scms.scms_be.model.entity.Manufacturing.BOM;
+import com.scms.scms_be.model.entity.Manufacturing.BOMDetail;
 import com.scms.scms_be.service.Manufacturing.BOMService;
 
 @RestController
@@ -29,7 +29,7 @@ public class BOMController {
         return ResponseEntity.ok(created);
     }
 
-    @GetMapping("/user/all-bom-in-com/{companyId}")
+    @GetMapping("/user/get-all-bom-in-com/{companyId}")
     public ResponseEntity<List<BOM>> getAllBOMsByCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(bomService.getAllBOMInCom(companyId));
     }
@@ -61,11 +61,11 @@ public class BOMController {
     public ResponseEntity<BOMDetail> updateBOMDetail(@PathVariable Long bomId, @PathVariable Long bomDetailId, @RequestBody BOMRequest.BOMDetailDTO request) {
         return ResponseEntity.ok(bomService.updateBOMDetail(bomId, bomDetailId, request));
     }
+
     @DeleteMapping("/user/delete-bom-detail/{bomDetailId}")
     public ResponseEntity<String> deleteBOMDetail(@PathVariable Long bomDetailId) {
         bomService.deleteBOMDetail(bomDetailId);
-        return ResponseEntity.ok("Đã xoá BOM Detail");
+        return ResponseEntity.ok("Đã xoá thành phần của BOM");
     }
 
-    
 }

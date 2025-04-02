@@ -23,7 +23,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/sysad/get-all-users")
     public ResponseEntity<UserDto> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
@@ -34,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
     }
     
-    @GetMapping("/sysad/get-user/{userId}")
+    @GetMapping("/sysad/get-user-by-userId/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
@@ -44,8 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
-
-    @GetMapping("/auth/get-profile")
+    @GetMapping("/user/get-profile")
     public ResponseEntity<UserDto> getProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

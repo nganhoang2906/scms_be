@@ -3,17 +3,13 @@ package com.scms.scms_be.model.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.scms.scms_be.model.entity.General.Company;
-
 import lombok.Data;
 
 @Data
 public class CompanyDto {
     private Long companyId;
     private String companyCode;
-
     private String taxCode;
-
     private String companyName;
     private String address;
     private String country;
@@ -21,14 +17,11 @@ public class CompanyDto {
     private String mainIndustry;
     private String representativeName;
     private Date startDate;
-
     private Date joinDate;
-
     private String phoneNumber;
     private String email;
     private String websiteAddress;
     private byte[] logo;
-
     private String status;
 
     private List<CompanyDto> companyList;

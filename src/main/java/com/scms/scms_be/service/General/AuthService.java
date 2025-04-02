@@ -97,16 +97,16 @@ public class AuthService {
            
 
              
-                //   Xác định danh sách `Department` dựa trên `companyType`
+                // Xác định danh sách 'Department' dựa trên 'companyType'
                 List<String> departmentNames = new ArrayList<>(Arrays.asList("Ban quản lý", "Kho", "Vận chuyển", "Mua hàng", "Bán hàng"));
                 if (company.getCompanyType().equalsIgnoreCase("Doanh nghiệp sản xuất")) {
                     departmentNames.add("Sản xuất"); // Nếu là doanh nghiệp sản xuất thì thêm bộ phận Sản xuất
                 }
 
-                //   Lấy số lượng `Department` hiện có của công ty để tránh trùng mã
+                // Lấy số lượng 'Department' hiện có của công ty để tránh trùng mã
                 int departmentIndex = departmentRepo.countByCompanyCompanyId(company.getCompanyId()) + 1;
 
-                //   Tạo `Department`
+                // Tạo 'Department'
                 List<Department> departments = new ArrayList<>();
                 for (String departmentName : departmentNames) {
                     Department department = new Department();
@@ -118,13 +118,13 @@ public class AuthService {
                     departmentIndex++;
                 }
 
-                //   Lấy `Department` của `Ban quản lý`
+                // Lấy 'Department' của 'Ban quản lý'
                 Department managementDepartment = departments.stream()
                         .filter(d -> d.getDepartmentName().equals("Ban quản lý"))
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException("Không tìm thấy phòng ban Ban quản lý!"));
 
-                //   Tạo `Employee` với chức vụ `Quản lý`
+                // Tạo 'Employee' với chức vụ 'Quản lý'
                 Employee employee = new Employee();
                 employee.setDepartment(managementDepartment);
                 employee.setEmployeeCode(registrationRequest.getEmployeeCode());
@@ -132,7 +132,6 @@ public class AuthService {
                 employee.setEmail(registrationRequest.getEmail());
                 employee.setStatus("Active");
                 employee = employeeRepo.save(employee);
-
     
                 // Tạo User
                 String otp = String.format("%06d", new Random().nextInt(999999));
@@ -148,11 +147,9 @@ public class AuthService {
                 );
                 newUser.setEmployee(employee);
                 User savedUser = usersRepo.save(newUser);
-        
-                // Gửi OTP qua email
                 emailService.sendOtpToEmail(registrationRequest.getEmail(), otp);
     
-                resp.setOurUsers(savedUser);
+                resp.setOurUser(savedUser);
                 resp.setStatusCode(200);
                 resp.setMessage("Đăng ký thành công! Vui lòng kiểm tra email để nhập OTP.");
         }
@@ -172,7 +169,7 @@ public class AuthService {
                 User user = userOptional.get();
                 if (user.getOtp() != null && user.getOtp().equals(verifyOtpRequest.getOtp())) {
                     user.setVerified(true);
-                    user.setOtp(null); // Clear OTP after verification
+                    user.setOtp(null); // Xóa OTP sau khi xác thực
                     usersRepo.save(user);
                     resp.setStatusCode(200);
                     resp.setMessage("Xác thực OTP thành công. Bạn có thể đăng nhập ngay bây giờ.");
@@ -197,14 +194,13 @@ public class AuthService {
             Optional<User> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                
                 String otp = String.format("%06d", new Random().nextInt(999999));
                 
                 user.setOtp(otp);
                 usersRepo.save(user);
-                
+
                 emailService.sendOtpToEmail(email, otp);
-                
+
                 resp.setStatusCode(200);
                 resp.setMessage("OTP đã được gửi thành công.");
             } else {
@@ -224,7 +220,6 @@ public class AuthService {
             Optional<User> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                
                 String otp = String.format("%06d", new Random().nextInt(999999));
                 
                 user.setOtp(otp);
@@ -274,16 +269,16 @@ public class AuthService {
 
     public UserDto resetPassword(ResetPasswordRequest resetPasswordRequest) {
         UserDto resp = new UserDto();
-        try{
+        try {
             Optional<User> userOptional = usersRepo.findByEmail(resetPasswordRequest.getEmail());
-            if(userOptional.isPresent()){
+            if (userOptional.isPresent()) {
                 User users = userOptional.get();
                 users.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
                 usersRepo.save(users);
 
                 resp.setStatusCode(200);
                 resp.setMessage("Đặt lại mật khẩu thành công.");
-            }else{
+            } else {
                 resp.setStatusCode(404);
                 resp.setMessage("Không tìm thấy người dùng.");
             }
@@ -297,10 +292,8 @@ public class AuthService {
     public UserDto login(LoginRequest loginRequest) {
         UserDto response = new UserDto();
         try {
-
             User users = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
-            //   Check if user is verified
             if (!users.isVerified()) {
                 response.setStatusCode(403);
                 response.setMessage("Tài khoản chưa được xác thực. Vui lòng kiểm tra email để nhập OTP.");
