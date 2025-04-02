@@ -25,13 +25,13 @@ public class BOMDetail {
     
     @ManyToOne
     @JoinColumn(name = "bom_id", nullable = false)
-    private BOM bomId;
+    private BOM bom;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    private Integer quantity;
+    private Long quantity;
     private String note;
     
 }

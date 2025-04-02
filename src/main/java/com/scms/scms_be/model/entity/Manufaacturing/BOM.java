@@ -1,14 +1,19 @@
 package com.scms.scms_be.model.entity.Manufaacturing;
 
 
+import java.util.List;
+import java.util.Optional;
+
 import com.scms.scms_be.model.entity.General.Item;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -35,4 +40,7 @@ public class BOM {
     private String description;
     private String status;
     
+    @OneToMany(mappedBy = "bom", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<BOMDetail> bomDetails;
+
 }

@@ -70,7 +70,7 @@ public class AuthService {
     
             // Kiểm tra nếu công ty đã tồn tại bằng mã số thuế (taxCode)
             Optional<Company> existingCompany = companyRepo.findByTaxCode(registrationRequest.getTaxCode());
-    
+            
             String role;
     
             if (existingCompany.isPresent()) {

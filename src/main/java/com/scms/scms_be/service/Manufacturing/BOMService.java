@@ -1,13 +1,20 @@
 package com.scms.scms_be.service.Manufacturing;
 
-import com.scms.scms_be.exception.CustomException;
-import com.scms.scms_be.model.entity.Manufaacturing.BOM;
-import com.scms.scms_be.repository.Manufacturing.BOMRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.scms.scms_be.exception.CustomException;
+import com.scms.scms_be.model.dto.request.BOMRequest;
+import com.scms.scms_be.model.entity.General.Item;
+import com.scms.scms_be.model.entity.Manufaacturing.BOM;
+import com.scms.scms_be.model.entity.Manufaacturing.BOMDetail;
+import com.scms.scms_be.repository.General.ItemRepository;
+import com.scms.scms_be.repository.Manufacturing.BOMDetailRepository;
+import com.scms.scms_be.repository.Manufacturing.BOMRepository;
 
 @Service
 public class BOMService {
@@ -15,11 +22,43 @@ public class BOMService {
     @Autowired
     private BOMRepository bomRepo;
 
-    public BOM createBOM(BOM bom) {
-        if (bomRepo.existsByBomCode(bom.getBomCode())) {
-            throw new CustomException("Mã BOM đã tồn tại!", HttpStatus.BAD_REQUEST);
+    @Autowired
+    private ItemRepository itemRepo;
+
+    @Autowired
+    private BOMDetailRepository bomDetailRepo;
+
+    public BOM createBOM(BOMRequest request) {
+        Item item = itemRepo.findById(request.getItemId())
+                .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+
+        // Sinh mã BOM tự động
+        String newBomCode = generateNewBomCode();
+
+        // Tạo BOM
+        BOM bom = new BOM();
+        bom.setItem(item);
+        bom.setBomCode(newBomCode);
+        bom.setDescription(request.getDescription());
+        bom.setStatus(request.getStatus());
+
+        BOM savedBOM = bomRepo.save(bom);
+
+        // Tạo BOMDetails
+        for (BOMRequest.BOMDetailDTO detailDTO : request.getDetails()) {
+            Item detailItem = itemRepo.findById(detailDTO.getItemId())
+                    .orElseThrow(() -> new CustomException("Nguyên liệu không tồn tại!", HttpStatus.NOT_FOUND));
+
+            BOMDetail detail = new BOMDetail();
+            detail.setBom(savedBOM);
+            detail.setItem(detailItem);
+            detail.setQuantity(detailDTO.getQuantity());
+            detail.setNote(detailDTO.getNote());
+
+            bomDetailRepo.save(detail);
         }
-        return bomRepo.save(bom);
+
+        return savedBOM;
     }
 
     public List<BOM> getAllBOMInCom( Long companyId) {
@@ -31,19 +70,59 @@ public class BOMService {
                 .orElseThrow(() -> new CustomException("Không tìm thấy BOM!", HttpStatus.NOT_FOUND));
     }
 
-    // public BOM updateBOM(Long bomId, BOM updated) {
-    //     BOM bom = getBOMById(bomId);
+    public BOM updateBOM(Long bomId, BOMRequest request) {
+        BOM bom = bomRepo.findById(bomId)
+                .orElseThrow(() -> new CustomException("BOM không tồn tại", HttpStatus.NOT_FOUND));
+    
+        Item item = itemRepo.findById(request.getItemId())
+                .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+    
+        // Cập nhật BOM
+        bom.setItem( item);
+        bom.setDescription(request.getDescription());
+        bom.setStatus(request.getStatus());
+        BOM updatedBOM = bomRepo.save(bom);
+    
+        return updatedBOM;
+    }
+    
+    public void deleteBOM(Long bomId) {
+        if (!bomRepo.existsById(bomId)) {
+            throw new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND);
+        }
+        bomRepo.deleteById(bomId);
+    }
 
-    //     if (!bom.getBomCode().equals(updated.getBomCode()) &&
-    //         bomRepo.existsByBomCode(updated.getBomCode())) {
-    //         throw new CustomException("Mã BOM mới đã tồn tại!", HttpStatus.BAD_REQUEST);
-    //     }
+    private String generateNewBomCode() {
+        Long count = bomRepo.count(); // đếm tổng số BOM hiện có
+        return String.format("BOM-%04d", count + 1); // BOM-0001, BOM-0002,...
+    }
 
-    //     bom.setBomCode(updated.getBomCode());
-    //     bom.setDescription(updated.getDescription());
-    //     bom.setStatus(updated.getStatus());
-    //     bom.setItem(updated.getItemId());
+    //Get BOM details by BOM ID
+    public BOMDetail getBOMDetailById(Long bomDetailId) {
+        return bomDetailRepo.findById(bomDetailId)
+                .orElseThrow(() -> new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND));
+    }
 
-    //     return bomRepo.save(bom);
-    // }
+    public BOMDetail updateBOMDetail(Long bomDetailId, BOMRequest.BOMDetailDTO detailDTO) {
+        BOMDetail detail = bomDetailRepo.findById(bomDetailId)
+                .orElseThrow(() -> new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND));
+
+        Item item = itemRepo.findById(detailDTO.getItemId())
+                .orElseThrow(() -> new CustomException("Nguyên liệu không tồn tại!", HttpStatus.NOT_FOUND));
+
+        detail.setItem(item);
+        detail.setQuantity(detailDTO.getQuantity());
+        detail.setNote(detailDTO.getNote());
+
+        return bomDetailRepo.save(detail);
+    }
+
+    public void deleteBOMDetail(Long bomDetailId) {
+        if (!bomDetailRepo.existsById(bomDetailId)) {
+            throw new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND);
+        }
+        bomDetailRepo.deleteById(bomDetailId);
+    }
+
 }
