@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.UserDto;
@@ -23,42 +24,37 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register-company")
+    @PostMapping("/auth/register-company")
     public ResponseEntity<UserDto> registerCompany(@RequestBody RegisterComanyRequest request) {
         return ResponseEntity.ok(authService.registerCompany(request));
     }
 
-    @PostMapping("/verify-otp")
+    @PostMapping("/auth/verify-otp")
     public ResponseEntity<UserDto> verifyOtp(@RequestBody VerifyOtpRequest request) {
         return ResponseEntity.ok(authService.verifyOtp(request));
     }
 
-    @PostMapping("/send-verify-otp")
-    public ResponseEntity<UserDto> sendVerifyOtp(@RequestBody String email ) {
+    @PostMapping("/auth/send-verify-otp")
+    public ResponseEntity<UserDto> sendVerifyOtp(@RequestParam String email ) {
         return ResponseEntity.ok(authService.sendVerifyOtp(email));
     }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<UserDto> sendForgotPasswordVerifyOtp(@RequestBody String email ) {
-        return ResponseEntity.ok(authService.sendForgotPasswordVerifyOtp(email));
-    }
-
-    @PostMapping("/verify-forgot-password-otp")
+    @PostMapping("/auth/verify-forgot-password-otp")
     public ResponseEntity<UserDto> verifyForgotPasswordOtp(@RequestBody VerifyOtpRequest request) {
         return ResponseEntity.ok(authService.verifyForgotPasswordOtp(request));
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/auth/reset-password")
     public ResponseEntity<UserDto> resetPassword(@RequestBody ResetPasswordRequest request) {
         return ResponseEntity.ok(authService.resetPassword(request));
     }
     
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/auth/refresh")
     public ResponseEntity<UserDto> refreshToken(@RequestBody RefreshTokenRequest request) {
         return ResponseEntity.ok(authService.refreshToken(request));
     }

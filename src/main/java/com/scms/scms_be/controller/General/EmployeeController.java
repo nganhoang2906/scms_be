@@ -38,7 +38,7 @@ public class EmployeeController {
     }
 
     //   Lấy nhân viên theo ID (chỉ xem trong công ty)
-    @GetMapping("/comad/get-employee/{employeeId}")
+    @GetMapping("/user/get-employee/{employeeId}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long employeeId) {
         return ResponseEntity.ok(employeeService.getEmployeeById( employeeId));
     }

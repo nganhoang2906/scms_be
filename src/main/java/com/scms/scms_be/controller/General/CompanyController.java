@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.CompanyDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.service.General.CompanyService;
 
@@ -24,22 +25,23 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @GetMapping("/get-company/{id}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable Long companyId) {
-        Optional<Company> company = companyService.getCompanyById(companyId);
-        return company.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/auth/get-company/{id}")
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id) {
+        CompanyDto company = companyService.getCompanyById(id);
+        return ResponseEntity.ok(company);
     }
 
-    @GetMapping("/get-all-companies")
-    public ResponseEntity<List<Company>> getAllCompanies() {
-        List<Company> companies = companyService.getAllCompanies();
+    @GetMapping("/auth/get-all-companies")
+    public ResponseEntity<List<CompanyDto>> getAllCompanies() {
+        List<CompanyDto> companies = companyService.getAllCompanies();
         return ResponseEntity.ok(companies);
     }
 
-    @PutMapping("/sysad/update-company/{companyId}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long companyId , @RequestBody Company companyDetails) {
-        Company updatedCompany = companyService.updateCompany(companyId,companyDetails);
+    @PutMapping("/comsys/update-company/{companyId}")
+    public ResponseEntity<CompanyDto> updateCompany(@PathVariable Long companyId, 
+                         @RequestBody CompanyDto companyDto) {
+        CompanyDto updatedCompany = companyService.updateCompany(companyId, companyDto);
         return ResponseEntity.ok(updatedCompany);
-    }
+        }
 
 }

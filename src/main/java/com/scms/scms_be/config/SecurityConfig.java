@@ -39,7 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
                         .requestMatchers("/comsys/**").hasAnyAuthority("C-A-ADMIN","S-ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER","C-ADMIN")
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/all/**").hasAnyAuthority("USER","C-ADMIN","S-ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()   )
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

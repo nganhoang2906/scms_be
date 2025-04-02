@@ -29,13 +29,20 @@ public class JWTUntils {
     }
 
     public String generateToken(UserDetails userDetails) {
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("roles", userDetails.getAuthorities().stream()
+                .map(Object::toString)
+                .toList());  // chuyển sang list<String>
+    
         return Jwts.builder()
+                .claims(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
     }
+    
 
     public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails) {
         return Jwts.builder()

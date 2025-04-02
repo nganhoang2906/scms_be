@@ -34,22 +34,22 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
     }
     
-    @GetMapping("/comad/get-user/{userId}")
+    @GetMapping("/sysad/get-user/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping("/update-user/{userId}")
+    @PutMapping("/all/update-user/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody User newUser) {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
 
-    @GetMapping("/get-profile")
+    @GetMapping("/auth/get-profile")
     public ResponseEntity<UserDto> getProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        UserDto response = userService.getMyInfo(email);
+        String username = authentication.getName();
+        UserDto response = userService.getMyInfo(username);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

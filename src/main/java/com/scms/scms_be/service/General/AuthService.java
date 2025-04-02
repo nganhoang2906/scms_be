@@ -209,7 +209,7 @@ public class AuthService {
                 resp.setMessage("OTP đã được gửi thành công.");
             } else {
                 resp.setStatusCode(404);
-                resp.setMessage("Không tìm thấy người dùng.");
+                resp.setMessage("Không tìm thấy người dùng." + email);
             }
         } catch (Exception e) {
             resp.setStatusCode(500);
@@ -322,7 +322,12 @@ public class AuthService {
             response.setStatusCode(200);
             response.setToken(jwt);
             response.setRefreshToken(refreshToken);
+          
+            response.setEmployeeId(user.getEmployee().getEmployeeId());
+            response.setUsername(user.getUsername());
+            response.setEmail(user.getEmail());
             response.setRole(user.getRole());
+            response.setStatus(users.getStatus());
             response.setExpirationTime("24Hrs");
             response.setMessage("Successfully Logged In");
 

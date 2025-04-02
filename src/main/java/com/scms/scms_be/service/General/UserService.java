@@ -109,10 +109,10 @@ public class UserService {
         }
     }
 
-    public UserDto getMyInfo(String email) {
+    public UserDto getMyInfo(String username) {
         UserDto response = new UserDto();
         try {
-            Optional<User> userOptional = usersRepo.findByEmail(email);
+            Optional<User> userOptional = usersRepo.findByUsername(username);
             if (userOptional.isPresent()) {
                 response.setOurUsers(userOptional.get());
                 response.setStatusCode(200);
