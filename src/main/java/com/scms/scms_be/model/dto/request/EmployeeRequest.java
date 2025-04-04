@@ -19,4 +19,5 @@ public class EmployeeRequest {
     private Long departmentId;
     private String username;
     private String password;
+    private String role;
 }

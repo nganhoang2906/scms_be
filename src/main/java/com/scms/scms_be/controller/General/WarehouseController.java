@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.General.WarehouseDto;
 import com.scms.scms_be.model.entity.General.Warehouse;
 import com.scms.scms_be.service.General.WarehouseService;
 
@@ -19,27 +20,28 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class WarehouseController {
+
     @Autowired
     private WarehouseService warehouseService;
 
     @PostMapping("/comad/add-warehouse/{companyId}")
-    public ResponseEntity<Warehouse> createWarehouse(@PathVariable Long companyId ,@RequestBody Warehouse warehouse) {
-        return ResponseEntity.ok(warehouseService.createWarehouse(companyId,warehouse));
+    public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId, @RequestBody Warehouse warehouse) {
+        return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
     }
 
     @GetMapping("/comad/get-warehouse/{warehouseId}")
-    public ResponseEntity<Warehouse> getWarehouseById(@PathVariable Long warehouseId) {
+    public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long warehouseId) {
         return ResponseEntity.ok(warehouseService.getWarehouseById(warehouseId));
     }
 
     @GetMapping("/comad/get-all-warehouse-in-company/{companyId}")
-    public ResponseEntity<List<Warehouse>> getAllWarehouseInCompany(@PathVariable Long companyId) {
+    public ResponseEntity<List<WarehouseDto>> getAllWarehouseInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(warehouseService.getAllWarehousesInCompany(companyId));
     }
 
     @PutMapping("/comad/update-warehouse/{warehouseId}")
-    public ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long warehouseId, @RequestBody Warehouse updatedWarehouse) {
+    public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long warehouseId, @RequestBody Warehouse updatedWarehouse) {
         return ResponseEntity.ok(warehouseService.updateWarehouse(warehouseId, updatedWarehouse));
     }
-  
+
 }

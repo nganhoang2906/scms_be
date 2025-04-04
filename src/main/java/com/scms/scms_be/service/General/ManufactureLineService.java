@@ -1,15 +1,19 @@
 package com.scms.scms_be.service.General;
 
-import com.scms.scms_be.exception.CustomException;
-import com.scms.scms_be.model.entity.General.ManufactureLine;
-import com.scms.scms_be.model.entity.General.ManufacturePlant;
-import com.scms.scms_be.repository.General.ManufactureLineRepository;
-import com.scms.scms_be.repository.General.ManufacturePlantRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.scms.scms_be.exception.CustomException;
+import com.scms.scms_be.model.dto.General.ManufactureLineDto;
+import com.scms.scms_be.model.entity.General.ManufactureLine;
+import com.scms.scms_be.model.entity.General.ManufacturePlant;
+import com.scms.scms_be.repository.General.ManufactureLineRepository;
+import com.scms.scms_be.repository.General.ManufacturePlantRepository;
 
 @Service
 public class ManufactureLineService {
@@ -20,7 +24,7 @@ public class ManufactureLineService {
     @Autowired
     private ManufacturePlantRepository plantRepo;
 
-    public ManufactureLine createLine(Long plantId, ManufactureLine line) {
+    public ManufactureLineDto createLine(Long plantId, ManufactureLine line) {
         ManufacturePlant plant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
 
@@ -29,31 +33,55 @@ public class ManufactureLineService {
         }
 
         line.setPlant(plant);
-        return lineRepo.save(line);
+        return convertToDto(lineRepo.save(line));
     }
 
-    public List<ManufactureLine> getAllLinesInPlant(Long plantId) {
-        return lineRepo.findByPlantPlantId(plantId);
+    public List<ManufactureLineDto> getAllLinesInPlant(Long plantId) {
+        List<ManufactureLine> lines = lineRepo.findByPlantPlantId(plantId);
+        return lines.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public ManufactureLine getLineById(Long lineId) {
-        return lineRepo.findById(lineId)
+    public ManufactureLineDto getLineById(Long lineId) {
+        ManufactureLine line = lineRepo.findById(lineId)
                 .orElseThrow(() -> new CustomException("Dây chuyền không tồn tại!", HttpStatus.NOT_FOUND));
+        return convertToDto(line);
     }
 
-    public ManufactureLine updateLine(Long lineId, ManufactureLine updatedLine) {
+    public ManufactureLineDto updateLine(Long lineId, ManufactureLine updatedLine) {
         ManufactureLine existingLine = lineRepo.findById(lineId)
                 .orElseThrow(() -> new CustomException("Dây chuyền không tồn tại!", HttpStatus.NOT_FOUND));
 
-        if(!existingLine.getLineCode().equals(updatedLine.getLineCode())){
+        if (!existingLine.getLineCode().equals(updatedLine.getLineCode())) {
             if (lineRepo.existsByLineCode(updatedLine.getLineCode())) {
                 throw new CustomException("Mã dây chuyền đã tồn tại!", HttpStatus.BAD_REQUEST);
             }
         }
+
         existingLine.setLineName(updatedLine.getLineName());
+        existingLine.setLineCode(updatedLine.getLineCode());
         existingLine.setCapacity(updatedLine.getCapacity());
         existingLine.setDescription(updatedLine.getDescription());
 
-        return lineRepo.save(existingLine);
+        return convertToDto(lineRepo.save(existingLine));
+    }
+
+    public boolean deleteLine(Long lineId) {
+        Optional<ManufactureLine> line = lineRepo.findById(lineId);
+        if (line.isPresent()) {
+            lineRepo.delete(line.get());
+            return true;
+        }
+        return false;
+    }
+
+    private ManufactureLineDto convertToDto(ManufactureLine line) {
+        ManufactureLineDto dto = new ManufactureLineDto();
+        dto.setLineId(line.getLineId());
+        dto.setLineCode(line.getLineCode());
+        dto.setLineName(line.getLineName());
+        dto.setCapacity(line.getCapacity());
+        dto.setDescription(line.getDescription());
+
+        return dto;
     }
 }

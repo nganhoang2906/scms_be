@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.General.ItemDto;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.service.General.ItemService;
 
@@ -25,27 +26,35 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping("/comad/create-item/{companyId}")
-    public ResponseEntity<Item> create(@PathVariable Long companyId, @RequestBody Item item) {
-        return ResponseEntity.ok(itemService.createItem(companyId, item));
+    public ResponseEntity<ItemDto> createItem(@PathVariable Long companyId, @RequestBody Item item) {
+        ItemDto createdItem = itemService.createItem(companyId, item);
+        return ResponseEntity.ok(createdItem);
     }
 
     @GetMapping("/user/get-all-item-in-com/{companyId}")
-    public ResponseEntity<List<Item>> getAll(@PathVariable Long companyId) {
-        return ResponseEntity.ok(itemService.getAllItemsByCompany(companyId));
+    public ResponseEntity<List<ItemDto>> getAll(@PathVariable Long companyId) {
+        List<ItemDto> items = itemService.getAllItemsInCompany(companyId);
+        return ResponseEntity.ok(items);
     }
 
     @GetMapping("/user/get-item/{itemId}")
-    public ResponseEntity<Item> getById(@PathVariable Long itemId) {
-        return ResponseEntity.ok(itemService.getItemById(itemId));
+    public ResponseEntity<ItemDto> getById(@PathVariable Long itemId) {
+        ItemDto item = itemService.getItemById(itemId);
+        return ResponseEntity.ok(item);
     }
 
     @PutMapping("/comad/update-item/{itemId}")
-    public ResponseEntity<Item> update(@PathVariable Long itemId, @RequestBody Item item) {
-        return ResponseEntity.ok(itemService.updateItem(itemId, item));
+    public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody Item item) {
+        ItemDto updatedItem = itemService.updateItem(itemId, item);
+        return ResponseEntity.ok(updatedItem);
     }
     @DeleteMapping("/comad/delete-item/{itemId}")
-    public ResponseEntity<Void> delete(@PathVariable Long itemId) {
-        itemService.deleteItem(itemId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> delete(@PathVariable Long itemId) {
+        boolean deleted = itemService.deleteItem(itemId);
+        if (deleted) {
+            return ResponseEntity.ok("Phòng ban và nhân viên liên quan đã được xóa thành công.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

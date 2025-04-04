@@ -1,12 +1,15 @@
 package com.scms.scms_be.service.General;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
+import com.scms.scms_be.model.dto.General.ProductDto;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.General.Product;
 import com.scms.scms_be.repository.General.ItemRepository;
@@ -21,28 +24,52 @@ public class ProductService {
     @Autowired
     private ItemRepository itemRepo;
 
-    public Product createProduct(Long itemId, Product product) {
+    public ProductDto createProduct(Long itemId, Product product) {
         Item item = itemRepo.findById(itemId)
                 .orElseThrow(() -> new CustomException("Mặt hàng không tồn tại!", HttpStatus.NOT_FOUND));
 
         product.setItem(item);
-        return productRepo.save(product);
+        return convertToDto(productRepo.save(product));
     }
 
-    public List<Product> getAllByItem(Long itemId) {
-        return productRepo.findByItemItemId(itemId);
+    public List<ProductDto> getAllProductsByItem(Long itemId) {
+        List<Product> products = productRepo.findByItemItemId(itemId);
+        return products.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public Product getProductById(Long id) {
-        return productRepo.findById(id)
+    public ProductDto getProductById(Long id) {
+        Product product = productRepo.findById(id)
                 .orElseThrow(() -> new CustomException("Không tìm thấy sản phẩm!", HttpStatus.NOT_FOUND));
+        return convertToDto(product);
     }
 
-    public Product updateProduct(Long productId, Product updated) {
-        Product existing = getProductById(productId);
+    public ProductDto updateProduct(Long productId, Product updated) {
+        Product existing = productRepo.findById(productId)
+                .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại!", HttpStatus.NOT_FOUND));
+
         existing.setSerialNumber(updated.getSerialNumber());
         existing.setBatchId(updated.getBatchId());
         existing.setQrCode(updated.getQrCode());
-        return productRepo.save(existing);
+        return convertToDto(productRepo.save(existing));
+    }
+
+    public boolean deleteProduct(Long productId) {
+        Optional<Product> product = productRepo.findById(productId);
+        if (product.isPresent()) {
+            productRepo.delete(product.get());
+            return true;
+        }
+        return false;
+    }
+
+    private ProductDto convertToDto(Product product) {
+        ProductDto dto = new ProductDto();
+        dto.setProductId(product.getProductId());
+        dto.setItemId(product.getItem().getItemId());
+        dto.setSerialNumber(product.getSerialNumber());
+        dto.setBatchId(product.getBatchId());
+        dto.setQrCode(product.getQrCode());
+        dto.setCurrentCompanyId(product.getCurrentCompanyId());
+        return dto;
     }
 }

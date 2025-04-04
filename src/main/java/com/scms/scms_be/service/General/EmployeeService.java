@@ -68,14 +68,14 @@ public class EmployeeService {
         Employee savedEmployee = employeeRepo.save(employee);
 
         User newUser = new User(
-            savedEmployee,
-            request.getEmail(),
-            request.getUsername(),
-            passwordEncoder.encode(request.getPassword()),
-            "USER",
-            null,
-            "Active",
-            true
+                savedEmployee,
+                request.getEmail(),
+                request.getUsername(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getRole(),
+                null,
+                "Active",
+                true
         );
         userRepo.save(newUser);
 
@@ -108,7 +108,7 @@ public class EmployeeService {
         existingEmployee.setEmail(updatedEmployee.getEmail());
         existingEmployee.setPhoneNumber(updatedEmployee.getPhoneNumber());
         existingEmployee.setDateOfBirth(updatedEmployee.getDateOfBirth());
-       existingEmployee.setAvatar(updatedEmployee.getAvatar());
+        existingEmployee.setAvatar(updatedEmployee.getAvatar());
         existingEmployee.setStatus(updatedEmployee.getStatus());
 
         return convertToDto(employeeRepo.save(existingEmployee));
@@ -134,7 +134,7 @@ public class EmployeeService {
         dto.setEmail(employee.getEmail());
         dto.setPhoneNumber(employee.getPhoneNumber());
         dto.setDateOfBirth(employee.getDateOfBirth());
-       dto.setAvatar(employee.getAvatar());
+        dto.setAvatar(employee.getAvatar());
         dto.setStatus(employee.getStatus());
         return dto;
     }

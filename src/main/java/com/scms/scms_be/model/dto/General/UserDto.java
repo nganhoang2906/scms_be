@@ -23,8 +23,5 @@ public class UserDto {
     private User ourUser;
     
     private List<User> ourUsersList;
-  
-
-
 
 }
