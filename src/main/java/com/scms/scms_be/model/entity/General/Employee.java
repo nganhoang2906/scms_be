@@ -38,17 +38,13 @@ public class Employee {
 
     private String employeeName;
     private String position;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
     private String gender;
     
     private String address;
     private String email;
     private String phoneNumber;
-
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
-
-    @Temporal(TemporalType.DATE)
-    private Date employmentStartDate;
 
     @Lob
     private byte[] avatar;

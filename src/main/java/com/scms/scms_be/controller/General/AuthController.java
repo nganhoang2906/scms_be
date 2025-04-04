@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.model.dto.UserDto;
+import com.scms.scms_be.model.dto.General.UserDto;
 import com.scms.scms_be.model.dto.request.LoginRequest;
 import com.scms.scms_be.model.dto.request.RefreshTokenRequest;
 import com.scms.scms_be.model.dto.request.RegisterComanyRequest;

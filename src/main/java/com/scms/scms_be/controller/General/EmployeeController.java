@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.General.EmployeeDto;
 import com.scms.scms_be.model.dto.request.EmployeeRequest;
 import com.scms.scms_be.model.entity.General.Employee;
 import com.scms.scms_be.service.General.EmployeeService;
@@ -27,25 +28,25 @@ public class EmployeeController {
 
     // Tạo mới nhân viên
     @PostMapping("/comad/create-employee")
-    public ResponseEntity<Employee> createEmployee( @RequestBody EmployeeRequest employeeRequest) {
+    public ResponseEntity<EmployeeDto> createEmployee( @RequestBody EmployeeRequest employeeRequest) {
         return ResponseEntity.ok(employeeService.createEmployee( employeeRequest));
     }
 
     // Lấy danh sách nhân viên trong công ty
     @GetMapping("/comad/get-all-employee-in-com/{companyId}")
-    public ResponseEntity<List<Employee>> getAllEmployeeInCompany(@PathVariable Long companyId) {
+    public ResponseEntity<List<EmployeeDto>> getAllEmployeeInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
     }
 
     // Lấy nhân viên theo ID (chỉ xem trong công ty)
     @GetMapping("/user/get-employee/{employeeId}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long employeeId) {
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId) {
         return ResponseEntity.ok(employeeService.getEmployeeById( employeeId));
     }
 
     // Chỉnh sửa thông tin cá nhân (chỉ user đó có thể sửa)
     @PutMapping("/user/update-employee/{employeeId}")
-    public ResponseEntity<Employee> updateEmployee(
+    public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long employeeId,
             @RequestBody Employee updatedEmployee) {
         return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));

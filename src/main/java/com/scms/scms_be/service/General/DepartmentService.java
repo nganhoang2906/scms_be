@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
-import com.scms.scms_be.model.dto.DepartmentDto;
+import com.scms.scms_be.model.dto.General.DepartmentDto;
 import com.scms.scms_be.model.dto.request.DepartmentRequest;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Department;

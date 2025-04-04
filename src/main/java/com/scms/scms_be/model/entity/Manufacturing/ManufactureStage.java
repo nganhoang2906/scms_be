@@ -28,7 +28,7 @@ public class ManufactureStage {
     private Item item;
     
     private String stageName;
-    private Integer orderIndex;
-    private Integer estimatedTime; // minutes
+    private Integer stageOrder;
+    private Long estimatedTime; // minutes
     private String description;
 }

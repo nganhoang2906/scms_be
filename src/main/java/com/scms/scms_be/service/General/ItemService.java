@@ -57,4 +57,10 @@ public class ItemService {
         existing.setDescription(updated.getDescription());
         return itemRepo.save(existing);
     }
+
+    public void deleteItem(Long itemId) {
+        Item existing = getItemById(itemId);
+        itemRepo.delete(existing);
+    
+    }
 }

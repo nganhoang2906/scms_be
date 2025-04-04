@@ -19,18 +19,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManufactureProcess {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "mo_id", nullable = false)
-    private ManufactureOrder mo;
 
-    @ManyToOne
-    @JoinColumn(name = "stage_id", nullable = false)
-    private ManufactureStage stage;
+    @ManyToOne 
+    @JoinColumn(name = "mo_id") 
+    private ManufactureOrder order;
     
+    @ManyToOne 
+    @JoinColumn(name = "stage_id") 
+    private ManufactureStage stage;
+
     private Date startedOn;
     private Date finishedOn;
     private String status;

@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.dto;
+package com.scms.scms_be.model.dto.General;
 
 import java.util.Date;
 import java.util.List;
@@ -7,8 +7,9 @@ import lombok.Data;
 
 @Data
 public class EmployeeDto {
-    private Long departmentId;
+    
     private Long employeeId;
+    private Long departmentId;
     private String employeeCode;
     private String employeeName;
     private String position;
@@ -17,7 +18,6 @@ public class EmployeeDto {
     private String email;
     private String phoneNumber;
     private Date dateOfBirth;
-    private Date employmentStartDate;
     private byte[] avatar;
     private String status;
 

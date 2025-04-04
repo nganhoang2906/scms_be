@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.scms.scms_be.model.dto.UserDto;
+import com.scms.scms_be.model.dto.General.UserDto;
 import com.scms.scms_be.model.entity.General.User;
 import com.scms.scms_be.repository.General.UserRepository;
 

@@ -30,7 +30,7 @@ public class JWTUntils {
 
     public String generateToken(UserDetails userDetails) {
         HashMap<String, Object> claims = new HashMap<>();
-        claims.put("roles", userDetails.getAuthorities().stream()
+        claims.put("role", userDetails.getAuthorities().stream()
                 .map(Object::toString)
                 .toList());
     

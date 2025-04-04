@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.config.JWTUntils;
-import com.scms.scms_be.model.dto.UserDto;
+import com.scms.scms_be.model.dto.General.UserDto;
 import com.scms.scms_be.model.dto.request.LoginRequest;
 import com.scms.scms_be.model.dto.request.RefreshTokenRequest;
 import com.scms.scms_be.model.dto.request.RegisterComanyRequest;

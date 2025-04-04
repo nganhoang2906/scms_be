@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.dto;
+package com.scms.scms_be.model.dto.General;
 
 import java.util.List;
 

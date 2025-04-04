@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scms.scms_be.model.dto.DepartmentDto;
+import com.scms.scms_be.model.dto.General.DepartmentDto;
 import com.scms.scms_be.model.dto.request.DepartmentRequest;
 import com.scms.scms_be.service.General.DepartmentService;
 

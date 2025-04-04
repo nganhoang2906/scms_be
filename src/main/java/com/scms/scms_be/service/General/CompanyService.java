@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
-import com.scms.scms_be.model.dto.CompanyDto;
+import com.scms.scms_be.model.dto.General.CompanyDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.repository.General.CompanyRepository;
 
