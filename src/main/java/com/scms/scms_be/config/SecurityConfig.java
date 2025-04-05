@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request-> request
                         .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
                         .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
-                        .requestMatchers("/comsys/**").hasAnyAuthority("C-A-ADMIN","S-ADMIN")
+                        .requestMatchers("/comsys/**").hasAnyAuthority("C-ADMIN","S-ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER","C-ADMIN")
                         .requestMatchers("/all/**").hasAnyAuthority("USER","C-ADMIN","S-ADMIN")
                         .requestMatchers("/auth/**").permitAll()

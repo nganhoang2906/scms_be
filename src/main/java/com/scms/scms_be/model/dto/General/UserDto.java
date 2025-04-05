@@ -14,6 +14,8 @@ public class UserDto {
     private String token;
     private String refreshToken;
     private String expirationTime;
+
+    private Long userId;
     private Long employeeId;
     private String username;
     private String email;
@@ -22,6 +24,6 @@ public class UserDto {
     private String otp;
     private User ourUser;
     
-    private List<User> ourUsersList;
+    private List<UserDto> ourUsersList;
 
 }

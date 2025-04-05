@@ -21,7 +21,7 @@ public class CompanyDto {
     private String phoneNumber;
     private String email;
     private String websiteAddress;
-    private byte[] logo;
+    private String logo;
     private String status;
 
     private List<CompanyDto> companyList;

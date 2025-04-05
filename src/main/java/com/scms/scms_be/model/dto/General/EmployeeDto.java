@@ -17,7 +17,7 @@ public class EmployeeDto {
     private String email;
     private String phoneNumber;
     private Date dateOfBirth;
-    private byte[] avatar;
+    private String avatar;
     private String status;
 
     private List<EmployeeDto> employeeList;

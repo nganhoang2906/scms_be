@@ -76,6 +76,7 @@ public class ManufactureLineService {
 
     private ManufactureLineDto convertToDto(ManufactureLine line) {
         ManufactureLineDto dto = new ManufactureLineDto();
+        dto.setPlantId(line.getPlant().getPlantId());
         dto.setLineId(line.getLineId());
         dto.setLineCode(line.getLineCode());
         dto.setLineName(line.getLineName());

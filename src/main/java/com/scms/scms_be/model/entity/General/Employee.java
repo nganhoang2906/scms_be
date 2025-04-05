@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -46,8 +45,7 @@ public class Employee {
     private String email;
     private String phoneNumber;
 
-    @Lob
-    private byte[] avatar;
+    private String avatar;
 
     private String status;
     

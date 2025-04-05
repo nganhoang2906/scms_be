@@ -1,5 +1,7 @@
 package com.scms.scms_be.controller.General;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,8 +26,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/sysad/get-all-users")
-    public ResponseEntity<UserDto> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/comad/get-all-users-in-com/{companyId}")
+    public ResponseEntity<List<UserDto>> getAllUsersInCompany(@PathVariable Long companyId) {
+        return ResponseEntity.ok(userService.getAllUsersByCompanyId(companyId));
     }
 
     @GetMapping("/comad/get-user-by-employeeId/{employeeId}")
@@ -48,7 +55,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         UserDto response = userService.getMyInfo(username);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+        return ResponseEntity.ok(response);
     }
 
 }

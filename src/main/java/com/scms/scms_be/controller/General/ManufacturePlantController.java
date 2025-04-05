@@ -33,13 +33,13 @@ public class ManufacturePlantController {
     }
 
     // Lấy tất cả ManufacturePlant của công ty
-    @GetMapping("/user/mf-plant-in-com/{companyId}")
+    @GetMapping("/user/get-all-mf-plant-in-com/{companyId}")
     public ResponseEntity<List<ManufacturePlantDto>> getAllPlants(@PathVariable Long companyId) {
         return ResponseEntity.ok(plantService.getAllPlantsInCompany(companyId));
     }
 
     // Lấy ManufacturePlant theo ID
-    @GetMapping("/user/mf-plant/{plantId}")
+    @GetMapping("/user/get-mf-plant/{plantId}")
     public ResponseEntity<ManufacturePlantDto> getPlantById(@PathVariable Long plantId) {
         return ResponseEntity.ok(plantService.getPlantById(plantId));
     }
