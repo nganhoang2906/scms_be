@@ -22,6 +22,7 @@ public class CompanyDto {
     private String email;
     private String websiteAddress;
     private String logo;
+    private String logoUrl;
     private String status;
 
     private List<CompanyDto> companyList;

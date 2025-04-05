@@ -84,6 +84,7 @@
 			<artifactId>jjwt-api</artifactId>
 			<version>0.12.5</version>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -91,6 +92,7 @@
 			<version>0.12.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -99,6 +101,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- aws s3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.100</version>
+		</dependency>
 
 	</dependencies>
 

@@ -91,7 +91,7 @@ public class AuthService {
                 company.setJoinDate(registrationRequest.getJoinDate());
                 company.setPhoneNumber(registrationRequest.getPhoneNumber());
                 company.setEmail(registrationRequest.getEmail());
-                company.setStatus("Active");
+                company.setStatus("Đang hoat động");
                 company = companyRepo.save(company);
                 role = "C-ADMIN"; // Người tạo công ty sẽ có quyền ADMIN
            
@@ -292,11 +292,19 @@ public class AuthService {
     public UserDto login(LoginRequest loginRequest) {
         UserDto response = new UserDto();
         try {
-            User users = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+            Optional<User> optionalUser = usersRepo.findByEmail(loginRequest.getEmail());
+
+            if (optionalUser.isEmpty()) {
+                response.setStatusCode(404);
+                response.setMessage("Tài khoản không tồn tại.");
+                return response;
+            }
+
+            User users = optionalUser.get();
 
             if (!users.isVerified()) {
                 response.setStatusCode(403);
-                response.setMessage("Tài khoản chưa được xác thực. Vui lòng kiểm tra email để nhập OTP.");
+                response.setMessage("Tài khoản chưa được xác thực.");
                 return response;
             }
 
@@ -306,9 +314,18 @@ public class AuthService {
                 return response;
             }
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-                            loginRequest.getPassword()));
+            try {
+                authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(), loginRequest.getPassword()
+                    )
+                );
+            } catch (Exception authEx) {
+                response.setStatusCode(401);
+                response.setMessage("Mật khẩu không chính xác.");
+                return response;
+            }
+
             var user = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow();
             var jwt = jwtUntils.generateToken(user);
             var refreshToken = jwtUntils.generateRefreshToken(new HashMap<>(), user);
@@ -322,7 +339,7 @@ public class AuthService {
             response.setRole(user.getRole());
             response.setStatus(users.getStatus());
             response.setExpirationTime("24Hrs");
-            response.setMessage("Successfully Logged In");
+            response.setMessage("Đăng nhập thành công!");
 
         } catch (Exception e) {
             response.setStatusCode(500);
