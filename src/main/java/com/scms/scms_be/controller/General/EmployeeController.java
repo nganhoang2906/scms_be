@@ -1,8 +1,10 @@
 package com.scms.scms_be.controller.General;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.EmployeeDto;
 import com.scms.scms_be.model.dto.request.EmployeeRequest;
 import com.scms.scms_be.model.entity.General.Employee;
@@ -59,6 +64,19 @@ public class EmployeeController {
             return ResponseEntity.ok("Nhân viên và tài khoản liên quan đã được xóa thành công");
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/user/update-avatar/{id}")
+    public ResponseEntity<String> updateEmployeeAvatar(
+            @PathVariable Long id,
+            @RequestParam("avatar") MultipartFile avatarFile) {
+
+        try {
+            String avatarUrl = employeeService.updateEmployeeAvatar(id, avatarFile);
+            return ResponseEntity.ok(avatarUrl);
+        } catch (IOException e) {
+            throw new CustomException("Upload avatar thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
   

@@ -80,7 +80,7 @@ public class CompanyService {
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
     
         if (logoFile != null && !logoFile.isEmpty()) {
-            String logoFileName = awsS3Service.uploadFile(logoFile, companyId);
+            String logoFileName = awsS3Service.uploadCompanyLogo(logoFile, companyId);
             company.setLogo(logoFileName);
             companyRepository.save(company);
             return awsS3Service.getFileUrl(logoFileName);

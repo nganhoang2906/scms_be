@@ -1,5 +1,6 @@
 package com.scms.scms_be.service.General;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.EmployeeDto;
@@ -32,6 +34,9 @@ public class EmployeeService {
 
     @Autowired
     private DepartmentRepository departmentRepo;
+
+    @Autowired
+    private AwsS3Service awsS3Service;
 
     public EmployeeDto createEmployee(EmployeeRequest request) {
 
@@ -62,7 +67,7 @@ public class EmployeeService {
         employee.setEmail(request.getEmail());
         employee.setPhoneNumber(request.getPhoneNumber());
         employee.setDateOfBirth(request.getDateOfBirth());
-        employee.setStatus(request.getStatus());
+        employee.setStatus("Đang làm việc");
         employee.setDepartment(department);
 
         Employee savedEmployee = employeeRepo.save(employee);
@@ -114,6 +119,20 @@ public class EmployeeService {
         return convertToDto(employeeRepo.save(existingEmployee));
     }
 
+    public String updateEmployeeAvatar(Long employeeId, MultipartFile avatarFile) throws IOException {
+        Employee employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            String avatarFileName = awsS3Service.uploadEmployeeAvatar(avatarFile, employeeId);
+            employee.setAvatar(avatarFileName);
+            employeeRepo.save(employee);
+            return awsS3Service.getFileUrl(avatarFileName);
+        } else {
+            throw new CustomException("Ảnh đại diện không hợp lệ", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     public boolean deleteEmployeeById(Long id) {
         if (employeeRepo.existsById(id)) {
             employeeRepo.deleteById(id);
@@ -136,6 +155,12 @@ public class EmployeeService {
         dto.setDateOfBirth(employee.getDateOfBirth());
         dto.setAvatar(employee.getAvatar());
         dto.setStatus(employee.getStatus());
+
+        if (employee.getAvatar() != null && !employee.getAvatar().isEmpty()) {
+            String avatarUrl = awsS3Service.getFileUrl(employee.getAvatar());
+            dto.setAvatarUrl(avatarUrl); // Set URL ảnh đại diện
+        }
+        
         return dto;
     }
 }

@@ -18,6 +18,7 @@ public class EmployeeDto {
     private String phoneNumber;
     private Date dateOfBirth;
     private String avatar;
+    private String avatarUrl;
     private String status;
 
     private List<EmployeeDto> employeeList;

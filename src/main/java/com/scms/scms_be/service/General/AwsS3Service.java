@@ -28,20 +28,36 @@ public class AwsS3Service {
         return amazonS3.getUrl(bucketName, fileName).toString();
     }
 
-    public String uploadFile(MultipartFile file, Long companyId) throws IOException {
+    public String uploadCompanyLogo(MultipartFile file, Long companyId) throws IOException {
         String originalFileName = file.getOriginalFilename();
-        String newFileName = "logo-" + companyId;
+        String newFileName = "company-logo/logo-" + companyId;
 
         Path tempPath = Files.createTempFile("temp", originalFileName);
         file.transferTo(tempPath.toFile());
 
-        // Thêm quyền PublicRead khi upload file
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newFileName, tempPath.toFile())
                 .withCannedAcl(CannedAccessControlList.PublicRead); // Set quyền public-read
 
         amazonS3.putObject(putObjectRequest);
         Files.delete(tempPath);
 
-        return newFileName; // Trả về tên file trên S3
+        return newFileName;
     }
+
+    public String uploadEmployeeAvatar(MultipartFile file, Long employeeId) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        String newFileName = "employee-avatar/avatar-" + employeeId;
+    
+        Path tempPath = Files.createTempFile("temp", originalFileName);
+        file.transferTo(tempPath.toFile());
+    
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newFileName, tempPath.toFile())
+                .withCannedAcl(CannedAccessControlList.PublicRead);
+    
+        amazonS3.putObject(putObjectRequest);
+        Files.delete(tempPath);
+    
+        return newFileName;
+    }
+    
 }
