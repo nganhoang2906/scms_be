@@ -68,7 +68,7 @@ public class CompanyService {
         company.setPhoneNumber(companyDetails.getPhoneNumber());
         company.setEmail(companyDetails.getEmail());
         company.setWebsiteAddress(companyDetails.getWebsiteAddress());
-        company.setStatus("Đang hoạt động");
+        company.setStatus(companyDetails.getStatus());
         company.setCountry(companyDetails.getCountry());
 
         companyRepository.save(company);

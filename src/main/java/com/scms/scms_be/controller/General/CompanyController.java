@@ -27,13 +27,13 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @GetMapping("/auth/get-company/{id}")
+    @GetMapping("/user/get-company/{id}")
     public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id) {
         CompanyDto company = companyService.getCompanyById(id);
         return ResponseEntity.ok(company);
     }
 
-    @GetMapping("/auth/get-all-companies")
+    @GetMapping("/user/get-all-companies")
     public ResponseEntity<List<CompanyDto>> getAllCompanies() {
         List<CompanyDto> companies = companyService.getAllCompanies();
         return ResponseEntity.ok(companies);

@@ -308,7 +308,7 @@ public class AuthService {
                 return response;
             }
 
-            if (!users.getStatus().equals("Active")) {
+            if (!users.getStatus().equals("Đang hoạt động")) {
                 response.setStatusCode(403);
                 response.setMessage("Tài khoản đã bị khóa.");
                 return response;

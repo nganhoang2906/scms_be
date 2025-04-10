@@ -9,6 +9,7 @@ import lombok.Data;
 public class EmployeeDto {
     private Long employeeId;
     private Long departmentId;
+    private String departmentName;
     private String employeeCode;
     private String employeeName;
     private String position;

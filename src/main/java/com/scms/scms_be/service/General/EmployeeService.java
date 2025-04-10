@@ -72,15 +72,24 @@ public class EmployeeService {
 
         Employee savedEmployee = employeeRepo.save(employee);
 
+        String departmentName = department.getDepartmentName();
+        String role;
+
+        if ("Ban quản lý".equals(departmentName)) {
+            role = "C-ADMIN";
+        } else {
+            role = "USER";
+        }
+
         User newUser = new User(
-                savedEmployee,
-                request.getEmail(),
-                request.getUsername(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getRole(),
-                null,
-                "Active",
-                true
+            savedEmployee,
+            request.getEmail(),
+            request.getUsername(),
+            passwordEncoder.encode(request.getPassword()),
+            role,
+            null,
+            "Active",
+            true
         );
         userRepo.save(newUser);
 
@@ -145,6 +154,7 @@ public class EmployeeService {
         EmployeeDto dto = new EmployeeDto();
         dto.setEmployeeId(employee.getEmployeeId());
         dto.setDepartmentId(employee.getDepartment().getDepartmentId());
+        dto.setDepartmentName(employee.getDepartment().getDepartmentName());
         dto.setEmployeeCode(employee.getEmployeeCode());
         dto.setEmployeeName(employee.getEmployeeName());
         dto.setPosition(employee.getPosition());
@@ -160,7 +170,7 @@ public class EmployeeService {
             String avatarUrl = awsS3Service.getFileUrl(employee.getAvatar());
             dto.setAvatarUrl(avatarUrl); // Set URL ảnh đại diện
         }
-        
+
         return dto;
     }
 }

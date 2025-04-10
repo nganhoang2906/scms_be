@@ -38,7 +38,7 @@ public class EmployeeController {
     }
 
     // Lấy danh sách nhân viên trong công ty
-    @GetMapping("/comad/get-all-employee-in-com/{companyId}")
+    @GetMapping("/user/get-all-employee-in-com/{companyId}")
     public ResponseEntity<List<EmployeeDto>> getAllEmployeeInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
     }

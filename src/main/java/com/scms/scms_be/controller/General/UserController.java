@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.UserDto;
+import com.scms.scms_be.model.dto.request.UpdatePasswordRequest;
 import com.scms.scms_be.model.entity.General.User;
 import com.scms.scms_be.service.General.UserService;
 
@@ -30,17 +30,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/comad/get-all-users-in-com/{companyId}")
+    @GetMapping("/comsys/get-all-users-in-com/{companyId}")
     public ResponseEntity<List<UserDto>> getAllUsersInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(userService.getAllUsersByCompanyId(companyId));
     }
 
-    @GetMapping("/comad/get-user-by-employeeId/{employeeId}")
+    @GetMapping("/user/get-user-by-employeeId/{employeeId}")
     public ResponseEntity<UserDto> getUserByEmployeeId(@PathVariable Long employeeId) {
         return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
     }
-    
-    @GetMapping("/sysad/get-user-by-userId/{userId}")
+
+    @GetMapping("/user/get-user-by-userId/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
@@ -50,12 +50,12 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
-    @GetMapping("/user/get-profile")
-    public ResponseEntity<UserDto> getProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        UserDto response = userService.getMyInfo(username);
-        return ResponseEntity.ok(response);
+    @PostMapping("/users/{userId}/update-password")
+    public ResponseEntity<?> updatePassword(
+            @PathVariable Long userId,
+            @RequestBody UpdatePasswordRequest request) {
+        userService.updatePassword(userId, request);
+        return ResponseEntity.ok("Cập nhật mật khẩu thành công");
     }
 
 }

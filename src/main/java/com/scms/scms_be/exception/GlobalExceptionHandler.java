@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<?> handleCustomException(CustomException ex) {
+    public ResponseEntity<Map<String, Object>> handleCustomException(CustomException ex) {
         Map<String, Object> errorBody = new HashMap<>();
         errorBody.put("status", ex.getStatus().value());
         errorBody.put("error", ex.getStatus().getReasonPhrase());
@@ -21,3 +20,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorBody, ex.getStatus());
     }
 }
+

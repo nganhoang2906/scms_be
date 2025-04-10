@@ -29,12 +29,12 @@ public class WarehouseController {
         return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
     }
 
-    @GetMapping("/comad/get-warehouse/{warehouseId}")
+    @GetMapping("/user/get-warehouse/{warehouseId}")
     public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long warehouseId) {
         return ResponseEntity.ok(warehouseService.getWarehouseById(warehouseId));
     }
 
-    @GetMapping("/comad/get-all-warehouse-in-company/{companyId}")
+    @GetMapping("/user/get-all-warehouse-in-company/{companyId}")
     public ResponseEntity<List<WarehouseDto>> getAllWarehouseInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(warehouseService.getAllWarehousesInCompany(companyId));
     }

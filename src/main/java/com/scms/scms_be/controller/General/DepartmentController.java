@@ -21,7 +21,7 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     // Lấy danh sách phòng ban trong công ty
-    @GetMapping("/comad/get-all-department-in-company/{companyId}")
+    @GetMapping("/user/get-all-department-in-company/{companyId}")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments(@PathVariable Long companyId) {
         List<DepartmentDto> departments = departmentService.getAllDepartmentInCompany(companyId);
         return ResponseEntity.ok(departments);
