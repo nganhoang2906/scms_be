@@ -36,7 +36,7 @@ public class Warehouse {
     private String description;
 
     @Column(nullable = false)
-    private double maxCapacity;
+    private Double maxCapacity;
 
     @Column(nullable = false)
     private String warehouseType;

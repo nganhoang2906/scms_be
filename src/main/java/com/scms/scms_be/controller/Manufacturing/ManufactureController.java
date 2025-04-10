@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
+import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureProcess;
@@ -64,49 +66,49 @@ public class ManufactureController {
     // --- ManufactureOrder ---
 
     @PostMapping("/user/create-order/{itemId}/{lineId}")
-    public ResponseEntity<ManufactureOrder> createOrder(@PathVariable Long itemId, @PathVariable Long lineId, @RequestBody ManufactureOrder order) {
-        return ResponseEntity.ok(orderService.createOrder(order, itemId, lineId));
+    public ResponseEntity<ManufactureOrderDto> createOrder(@PathVariable Long itemId, @PathVariable Long lineId, @RequestBody ManufactureOrder order) {
+        return ResponseEntity.ok(orderService.createOrder( itemId, lineId,order));
     }
 
     @GetMapping("/user/get-all-order-in-item/{itemId}")
-    public ResponseEntity<List<ManufactureOrder>> getAllOrders(@PathVariable Long itemId) {
+    public ResponseEntity<List<ManufactureOrderDto>> getAllOrders(@PathVariable Long itemId) {
         return ResponseEntity.ok(orderService.getAllManufactureOrdersbyItemId(itemId));
     }
 
     @GetMapping("/user/get-all-order-in-com/{companyId}")
-    public ResponseEntity<List<ManufactureOrder>> getAllOrdersByCompany(@PathVariable Long companyId) {
+    public ResponseEntity<List<ManufactureOrderDto>> getAllOrdersByCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(orderService.getAllManufactureOrdersByCompanyId(companyId));
     }
 
-    @GetMapping("/user/get-order/{id}")
-    public ResponseEntity<ManufactureOrder> getOrder(@PathVariable Long id) {
-        return ResponseEntity.ok(orderService.getById(id));
+    @GetMapping("/user/get-order/{moid}")
+    public ResponseEntity<ManufactureOrderDto> getOrder(@PathVariable Long moid) {
+        return ResponseEntity.ok(orderService.getById(moid));
     }
 
-    @PutMapping("/user/update-order/{id}")
-    public ResponseEntity<ManufactureOrder> updateOrder(@PathVariable Long id, @RequestBody ManufactureOrder order) {
-        return ResponseEntity.ok(orderService.update(id, order));
+    @PutMapping("/user/update-order/{moid}")
+    public ResponseEntity<ManufactureOrderDto> updateOrder(@PathVariable Long moid, @RequestBody ManufactureOrder order) {
+        return ResponseEntity.ok(orderService.update(moid, order));
     }
 
     // --- ManufactureProcess ---
 
     @PostMapping("/user/create-process/{moId}/{stageId}")
-    public ResponseEntity<ManufactureProcess> createProcess(@PathVariable Long moId, @PathVariable Long stageId, @RequestBody ManufactureProcess process) {
-        return ResponseEntity.ok(processService.create(process, moId, stageId));
+    public ResponseEntity<ManufactureProcessDto> createProcess(@PathVariable Long moId, @PathVariable Long stageId, @RequestBody ManufactureProcess process) {
+        return ResponseEntity.ok(processService.create( moId, stageId,process));
     }
 
-    @GetMapping("/user/get-all-process/{companyId}")
-    public ResponseEntity<List<ManufactureProcess>> getAllProcesses(@PathVariable Long companyId) {
+    @GetMapping("/user/get-all-process-in-com/{companyId}")
+    public ResponseEntity<List<ManufactureProcessDto>> getAllProcesses(@PathVariable Long companyId) {
         return ResponseEntity.ok(processService.getAllByCompany(companyId));
     }
 
-    @GetMapping("/user/get-process/{id}")
-    public ResponseEntity<ManufactureProcess> getProcess(@PathVariable Long id) {
-        return ResponseEntity.ok(processService.getById(id));
+    @GetMapping("/user/get-process/{mpid}")
+    public ResponseEntity<ManufactureProcessDto> getProcess(@PathVariable Long mpid) {
+        return ResponseEntity.ok(processService.getById(mpid));
     }
 
-    @PutMapping("/user/update-process/{id}")
-    public ResponseEntity<ManufactureProcess> updateProcess(@PathVariable Long id, @RequestBody ManufactureProcess process) {
-        return ResponseEntity.ok(processService.update(id, process));
+    @PutMapping("/user/update-process/{mpid}")
+    public ResponseEntity<ManufactureProcessDto> updateProcess(@PathVariable Long mpid, @RequestBody ManufactureProcess process) {
+        return ResponseEntity.ok(processService.update(mpid, process));
     }
 }

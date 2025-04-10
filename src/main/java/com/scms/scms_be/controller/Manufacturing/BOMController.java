@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scms.scms_be.model.dto.Manufacture.BOMDetailDto;
+import com.scms.scms_be.model.dto.Manufacture.BOMDto;
 import com.scms.scms_be.model.dto.request.BOMRequest;
-import com.scms.scms_be.model.entity.Manufacturing.BOM;
-import com.scms.scms_be.model.entity.Manufacturing.BOMDetail;
 import com.scms.scms_be.service.Manufacturing.BOMService;
 
 @RestController
@@ -24,23 +24,23 @@ public class BOMController {
     private BOMService bomService;
 
     @PostMapping("/user/create-bom")
-    public ResponseEntity<BOM> createBOM(@RequestBody BOMRequest request) {
-        BOM created = bomService.createBOM(request);
+    public ResponseEntity<BOMDto> createBOM(@RequestBody BOMRequest request) {
+        BOMDto created = bomService.createBOM(request);
         return ResponseEntity.ok(created);
     }
 
     @GetMapping("/user/get-all-bom-in-com/{companyId}")
-    public ResponseEntity<List<BOM>> getAllBOMsByCompany(@PathVariable Long companyId) {
+    public ResponseEntity<List<BOMDto>> getAllBOMsByCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(bomService.getAllBOMInCom(companyId));
     }
 
     @GetMapping("/user/get-bom/{bomId}")
-    public ResponseEntity<BOM> getBOMById(@PathVariable Long bomId) {
+    public ResponseEntity<BOMDto> getBOMById(@PathVariable Long bomId) {
         return ResponseEntity.ok(bomService.getBOMById(bomId));
     }
 
     @PutMapping("/user/update-bom/{bomId}")
-    public ResponseEntity<BOM> updateBOM(@PathVariable Long bomId, @RequestBody BOMRequest bom) {
+    public ResponseEntity<BOMDto> updateBOM(@PathVariable Long bomId, @RequestBody BOMRequest bom) {
         return ResponseEntity.ok(bomService.updateBOM(bomId, bom));
     }
 
@@ -52,13 +52,13 @@ public class BOMController {
 
     // BOM Detail
     @PostMapping("/user/add-bom-detail/{bomId}")
-    public ResponseEntity<BOMDetail> addBOMDetail(@PathVariable Long bomId, @RequestBody BOMRequest.BOMDetailDTO request) {
-        BOMDetail created = bomService.addBomDetail(bomId, request);
+    public ResponseEntity<BOMDto> addBOMDetail(@PathVariable Long bomId, @RequestBody BOMRequest.BOMDetailDTO request) {
+        BOMDto created = bomService.addBomDetail(bomId, request);
         return ResponseEntity.ok(created);
     }
     
     @PutMapping("/user/update-bom-detail/{bomId}/{bomDetailId}")
-    public ResponseEntity<BOMDetail> updateBOMDetail(@PathVariable Long bomId, @PathVariable Long bomDetailId, @RequestBody BOMRequest.BOMDetailDTO request) {
+    public ResponseEntity<BOMDto> updateBOMDetail(@PathVariable Long bomId, @PathVariable Long bomDetailId, @RequestBody BOMRequest.BOMDetailDTO request) {
         return ResponseEntity.ok(bomService.updateBOMDetail(bomId, bomDetailId, request));
     }
 

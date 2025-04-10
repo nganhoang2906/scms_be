@@ -21,8 +21,45 @@ public class ManufactureStageService {
     @Autowired
     private ItemRepository itemRepo;
 
-    // Mapper thủ công
-    private ManufactureStageDto toDto(ManufactureStage stage) {
+
+    
+
+    public ManufactureStageDto createStage(Long itemId, ManufactureStage stage) {
+        stage.setItem(itemRepo.findById(itemId)
+                .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
+        ManufactureStage saved = stageRepo.save(stage);
+        return convertToDto(saved);
+    }
+
+    public List<ManufactureStageDto> getAllStagesByItemId(Long itemId) {
+        return stageRepo.findByItem_ItemId(itemId).stream().map(this::convertToDto).toList();
+    }
+
+    public ManufactureStageDto getStageById(Long stageId) {
+        ManufactureStage stage = stageRepo.findById(stageId)
+                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
+        return convertToDto(stage);
+    }
+
+    public ManufactureStageDto updateStage(Long stageId, ManufactureStage stage) {
+        ManufactureStage exist = stageRepo.findById(stageId)
+                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
+        
+        exist.setStageName(stage.getStageName());
+        exist.setStageOrder(stage.getStageOrder());
+        exist.setEstimatedTime(stage.getEstimatedTime());
+        exist.setDescription(stage.getDescription());
+        ManufactureStage updated = stageRepo.save(exist);
+        return convertToDto(updated);
+    }
+
+    public void deleteStage(Long stageId) {
+        ManufactureStage exist = stageRepo.findById(stageId)
+                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
+        stageRepo.delete(exist);
+    }
+    
+    private ManufactureStageDto convertToDto(ManufactureStage stage) {
         ManufactureStageDto dto = new ManufactureStageDto();
         dto.setStageId(stage.getStageId());
         dto.setItemId(stage.getItem().getItemId());
@@ -31,39 +68,5 @@ public class ManufactureStageService {
         dto.setEstimatedTime(stage.getEstimatedTime());
         dto.setDescription(stage.getDescription());
         return dto;
-    }
-
-    public ManufactureStageDto createStage(Long itemId, ManufactureStage stage) {
-        stage.setItem(itemRepo.findById(itemId)
-                .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
-        ManufactureStage saved = stageRepo.save(stage);
-        return toDto(saved);
-    }
-
-    public List<ManufactureStageDto> getAllStagesByItemId(Long itemId) {
-        return stageRepo.findByItem_ItemId(itemId).stream().map(this::toDto).toList();
-    }
-
-    public ManufactureStageDto getStageById(Long id) {
-        ManufactureStage stage = stageRepo.findById(id)
-                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
-        return toDto(stage);
-    }
-
-    public ManufactureStageDto updateStage(Long id, ManufactureStage stage) {
-        ManufactureStage exist = stageRepo.findById(id)
-                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
-        exist.setStageName(stage.getStageName());
-        exist.setStageOrder(stage.getStageOrder());
-        exist.setEstimatedTime(stage.getEstimatedTime());
-        exist.setDescription(stage.getDescription());
-        ManufactureStage updated = stageRepo.save(exist);
-        return toDto(updated);
-    }
-
-    public void deleteStage(Long id) {
-        ManufactureStage exist = stageRepo.findById(id)
-                .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
-        stageRepo.delete(exist);
     }
 }
