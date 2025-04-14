@@ -24,7 +24,7 @@ public class WarehouseController {
     @Autowired
     private WarehouseService warehouseService;
 
-    @PostMapping("/comad/add-warehouse/{companyId}")
+    @PostMapping("/comad/create-warehouse/{companyId}")
     public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId, @RequestBody Warehouse warehouse) {
         return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
     }

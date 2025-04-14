@@ -60,7 +60,8 @@ public class ItemService {
         existingItem.setItemType(updatedItem.getItemType());
         existingItem.setUom(updatedItem.getUom());
         existingItem.setTechnicalSpecifications(updatedItem.getTechnicalSpecifications());
-        existingItem.setUnitPrice(updatedItem.getUnitPrice());
+        existingItem.setImportPrice(updatedItem.getImportPrice());
+        existingItem.setExportPrice(updatedItem.getExportPrice());
         existingItem.setDescription(updatedItem.getDescription());
         return convertToDto(itemRepo.save(existingItem));
     }
@@ -83,7 +84,8 @@ public class ItemService {
         dto.setItemType(item.getItemType());
         dto.setUom(item.getUom());
         dto.setTechnicalSpecifications(item.getTechnicalSpecifications());
-        dto.setUnitPrice(item.getUnitPrice());
+        dto.setImportPrice(item.getImportPrice());
+        dto.setExportPrice(item.getExportPrice());
         dto.setDescription(item.getDescription());
 
         return dto;

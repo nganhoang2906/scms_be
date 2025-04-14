@@ -13,7 +13,8 @@ public class ItemDto {
     private String itemType;
     private String uom;
     private String technicalSpecifications;
-    private Double unitPrice;
+    private Double importPrice;
+    private Double exportPrice;
     private String description;
 
     private List<ItemDto> ItemList;

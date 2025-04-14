@@ -20,15 +20,13 @@ import com.scms.scms_be.repository.Inventory.InventoryRepository;
 public class InventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
+    
     @Autowired
     private ItemRepository itemRepository;
+    
     @Autowired
     private WarehouseRepository warehouseRepository;
     
-    public InventoryDto createInventory(Inventory inventory) {
-        Inventory savedInventory = inventoryRepository.save(inventory);
-        return convertToDto(savedInventory);
-    }
     public List<InventoryDto> getAllInventoryByItem(Long itemId) {
         List<Inventory> inventories = inventoryRepository.findAllByItem_ItemId(itemId);
         return inventories.stream()

@@ -1,0 +1,69 @@
+package com.scms.scms_be.controller.Inventory;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.scms.scms_be.model.dto.Inventory.InventoryDto;
+import com.scms.scms_be.model.dto.request.InventoryRequest;
+import com.scms.scms_be.model.entity.Inventory.Inventory;
+import com.scms.scms_be.service.Inventory.InventoryService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+public class InventoryController {
+
+    @Autowired
+    private InventoryService inventoryService;
+
+    @PostMapping("/user/put-item-to-inventory")
+    public ResponseEntity<InventoryDto> putItemToInventory(@RequestBody InventoryRequest request) {
+        return ResponseEntity.ok(inventoryService.putItemToInventory(request));
+    }
+
+    @PostMapping("/user/increase-ondemand/{inventoryId}")
+    public ResponseEntity<InventoryDto> increaseOnDemand(
+            @PathVariable Long inventoryId,
+            @RequestParam Double amount) {
+        return ResponseEntity.ok(inventoryService.increaseOnDemand(inventoryId, amount));
+    }
+
+    @PostMapping("/user/consume-ondemand/{inventoryId}")
+    public ResponseEntity<InventoryDto> consumeOnDemand(
+            @PathVariable Long inventoryId,
+            @RequestParam Double amount) {
+        return ResponseEntity.ok(inventoryService.consumeOnDemand(inventoryId, amount));
+    }
+
+    @GetMapping("/user/get-all-inventory-by-item/{itemId}")
+    public ResponseEntity<List<InventoryDto>> getAllByItem(@PathVariable Long itemId) {
+        return ResponseEntity.ok(inventoryService.getAllInventoryByItem(itemId));
+    }
+
+    @GetMapping("/user/get-all-inventory-in-warehouse/{warehouseId}")
+    public ResponseEntity<List<InventoryDto>> getAllByWarehouse(@PathVariable Long warehouseId) {
+        return ResponseEntity.ok(inventoryService.getAllInventoryByWarehouse(warehouseId));
+    }
+
+    @GetMapping("/user/get-inventory/{inventoryId}")
+    public ResponseEntity<InventoryDto> getById(@PathVariable Long inventoryId) {
+        return ResponseEntity.ok(inventoryService.getInventoryById(inventoryId));
+    }
+
+    @PutMapping("/user/update-inventory/{inventoryId}")
+    public ResponseEntity<InventoryDto> updateInventory(@PathVariable Long inventoryId, @RequestBody Inventory inventory) {
+        return ResponseEntity.ok(inventoryService.updateInventory(inventoryId, inventory));
+    }
+
+
+}
