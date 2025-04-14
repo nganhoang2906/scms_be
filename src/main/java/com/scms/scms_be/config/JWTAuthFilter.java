@@ -31,8 +31,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
@@ -49,9 +49,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         try {
             usernameOrEmail = jwtUtils.extractUsername(jwtToken);
         } catch (Exception e) {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write("Token không hợp lệ hoặc đã hết hạn!");
-            return;
+            throw new CustomException("Phiên đăng nhập đã hết hạn!", HttpStatus.UNAUTHORIZED);
         }
 
         // Nếu user đã được xác thực thì bỏ qua
@@ -74,7 +72,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             System.out.println("Authorities: " + userDetails.getAuthorities());
 
         }
-       
+
         filterChain.doFilter(request, response);
     }
 }
