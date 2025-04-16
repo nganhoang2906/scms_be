@@ -83,7 +83,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             System.out.println("Authorities: " + userDetails.getAuthorities());
 
         }
-       
+
         filterChain.doFilter(request, response);
     }
 }
