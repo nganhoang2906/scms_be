@@ -33,11 +33,11 @@ public class ManufactureLineController {
         return ResponseEntity.ok(lineService.createLine(plantId, line));
     }
 
-    // Lấy tất cả ManufactureLine của một nhà máy
-    @GetMapping("/user/get-all-mf-line-in-plant/{plantId}")
-    public ResponseEntity<List<ManufactureLineDto>> getAllLines(
-        @PathVariable Long plantId) {
-        return ResponseEntity.ok(lineService.getAllLinesInPlant(plantId));
+    // Lấy tất cả ManufactureLine của một xưởng
+    @GetMapping("/user/get-all-mf-line-in-company/{companyId}")
+    public ResponseEntity<List<ManufactureLineDto>> getAllLinesInCompany(
+            @PathVariable Long companyId) {
+        return ResponseEntity.ok(lineService.getAllLinesInCompany(companyId));
     }
 
     // Lấy ManufactureLine theo ID

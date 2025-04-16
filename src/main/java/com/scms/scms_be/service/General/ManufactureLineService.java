@@ -1,5 +1,6 @@
 package com.scms.scms_be.service.General;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class ManufactureLineService {
 
     public ManufactureLineDto createLine(Long plantId, ManuLineRequest newLine) {
         ManufacturePlant plant = plantRepo.findById(plantId)
-                .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Xưởng sản xuất không tồn tại!", HttpStatus.NOT_FOUND));
 
         if (lineRepo.existsByLineCode(newLine.getLineCode())) {
             throw new CustomException("Mã dây chuyền đã tồn tại!", HttpStatus.BAD_REQUEST);
@@ -44,6 +45,18 @@ public class ManufactureLineService {
     public List<ManufactureLineDto> getAllLinesInPlant(Long plantId) {
         List<ManufactureLine> lines = lineRepo.findByPlantPlantId(plantId);
         return lines.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    public List<ManufactureLineDto> getAllLinesInCompany(Long companyId) {
+        List<ManufacturePlant> plants = plantRepo.findByCompanyCompanyId(companyId);
+        List<ManufactureLineDto> allLines = new ArrayList<>();
+
+        for (ManufacturePlant plant : plants) {
+            List<ManufactureLine> lines = lineRepo.findByPlantPlantId(plant.getPlantId());
+            allLines.addAll(lines.stream().map(this::convertToDto).collect(Collectors.toList()));
+        }
+
+        return allLines;
     }
 
     public ManufactureLineDto getLineById(Long lineId) {
@@ -81,7 +94,9 @@ public class ManufactureLineService {
 
     private ManufactureLineDto convertToDto(ManufactureLine line) {
         ManufactureLineDto dto = new ManufactureLineDto();
+        dto.setCompanyId(line.getPlant().getCompany().getCompanyId());
         dto.setPlantId(line.getPlant().getPlantId());
+        dto.setPlantName(line.getPlant().getPlantName());
         dto.setLineId(line.getLineId());
         dto.setLineCode(line.getLineCode());
         dto.setLineName(line.getLineName());

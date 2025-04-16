@@ -31,7 +31,7 @@ public class ManufacturePlantService {
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 
         if (plantRepo.existsByPlantCode(newPlant.getPlantCode())) {
-            throw new CustomException("Mã nhà máy đã tồn tại!", HttpStatus.BAD_REQUEST);
+            throw new CustomException("Mã xưởng đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
         ManufacturePlant plant = new ManufacturePlant();
         plant.setCompany(company);
@@ -50,18 +50,18 @@ public class ManufacturePlantService {
     // Lấy ManufacturePlant theo ID
     public ManufacturePlantDto getPlantById(Long plantId) {
         ManufacturePlant plant = plantRepo.findById(plantId)
-                .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Xưởng không tồn tại!", HttpStatus.NOT_FOUND));
         return convertToDto(plant);
     }
 
     // Cập nhật ManufacturePlant
     public ManufacturePlantDto updatePlant(Long plantId, ManuPlantRequest updatedPlant) {
         ManufacturePlant existingPlant = plantRepo.findById(plantId)
-                .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Xưởng không tồn tại!", HttpStatus.NOT_FOUND));
 
         if (!existingPlant.getPlantCode().equals(updatedPlant.getPlantCode())) {
             if (plantRepo.existsByPlantCode(updatedPlant.getPlantCode())) {
-                throw new CustomException("Mã nhà máy đã tồn tại!", HttpStatus.BAD_REQUEST);
+                throw new CustomException("Mã xưởng đã tồn tại!", HttpStatus.BAD_REQUEST);
             }
         }
 
