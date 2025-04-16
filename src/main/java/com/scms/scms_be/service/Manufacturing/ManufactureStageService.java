@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
+import com.scms.scms_be.model.request.Manufaacturing.ManuStageRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
@@ -24,7 +25,13 @@ public class ManufactureStageService {
 
     
 
-    public ManufactureStageDto createStage(Long itemId, ManufactureStage stage) {
+    public ManufactureStageDto createStage(Long itemId, ManuStageRequest stageRequest) {
+        ManufactureStage stage = new ManufactureStage();
+        stage.setStageName(stageRequest.getStageName());
+        stage.setStageOrder(stageRequest.getStageOrder());
+        stage.setEstimatedTime(stageRequest.getEstimatedTime());
+        stage.setDescription(stageRequest.getDescription());
+        
         stage.setItem(itemRepo.findById(itemId)
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
         ManufactureStage saved = stageRepo.save(stage);
@@ -41,7 +48,7 @@ public class ManufactureStageService {
         return convertToDto(stage);
     }
 
-    public ManufactureStageDto updateStage(Long stageId, ManufactureStage stage) {
+    public ManufactureStageDto updateStage(Long stageId, ManuStageRequest stage) {
         ManufactureStage exist = stageRepo.findById(stageId)
                 .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
         

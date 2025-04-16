@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Inventory.InventoryDto;
-import com.scms.scms_be.model.dto.request.InventoryRequest;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.General.Warehouse;
 import com.scms.scms_be.model.entity.Inventory.Inventory;
+import com.scms.scms_be.model.request.Inventory.InventoryRequest;
+import com.scms.scms_be.model.request.Inventory.putItemToInventoryRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.WarehouseRepository;
 import com.scms.scms_be.repository.Inventory.InventoryRepository;
@@ -45,7 +46,7 @@ public class InventoryService {
         return convertToDto(inventory);
     }
     
-    public InventoryDto updateInventory(Long inventoryId, Inventory inventory) {
+    public InventoryDto updateInventory(Long inventoryId, InventoryRequest inventory) {
         Inventory existingInventory = inventoryRepository.findById(inventoryId).orElse(null);
         if (existingInventory != null) {
             if(inventory.getQuantity() < inventory.getOnDemandQuantity()){
@@ -56,11 +57,11 @@ public class InventoryService {
             Inventory updatedInventory = inventoryRepository.save(existingInventory);
             return convertToDto(updatedInventory);
         }
-        return null;
+        throw new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND);
     }
 
     //Tăng Quantity 
-    public InventoryDto putItemToInventory(InventoryRequest inventoryRequest) {
+    public InventoryDto putItemToInventory(putItemToInventoryRequest inventoryRequest) {
         // Kiểm tra xem inventory đã tồn tại chưa (theo itemId và warehouseId)
         Inventory existingInventory = inventoryRepository.findByItem_ItemIdAndWarehouse_WarehouseId(
                 inventoryRequest.getItemId(),

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ManufactureLineDto;
 import com.scms.scms_be.model.entity.General.ManufactureLine;
+import com.scms.scms_be.model.request.General.ManuLineRequest;
 import com.scms.scms_be.service.General.ManufactureLineService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,19 +29,21 @@ public class ManufactureLineController {
     @PostMapping("/comad/create-mf-line/{plantId}")
     public ResponseEntity<ManufactureLineDto> createLine(
             @PathVariable Long plantId,
-            @RequestBody ManufactureLine line) {
+            @RequestBody ManuLineRequest line) {
         return ResponseEntity.ok(lineService.createLine(plantId, line));
     }
 
     // Lấy tất cả ManufactureLine của một nhà máy
     @GetMapping("/user/get-all-mf-line-in-plant/{plantId}")
-    public ResponseEntity<List<ManufactureLineDto>> getAllLines(@PathVariable Long plantId) {
+    public ResponseEntity<List<ManufactureLineDto>> getAllLines(
+        @PathVariable Long plantId) {
         return ResponseEntity.ok(lineService.getAllLinesInPlant(plantId));
     }
 
     // Lấy ManufactureLine theo ID
     @GetMapping("/user/get-mf-line/{lineId}")
-    public ResponseEntity<ManufactureLineDto> getLineById(@PathVariable Long lineId) {
+    public ResponseEntity<ManufactureLineDto> getLineById(
+        @PathVariable Long lineId) {
         return ResponseEntity.ok(lineService.getLineById(lineId));
     }
 
@@ -48,7 +51,7 @@ public class ManufactureLineController {
     @PutMapping("/comad/update-mf-line/{lineId}")
     public ResponseEntity<ManufactureLineDto> updateLine(
             @PathVariable Long lineId,
-            @RequestBody ManufactureLine line) {
+            @RequestBody ManuLineRequest line) {
         return ResponseEntity.ok(lineService.updateLine(lineId, line));
     }
 }

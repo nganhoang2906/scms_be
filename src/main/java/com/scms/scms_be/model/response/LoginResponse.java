@@ -1,13 +1,14 @@
-package com.scms.scms_be.model.dto.General;
-
+package com.scms.scms_be.model.response;
 
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class LoginResponse {
+
+    private String token;
 
     private Long userId;
-
+    
     private Long employeeId;
 
     private String employeeCode;
@@ -19,6 +20,4 @@ public class UserDto {
     private String role;
 
     private String status;
-
-
 }

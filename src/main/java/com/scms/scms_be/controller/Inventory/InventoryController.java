@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.Inventory.InventoryDto;
-import com.scms.scms_be.model.dto.request.InventoryRequest;
 import com.scms.scms_be.model.entity.Inventory.Inventory;
+import com.scms.scms_be.model.request.Inventory.InventoryRequest;
+import com.scms.scms_be.model.request.Inventory.putItemToInventoryRequest;
 import com.scms.scms_be.service.Inventory.InventoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @PostMapping("/user/put-item-to-inventory")
-    public ResponseEntity<InventoryDto> putItemToInventory(@RequestBody InventoryRequest request) {
+    public ResponseEntity<InventoryDto> putItemToInventory(@RequestBody putItemToInventoryRequest request) {
         return ResponseEntity.ok(inventoryService.putItemToInventory(request));
     }
 
@@ -46,22 +47,27 @@ public class InventoryController {
     }
 
     @GetMapping("/user/get-all-inventory-by-item/{itemId}")
-    public ResponseEntity<List<InventoryDto>> getAllByItem(@PathVariable Long itemId) {
+    public ResponseEntity<List<InventoryDto>> getAllByItem(
+            @PathVariable Long itemId) {
         return ResponseEntity.ok(inventoryService.getAllInventoryByItem(itemId));
     }
 
     @GetMapping("/user/get-all-inventory-in-warehouse/{warehouseId}")
-    public ResponseEntity<List<InventoryDto>> getAllByWarehouse(@PathVariable Long warehouseId) {
+    public ResponseEntity<List<InventoryDto>> getAllByWarehouse(
+            @PathVariable Long warehouseId) {
         return ResponseEntity.ok(inventoryService.getAllInventoryByWarehouse(warehouseId));
     }
 
     @GetMapping("/user/get-inventory/{inventoryId}")
-    public ResponseEntity<InventoryDto> getById(@PathVariable Long inventoryId) {
+    public ResponseEntity<InventoryDto> getById(
+            @PathVariable Long inventoryId) {
         return ResponseEntity.ok(inventoryService.getInventoryById(inventoryId));
     }
 
     @PutMapping("/user/update-inventory/{inventoryId}")
-    public ResponseEntity<InventoryDto> updateInventory(@PathVariable Long inventoryId, @RequestBody Inventory inventory) {
+    public ResponseEntity<InventoryDto> updateInventory(
+            @PathVariable Long inventoryId, 
+            @RequestBody InventoryRequest inventory) {
         return ResponseEntity.ok(inventoryService.updateInventory(inventoryId, inventory));
     }
 

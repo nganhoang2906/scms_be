@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.dto.request;
+package com.scms.scms_be.model.request.Auth;
 
 import javax.validation.constraints.Email;
 

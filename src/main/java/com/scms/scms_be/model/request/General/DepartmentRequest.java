@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.dto.request;
+package com.scms.scms_be.model.request.General;
 
 
 import lombok.Data;

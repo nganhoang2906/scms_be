@@ -18,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.EmployeeDto;
-import com.scms.scms_be.model.dto.request.EmployeeRequest;
 import com.scms.scms_be.model.entity.General.Employee;
+import com.scms.scms_be.model.request.General.EmployeeRequest;
 import com.scms.scms_be.service.General.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
@@ -53,13 +53,13 @@ public class EmployeeController {
     @PutMapping("/user/update-employee/{employeeId}")
     public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long employeeId,
-            @RequestBody Employee updatedEmployee) {
+            @RequestBody EmployeeRequest updatedEmployee) {
         return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));
     }
 
-    @DeleteMapping("/comad/delete-employee/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        boolean deleted = employeeService.deleteEmployeeById(id);
+    @DeleteMapping("/comad/delete-employee/{employeeId}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long employeeId) {
+        boolean deleted = employeeService.deleteEmployeeById(employeeId);
         if (deleted) {
             return ResponseEntity.ok("Nhân viên và tài khoản liên quan đã được xóa thành công");
         } else {
@@ -67,13 +67,13 @@ public class EmployeeController {
         }
     }
 
-    @PutMapping("/user/update-avatar/{id}")
+    @PutMapping("/user/update-avatar/{employeeId}")
     public ResponseEntity<String> updateEmployeeAvatar(
-            @PathVariable Long id,
+            @PathVariable Long employeeId,
             @RequestParam("avatar") MultipartFile avatarFile) {
 
         try {
-            String avatarUrl = employeeService.updateEmployeeAvatar(id, avatarFile);
+            String avatarUrl = employeeService.updateEmployeeAvatar(employeeId, avatarFile);
             return ResponseEntity.ok(avatarUrl);
         } catch (IOException e) {
             throw new CustomException("Upload avatar thất bại", HttpStatus.INTERNAL_SERVER_ERROR);

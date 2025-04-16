@@ -12,6 +12,7 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.ManufactureLineDto;
 import com.scms.scms_be.model.entity.General.ManufactureLine;
 import com.scms.scms_be.model.entity.General.ManufacturePlant;
+import com.scms.scms_be.model.request.General.ManuLineRequest;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
 import com.scms.scms_be.repository.General.ManufacturePlantRepository;
 
@@ -24,15 +25,19 @@ public class ManufactureLineService {
     @Autowired
     private ManufacturePlantRepository plantRepo;
 
-    public ManufactureLineDto createLine(Long plantId, ManufactureLine line) {
+    public ManufactureLineDto createLine(Long plantId, ManuLineRequest newLine) {
         ManufacturePlant plant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
 
-        if (lineRepo.existsByLineCode(line.getLineCode())) {
+        if (lineRepo.existsByLineCode(newLine.getLineCode())) {
             throw new CustomException("Mã dây chuyền đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
-
+        ManufactureLine line = new ManufactureLine();
         line.setPlant(plant);
+        line.setLineCode(newLine.getLineCode());
+        line.setLineName(newLine.getLineName());
+        line.setCapacity(newLine.getCapacity());
+        line.setDescription(newLine.getDescription());
         return convertToDto(lineRepo.save(line));
     }
 
@@ -47,7 +52,7 @@ public class ManufactureLineService {
         return convertToDto(line);
     }
 
-    public ManufactureLineDto updateLine(Long lineId, ManufactureLine updatedLine) {
+    public ManufactureLineDto updateLine(Long lineId, ManuLineRequest updatedLine) {
         ManufactureLine existingLine = lineRepo.findById(lineId)
                 .orElseThrow(() -> new CustomException("Dây chuyền không tồn tại!", HttpStatus.NOT_FOUND));
 

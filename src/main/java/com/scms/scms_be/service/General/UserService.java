@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.UserDto;
-import com.scms.scms_be.model.dto.request.UpdatePasswordRequest;
 import com.scms.scms_be.model.entity.General.User;
+import com.scms.scms_be.model.request.Auth.UpdatePasswordRequest;
+import com.scms.scms_be.model.request.General.UpdateInfoRequest;
 import com.scms.scms_be.repository.General.UserRepository;
 
 @Service
@@ -42,18 +43,13 @@ public class UserService {
         return convertToDto(user);
     }
 
-    public UserDto updateUser(Long userId, User updateUser) {
+    public UserDto updateUser(Long userId, UpdateInfoRequest updateUser) {
         User existingUser = usersRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User không tồn tại"));
 
         existingUser.setUsername(updateUser.getUsername());
         existingUser.setEmail(updateUser.getEmail());
-        existingUser.setRole(updateUser.getRole());
         existingUser.setStatus(updateUser.getStatus());
-
-        if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-        }
 
         return convertToDto(usersRepo.save(existingUser));
     }

@@ -1,4 +1,6 @@
-package com.scms.scms_be.model.dto.request;
+package com.scms.scms_be.model.request.Auth;
+
+import javax.validation.constraints.Email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RefreshTokenRequest {
-    private String token;
+public class ForgotPasswordRequest {
+    @Email
+    private String email;
 }

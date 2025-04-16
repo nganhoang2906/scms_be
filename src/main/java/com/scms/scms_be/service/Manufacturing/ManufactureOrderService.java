@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
+import com.scms.scms_be.model.request.Manufaacturing.ManuOrderRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
@@ -27,14 +28,22 @@ public class ManufactureOrderService {
     @Autowired 
     private ManufactureLineRepository lineRepo;
 
-    public ManufactureOrderDto createOrder( Long itemId, Long lineId ,ManufactureOrder order) {
+    public ManufactureOrderDto createOrder( Long itemId, Long lineId ,ManuOrderRequest orderRequest) {
+        ManufactureOrder order = new ManufactureOrder();
+        order.setMoCode(generateMOCode(itemId, lineId));    
+        order.setType(orderRequest.getType());
+        order.setQuantity(orderRequest.getQuantity());
+        order.setEstimatedStartTime(orderRequest.getEstimatedStartTime());
+        order.setEstimatedEndTime(orderRequest.getEstimatedEndTime());
+        order.setCreatedBy(orderRequest.getCreatedBy());
+        
         order.setItem(itemRepo.findById(itemId).orElseThrow(() 
             -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
         order.setLine(lineRepo.findById(lineId).orElseThrow(() 
             -> new CustomException("Line không tồn tại", HttpStatus.NOT_FOUND)));
         order.setCreatedOn(new Date());
         order.setLastUpdatedOn(new Date());
-        order.setMoCode(generateMOCode(itemId, lineId));
+        order.setStatus(orderRequest.getStatus());
         return convertToDto(moRepo.save(order));
     }
 
@@ -58,18 +67,19 @@ public class ManufactureOrderService {
         return convertToDto(mo);
     }
 
-    public ManufactureOrderDto update(Long id, ManufactureOrder update) {
+    public ManufactureOrderDto update(Long id, ManuOrderRequest update) {
         ManufactureOrder mo = moRepo.findById(id)
                                     .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND));
 
-        mo.setBatchNo(update.getBatchNo());
         mo.setType(update.getType());
         mo.setQuantity(update.getQuantity());
         mo.setEstimatedStartTime(update.getEstimatedStartTime());
         mo.setEstimatedEndTime(update.getEstimatedEndTime());
-        mo.setStatus(update.getStatus());
+        mo.setCreatedBy(update.getCreatedBy());
+        mo.setCreatedOn(mo.getCreatedOn());
         mo.setLastUpdatedOn(new Date());
-
+        mo.setStatus(update.getStatus());
+        
         return convertToDto(moRepo.save(mo));
     }
     public String generateMOCode(Long itemId, Long lineId) {
@@ -83,7 +93,6 @@ public class ManufactureOrderService {
         dto.setItemId(mo.getItem().getItemId());
         dto.setLineId(mo.getLine().getLineId());
         dto.setMoCode(mo.getMoCode());
-        dto.setBatchNo(mo.getBatchNo());
         dto.setType(mo.getType());
         dto.setQuantity(mo.getQuantity());
         dto.setEstimatedStartTime(mo.getEstimatedStartTime());

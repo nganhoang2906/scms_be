@@ -12,6 +12,7 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.ItemDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Item;
+import com.scms.scms_be.model.request.General.ItemRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ItemRepository;
 
@@ -24,15 +25,23 @@ public class ItemService {
     @Autowired
     private CompanyRepository companyRepo;
 
-    public ItemDto createItem(Long companyId, Item item) {
+    public ItemDto createItem(Long companyId, ItemRequest newitem) {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 
-        if (itemRepo.existsByItemCode(item.getItemCode())) {
+        if (itemRepo.existsByItemCode(newitem.getItemCode())) {
             throw new CustomException("Mã mặt hàng đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
-
+        Item item = new Item();
         item.setCompany(company);
+        item.setItemCode(newitem.getItemCode());
+        item.setItemName(newitem.getItemName());
+        item.setItemType(newitem.getItemType());
+        item.setUom(newitem.getUom());
+        item.setTechnicalSpecifications(newitem.getTechnicalSpecifications());
+        item.setImportPrice(newitem.getImportPrice());
+        item.setExportPrice(newitem.getExportPrice());
+        item.setDescription(newitem.getDescription());
         return convertToDto(itemRepo.save(item));
     }
 

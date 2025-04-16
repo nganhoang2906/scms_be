@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ProductDto;
 import com.scms.scms_be.model.entity.General.Product;
+import com.scms.scms_be.model.request.General.ProductRequest;
 import com.scms.scms_be.service.General.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ProductController {
 
     // Tạo Product
     @PostMapping("/comad/create-product/{itemId}")
-    public ResponseEntity<ProductDto> create(@PathVariable Long itemId, @RequestBody Product product) {
+    public ResponseEntity<ProductDto> create(@PathVariable Long itemId, @RequestBody ProductRequest product) {
         ProductDto createdProduct = productService.createProduct(itemId, product);
         return ResponseEntity.ok(createdProduct);
     }
@@ -48,7 +49,7 @@ public class ProductController {
 
     // Cập nhật Product
     @PutMapping("/comad/update-product/{productId}")
-    public ResponseEntity<ProductDto> update(@PathVariable Long productId, @RequestBody Product product) {
+    public ResponseEntity<ProductDto> update(@PathVariable Long productId, @RequestBody ProductRequest product) {
         ProductDto updatedProduct = productService.updateProduct(productId, product);
         return ResponseEntity.ok(updatedProduct);
     }

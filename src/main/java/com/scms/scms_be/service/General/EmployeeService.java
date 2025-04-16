@@ -12,10 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.EmployeeDto;
-import com.scms.scms_be.model.dto.request.EmployeeRequest;
 import com.scms.scms_be.model.entity.General.Department;
 import com.scms.scms_be.model.entity.General.Employee;
 import com.scms.scms_be.model.entity.General.User;
+import com.scms.scms_be.model.request.General.EmployeeRequest;
 import com.scms.scms_be.repository.General.DepartmentRepository;
 import com.scms.scms_be.repository.General.EmployeeRepository;
 import com.scms.scms_be.repository.General.UserRepository;
@@ -111,7 +111,7 @@ public class EmployeeService {
         return convertToDto(employee);
     }
 
-    public EmployeeDto updateEmployee(Long employeeId, Employee updatedEmployee) {
+    public EmployeeDto updateEmployee(Long employeeId, EmployeeRequest updatedEmployee) {
         Employee existingEmployee = employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new CustomException("Nhân viên không tồn tại!", HttpStatus.NOT_FOUND));
 
@@ -122,7 +122,6 @@ public class EmployeeService {
         existingEmployee.setEmail(updatedEmployee.getEmail());
         existingEmployee.setPhoneNumber(updatedEmployee.getPhoneNumber());
         existingEmployee.setDateOfBirth(updatedEmployee.getDateOfBirth());
-        existingEmployee.setAvatar(updatedEmployee.getAvatar());
         existingEmployee.setStatus(updatedEmployee.getStatus());
 
         return convertToDto(employeeRepo.save(existingEmployee));

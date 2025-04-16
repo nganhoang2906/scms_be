@@ -14,7 +14,6 @@ public class ManufactureOrderDto {
     
     private String moCode;
 
-    private String batchNo;
     private String type;
     private Integer quantity;
 

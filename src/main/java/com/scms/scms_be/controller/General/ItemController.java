@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ItemDto;
 import com.scms.scms_be.model.entity.General.Item;
+import com.scms.scms_be.model.request.General.ItemRequest;
 import com.scms.scms_be.service.General.ItemService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping("/comad/create-item/{companyId}")
-    public ResponseEntity<ItemDto> createItem(@PathVariable Long companyId, @RequestBody Item item) {
+    public ResponseEntity<ItemDto> createItem(@PathVariable Long companyId, @RequestBody ItemRequest item) {
         ItemDto createdItem = itemService.createItem(companyId, item);
         return ResponseEntity.ok(createdItem);
     }

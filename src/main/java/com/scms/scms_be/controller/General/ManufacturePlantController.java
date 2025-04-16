@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ManufacturePlantDto;
 import com.scms.scms_be.model.entity.General.ManufacturePlant;
+import com.scms.scms_be.model.request.General.ManuPlantRequest;
 import com.scms.scms_be.service.General.ManufacturePlantService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class ManufacturePlantController {
     @PostMapping("/comad/create-mf-plant/{companyId}")
     public ResponseEntity<ManufacturePlantDto> createPlant(
             @PathVariable Long companyId,
-            @RequestBody ManufacturePlant plant) {
+            @RequestBody ManuPlantRequest plant) {
         return ResponseEntity.ok(plantService.createPlant(companyId, plant));
     }
 
@@ -48,7 +49,7 @@ public class ManufacturePlantController {
     @PutMapping("/comad/update-mf-plant/{plantId}")
     public ResponseEntity<ManufacturePlantDto> updatePlant(
             @PathVariable Long plantId,
-            @RequestBody ManufacturePlant plant) {
+            @RequestBody ManuPlantRequest plant) {
         return ResponseEntity.ok(plantService.updatePlant(plantId, plant));
     }
 }

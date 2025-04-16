@@ -12,6 +12,7 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.WarehouseDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Warehouse;
+import com.scms.scms_be.model.request.General.WarehouseRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.WarehouseRepository;
 
@@ -24,15 +25,21 @@ public class WarehouseService {
     @Autowired
     private CompanyRepository companyRepo;
 
-    public WarehouseDto createWarehouse(Long companyId, Warehouse warehouse) {
+    public WarehouseDto createWarehouse(Long companyId, WarehouseRequest newWarehouse) {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 
-        if (warehouseRepo.existsByWarehouseCode(warehouse.getWarehouseCode())) {
+        if (warehouseRepo.existsByWarehouseCode(newWarehouse.getWarehouseCode())) {
             throw new CustomException("Mã kho đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
-
+        Warehouse warehouse = new Warehouse();
         warehouse.setCompany(company);
+        warehouse.setWarehouseCode(newWarehouse.getWarehouseCode());
+        warehouse.setWarehouseName(newWarehouse.getWarehouseName());
+        warehouse.setDescription(newWarehouse.getDescription());
+        warehouse.setMaxCapacity(newWarehouse.getMaxCapacity());
+        warehouse.setWarehouseType(newWarehouse.getWarehouseType());
+        warehouse.setStatus(newWarehouse.getStatus());
         return convertToDto(warehouseRepo.save(warehouse));
     }
 
@@ -47,7 +54,7 @@ public class WarehouseService {
         return convertToDto(warehouse);
     }
 
-    public WarehouseDto updateWarehouse(Long warehouseId, Warehouse warehouse) {
+    public WarehouseDto updateWarehouse(Long warehouseId, WarehouseRequest warehouse) {
         Warehouse existingWarehouse = warehouseRepo.findById(warehouseId)
                 .orElseThrow(() -> new CustomException("Kho không tồn tại!", HttpStatus.NOT_FOUND));
 

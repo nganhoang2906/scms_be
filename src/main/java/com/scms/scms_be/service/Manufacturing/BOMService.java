@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.BOMDetailDto;
 import com.scms.scms_be.model.dto.Manufacture.BOMDto;
-import com.scms.scms_be.model.dto.request.BOMRequest;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.Manufacturing.BOM;
 import com.scms.scms_be.model.entity.Manufacturing.BOMDetail;
+import com.scms.scms_be.model.request.Manufaacturing.BOMDetailRequest;
+import com.scms.scms_be.model.request.Manufaacturing.BOMRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.Manufacturing.BOMDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.BOMRepository;
@@ -44,19 +45,19 @@ public class BOMService {
 
         BOM savedBOM = bomRepo.save(bom);
 
-        for (BOMRequest.BOMDetailDTO detailDTO : request.getDetails()) {
-            if (detailDTO.getItemId().equals(savedBOM.getItem().getItemId())) {
+        for (BOMDetailRequest newdetail : request.getBomDetailList()) {
+            if (newdetail.getItemId().equals(savedBOM.getItem().getItemId())) {
                 throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
             }
 
-            Item detailItem = itemRepo.findById(detailDTO.getItemId())
+            Item detailItem = itemRepo.findById(newdetail.getItemId())
                     .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
 
             BOMDetail detail = new BOMDetail();
             detail.setBom(savedBOM);
             detail.setItem(detailItem);
-            detail.setQuantity(detailDTO.getQuantity());
-            detail.setNote(detailDTO.getNote());
+            detail.setQuantity(newdetail.getQuantity());
+            detail.setNote(newdetail.getNote());
 
             bomDetailRepo.save(detail);
         }
@@ -95,7 +96,7 @@ public class BOMService {
         bomRepo.deleteById(bomId);
     }
 
-    public BOMDto addBomDetail(Long bomId, BOMRequest.BOMDetailDTO detailDTO) {
+    public BOMDto addBomDetail(Long bomId, BOMDetailRequest detailDTO) {
         BOM bom = bomRepo.findById(bomId)
                 .orElseThrow(() -> new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND));
 
@@ -124,7 +125,7 @@ public class BOMService {
         return convertToDto(newbom);
     }
 
-    public BOMDto updateBOMDetail(Long bomId, Long bomDetailId, BOMRequest.BOMDetailDTO detailDTO) {
+    public BOMDto updateBOMDetail(Long bomId, Long bomDetailId, BOMDetailRequest detailDTO) {
         BOMDetail detail = bomDetailRepo.findById(bomDetailId)
                 .orElseThrow(() -> new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND));
 

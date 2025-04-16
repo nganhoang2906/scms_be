@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.CompanyDto;
+import com.scms.scms_be.model.request.General.CompanyRequest;
 import com.scms.scms_be.service.General.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,9 @@ public class CompanyController {
     }
 
     @PutMapping("/comsys/update-company/{companyId}")
-    public ResponseEntity<CompanyDto> updateCompany(@PathVariable Long companyId, 
-                         @RequestBody CompanyDto companyDto) {
+    public ResponseEntity<CompanyDto> updateCompany(
+            @PathVariable Long companyId, 
+            @RequestBody CompanyRequest companyDto) {
         CompanyDto updatedCompany = companyService.updateCompany(companyId, companyDto);
         return ResponseEntity.ok(updatedCompany);
     }

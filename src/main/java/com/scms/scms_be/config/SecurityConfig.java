@@ -34,6 +34,11 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request-> request
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                                    ).permitAll()
                         .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
                         .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
                         .requestMatchers("/comsys/**").hasAnyAuthority("C-ADMIN","S-ADMIN")

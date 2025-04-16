@@ -3,6 +3,7 @@ package com.scms.scms_be.config;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,7 +13,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.service.General.UserDetailService;
 
 import jakarta.servlet.FilterChain;
@@ -29,6 +29,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailService userDetailService;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -46,6 +49,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         final String jwtToken = authHeader.substring(7);
         String usernameOrEmail;
 
+        Boolean isBlacklisted = redisTemplate.hasKey("BLACKLISTED_TOKEN:" + jwtToken);
+        if (Boolean.TRUE.equals(isBlacklisted)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token has been invalidated. Please login again.");
+            return;
+        }
         try {
             usernameOrEmail = jwtUtils.extractUsername(jwtToken);
         } catch (Exception e) {

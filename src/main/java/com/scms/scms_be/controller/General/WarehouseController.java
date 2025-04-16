@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.WarehouseDto;
 import com.scms.scms_be.model.entity.General.Warehouse;
+import com.scms.scms_be.model.request.General.WarehouseRequest;
 import com.scms.scms_be.service.General.WarehouseService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class WarehouseController {
     private WarehouseService warehouseService;
 
     @PostMapping("/comad/create-warehouse/{companyId}")
-    public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId, @RequestBody Warehouse warehouse) {
+    public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId, @RequestBody WarehouseRequest warehouse) {
         return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
     }
 
@@ -40,7 +41,7 @@ public class WarehouseController {
     }
 
     @PutMapping("/comad/update-warehouse/{warehouseId}")
-    public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long warehouseId, @RequestBody Warehouse updatedWarehouse) {
+    public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long warehouseId, @RequestBody WarehouseRequest updatedWarehouse) {
         return ResponseEntity.ok(warehouseService.updateWarehouse(warehouseId, updatedWarehouse));
     }
 

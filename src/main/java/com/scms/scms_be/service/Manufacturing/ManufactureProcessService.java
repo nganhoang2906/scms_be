@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureProcess;
+import com.scms.scms_be.model.request.Manufaacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureProcessRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
@@ -17,16 +18,25 @@ import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 @Service
 public class ManufactureProcessService {
 
-    @Autowired private ManufactureProcessRepository processRepo;
-    @Autowired private ManufactureOrderRepository orderRepo;
-    @Autowired private ManufactureStageRepository stageRepo;
+    @Autowired 
+    private ManufactureProcessRepository processRepo;
+    @Autowired 
+    private ManufactureOrderRepository orderRepo;
+    @Autowired 
+    private ManufactureStageRepository stageRepo;
 
-    public ManufactureProcessDto create( Long moId, Long stageId,ManufactureProcess process) {
+    public ManufactureProcessDto create( Long moId, Long stageId,ManuProcessRequest processRequest) {
+        ManufactureProcess process = new ManufactureProcess();
+        process.setStartedOn(processRequest.getStartedOn());
+        process.setFinishedOn(processRequest.getFinishedOn());
+        process.setStatus(processRequest.getStatus());
+        
         process.setOrder(orderRepo.findById(moId)
             .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND)));
         process.setStage(stageRepo.findById(stageId)
             .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND)));
-        return convertToDto(processRepo.save(process));
+        
+            return convertToDto(processRepo.save(process));
     }
 
     public List<ManufactureProcessDto> getAllByCompany(Long companyId) {
@@ -42,7 +52,7 @@ public class ManufactureProcessService {
         return convertToDto(process);
     }
 
-    public ManufactureProcessDto update(Long id, ManufactureProcess processUpdate) {
+    public ManufactureProcessDto update(Long id, ManuProcessRequest processUpdate) {
         ManufactureProcess process = processRepo.findById(id)
             .orElseThrow(() -> new CustomException("Process không tồn tại", HttpStatus.NOT_FOUND));
         process.setStartedOn(processUpdate.getStartedOn());

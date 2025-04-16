@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.UserDto;
-import com.scms.scms_be.model.dto.request.UpdatePasswordRequest;
 import com.scms.scms_be.model.entity.General.User;
+import com.scms.scms_be.model.request.Auth.UpdatePasswordRequest;
+import com.scms.scms_be.model.request.General.UpdateInfoRequest;
 import com.scms.scms_be.service.General.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -46,12 +47,12 @@ public class UserController {
     }
 
     @PutMapping("/all/update-user/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody User newUser) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UpdateInfoRequest newUser) {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
-    @PostMapping("/users/{userId}/update-password")
-    public ResponseEntity<?> updatePassword(
+    @PostMapping("/users/update-password/{userId}")
+    public ResponseEntity<String> updatePassword(
             @PathVariable Long userId,
             @RequestBody UpdatePasswordRequest request) {
         userService.updatePassword(userId, request);

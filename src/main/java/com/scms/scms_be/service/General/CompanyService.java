@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.CompanyDto;
 import com.scms.scms_be.model.entity.General.Company;
+import com.scms.scms_be.model.request.General.CompanyRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 
 @Service
@@ -34,7 +35,7 @@ public class CompanyService {
         return companies.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CompanyDto updateCompany(Long companyId, CompanyDto companyDetails) {
+    public CompanyDto updateCompany(Long companyId, CompanyRequest companyDetails) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 

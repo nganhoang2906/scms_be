@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.dto.request;
+package com.scms.scms_be.model.request.Auth;
 
 import java.util.Date;
 
@@ -16,7 +16,6 @@ public class RegisterComanyRequest {
     private String mainIndustry;
     private String representativeName;
     private Date startDate;
-    private Date joinDate;
     private String phoneNumber;
     private String email;
     private String websiteAddress;

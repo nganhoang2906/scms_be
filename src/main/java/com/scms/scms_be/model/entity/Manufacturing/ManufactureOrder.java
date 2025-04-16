@@ -38,7 +38,6 @@ public class ManufactureOrder {
     @Column(unique = true, nullable = false)
     private String moCode;
 
-    private String batchNo;
     private String type;
     private Integer quantity;
 

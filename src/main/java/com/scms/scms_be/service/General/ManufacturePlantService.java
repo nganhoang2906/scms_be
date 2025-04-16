@@ -12,6 +12,7 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.ManufacturePlantDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.ManufacturePlant;
+import com.scms.scms_be.model.request.General.ManuPlantRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ManufacturePlantRepository;
 
@@ -25,15 +26,18 @@ public class ManufacturePlantService {
     private CompanyRepository companyRepo;
 
     // Tạo ManufacturePlant
-    public ManufacturePlantDto createPlant(Long companyId, ManufacturePlant plant) {
+    public ManufacturePlantDto createPlant(Long companyId, ManuPlantRequest newPlant) {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
 
-        if (plantRepo.existsByPlantCode(plant.getPlantCode())) {
+        if (plantRepo.existsByPlantCode(newPlant.getPlantCode())) {
             throw new CustomException("Mã nhà máy đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
-
+        ManufacturePlant plant = new ManufacturePlant();
         plant.setCompany(company);
+        plant.setPlantCode(newPlant.getPlantCode());
+        plant.setPlantName(newPlant.getPlantName());
+        plant.setDescription(newPlant.getDescription());
         return convertToDto(plantRepo.save(plant));
     }
 
@@ -51,7 +55,7 @@ public class ManufacturePlantService {
     }
 
     // Cập nhật ManufacturePlant
-    public ManufacturePlantDto updatePlant(Long plantId, ManufacturePlant updatedPlant) {
+    public ManufacturePlantDto updatePlant(Long plantId, ManuPlantRequest updatedPlant) {
         ManufacturePlant existingPlant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Nhà máy không tồn tại!", HttpStatus.NOT_FOUND));
 
