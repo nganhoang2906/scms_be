@@ -20,7 +20,7 @@ public class DepartmentService {
 
     public DepartmentDto getDepartmentById(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new CustomException("Phòng ban không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Bộ phận không tồn tại!", HttpStatus.NOT_FOUND));
         return convertToDto(department);
     }
 

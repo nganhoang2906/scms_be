@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ProductDto;
-import com.scms.scms_be.model.entity.General.Product;
 import com.scms.scms_be.model.request.General.ProductRequest;
 import com.scms.scms_be.service.General.ProductService;
 

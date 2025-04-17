@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.Inventory.InventoryDto;
-import com.scms.scms_be.model.entity.Inventory.Inventory;
 import com.scms.scms_be.model.request.Inventory.InventoryRequest;
 import com.scms.scms_be.model.request.Inventory.putItemToInventoryRequest;
 import com.scms.scms_be.service.Inventory.InventoryService;

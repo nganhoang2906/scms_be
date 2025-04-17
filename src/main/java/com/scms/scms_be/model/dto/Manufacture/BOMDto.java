@@ -7,11 +7,10 @@ import lombok.Data;
 @Data
 public class BOMDto {
     private Long bomId;
-
     private Long itemId;
-
+    private String itemCode;
+    private String itemName;
     private String bomCode;
-    
     private String description;
     private String status;
 

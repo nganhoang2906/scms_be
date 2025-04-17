@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.General.EmployeeDto;
-import com.scms.scms_be.model.entity.General.Employee;
 import com.scms.scms_be.model.request.General.EmployeeRequest;
 import com.scms.scms_be.service.General.EmployeeService;
 

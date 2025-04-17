@@ -53,7 +53,7 @@ public class ItemController {
     public ResponseEntity<String> delete(@PathVariable Long itemId) {
         boolean deleted = itemService.deleteItem(itemId);
         if (deleted) {
-            return ResponseEntity.ok("Phòng ban và nhân viên liên quan đã được xóa thành công.");
+            return ResponseEntity.ok("Item đã được xóa thành công.");
         } else {
             return ResponseEntity.notFound().build();
         }

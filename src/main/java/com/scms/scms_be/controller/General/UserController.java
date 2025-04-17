@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.UserDto;
-import com.scms.scms_be.model.entity.General.User;
 import com.scms.scms_be.model.request.Auth.UpdatePasswordRequest;
 import com.scms.scms_be.model.request.General.UpdateInfoRequest;
 import com.scms.scms_be.service.General.UserService;

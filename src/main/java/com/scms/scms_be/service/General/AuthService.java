@@ -1,6 +1,12 @@
 package com.scms.scms_be.service.General;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +17,19 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.config.JWTUntils;
 import com.scms.scms_be.exception.CustomException;
-import com.scms.scms_be.model.entity.General.*;
+import com.scms.scms_be.model.entity.General.Company;
+import com.scms.scms_be.model.entity.General.Department;
+import com.scms.scms_be.model.entity.General.Employee;
+import com.scms.scms_be.model.entity.General.User;
 import com.scms.scms_be.model.request.Auth.LoginRequest;
 import com.scms.scms_be.model.request.Auth.RegisterComanyRequest;
 import com.scms.scms_be.model.request.Auth.ResetPasswordRequest;
 import com.scms.scms_be.model.request.Auth.VerifyOtpRequest;
 import com.scms.scms_be.model.response.LoginResponse;
-import com.scms.scms_be.repository.General.*;
+import com.scms.scms_be.repository.General.CompanyRepository;
+import com.scms.scms_be.repository.General.DepartmentRepository;
+import com.scms.scms_be.repository.General.EmployeeRepository;
+import com.scms.scms_be.repository.General.UserRepository;
 
 @Service
 public class AuthService {
@@ -71,7 +83,7 @@ public class AuthService {
         company.setStatus("Đang hoat động");
         company = companyRepo.save(company);
 
-        List<String> departmentNames = new ArrayList<>(Arrays.asList("Ban quản lý", "Kho", "Vận chuyển", "Mua hàng", "Bán hàng"));
+        List<String> departmentNames = new ArrayList<>(Arrays.asList("Quản trị", "Kho", "Vận chuyển", "Mua hàng", "Bán hàng"));
         if (company.getCompanyType().equalsIgnoreCase("Doanh nghiệp sản xuất")) {
             departmentNames.add("Sản xuất");
         }
@@ -90,9 +102,9 @@ public class AuthService {
         }
 
         Department managementDepartment = departments.stream()
-                .filter(d -> d.getDepartmentName().equals("Ban quản lý"))
+                .filter(d -> d.getDepartmentName().equals("Quản trị"))
                 .findFirst()
-                .orElseThrow(() -> new CustomException("Không tìm thấy phòng ban Ban quản lý!", HttpStatus.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new CustomException("Không tìm thấy bộ phận Quản trị!", HttpStatus.INTERNAL_SERVER_ERROR));
 
         Employee employee = new Employee();
         employee.setDepartment(managementDepartment);

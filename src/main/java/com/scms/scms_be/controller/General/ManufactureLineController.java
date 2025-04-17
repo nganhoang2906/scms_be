@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ManufactureLineDto;
-import com.scms.scms_be.model.entity.General.ManufactureLine;
 import com.scms.scms_be.model.request.General.ManuLineRequest;
 import com.scms.scms_be.service.General.ManufactureLineService;
 

@@ -56,7 +56,7 @@ public class EmployeeService {
         }
 
         Department department = departmentRepo.findById(request.getDepartmentId())
-                .orElseThrow(() -> new CustomException("Phòng ban không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Bộ phận không tồn tại!", HttpStatus.NOT_FOUND));
 
         Employee employee = new Employee();
         employee.setEmployeeCode(request.getEmployeeCode());
@@ -75,7 +75,7 @@ public class EmployeeService {
         String departmentName = department.getDepartmentName();
         String role;
 
-        if ("Ban quản lý".equals(departmentName)) {
+        if ("Quản trị".equals(departmentName)) {
             role = "C-ADMIN";
         } else {
             role = "USER";

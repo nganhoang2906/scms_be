@@ -34,14 +34,16 @@ public class BOMService {
     public BOMDto createBOM(BOMRequest request) {
         Item item = itemRepo.findById(request.getItemId())
                 .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
-                
+        if (item.getItemType().equals("Nguyên vật liệu")) {
+            throw new CustomException("Item trong BOM phải là Thành phẩm hoặc Bán thành phẩm!", HttpStatus.BAD_REQUEST);
+        }        
         String newBomCode = generateNewBomCode();
 
         BOM bom = new BOM();
         bom.setItem(item);
         bom.setBomCode(newBomCode);
         bom.setDescription(request.getDescription());
-        bom.setStatus("Active");
+        bom.setStatus("Đang sử dụng");
 
         BOM savedBOM = bomRepo.save(bom);
 
@@ -160,8 +162,6 @@ public class BOMService {
         bomDetailRepo.deleteById(bomDetailId);
     }
 
-    // ---------------- Helper methods for conversion ----------------
-
     private String generateNewBomCode() {
         Long count = bomRepo.count();
         return String.format("BOM-%04d", count + 1);
@@ -172,6 +172,8 @@ public class BOMService {
         dto.setBomId(bom.getBomId());
         dto.setBomCode(bom.getBomCode());
         dto.setItemId(bom.getItem().getItemId());
+        dto.setItemCode(bom.getItem().getItemCode());
+        dto.setItemName(bom.getItem().getItemName());
         dto.setDescription(bom.getDescription());
         dto.setStatus(bom.getStatus());
 

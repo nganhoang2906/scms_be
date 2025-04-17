@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.WarehouseDto;
-import com.scms.scms_be.model.entity.General.Warehouse;
 import com.scms.scms_be.model.request.General.WarehouseRequest;
 import com.scms.scms_be.service.General.WarehouseService;
 

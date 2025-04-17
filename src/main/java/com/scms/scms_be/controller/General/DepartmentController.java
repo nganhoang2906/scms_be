@@ -20,14 +20,12 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
-    // Lấy danh sách phòng ban trong công ty
     @GetMapping("/user/get-all-department-in-company/{companyId}")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments(@PathVariable Long companyId) {
         List<DepartmentDto> departments = departmentService.getAllDepartmentInCompany(companyId);
         return ResponseEntity.ok(departments);
     }
 
-    // Lấy thông tin chi tiết của phòng ban
     @GetMapping("/user/get-department/{departmentId}")
     public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable Long departmentId) {
         DepartmentDto department = departmentService.getDepartmentById(departmentId);
