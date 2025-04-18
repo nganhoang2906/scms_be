@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.Inventory.TransferTicketDto;
+import com.scms.scms_be.model.request.Inventory.TransferTicketRequest;
 import com.scms.scms_be.service.Inventory.TransferTicketService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,8 +26,8 @@ public class TransferTicketController {
     private TransferTicketService ticketService;
 
     @PostMapping("/user/create-transfer-ticket")
-    public ResponseEntity<TransferTicketDto> createTicket(@RequestBody TransferTicketDto dto) {
-        return ResponseEntity.ok(ticketService.createTicket(dto));
+    public ResponseEntity<TransferTicketDto> createTicket(@RequestBody TransferTicketRequest request) {
+        return ResponseEntity.ok(ticketService.createTicket(request));
     }
 
     @GetMapping("/user/get-transfer-ticket-by-id/{ticketId}")
@@ -46,8 +48,8 @@ public class TransferTicketController {
     @PutMapping("/user/update-transfer-ticket-status/{ticketId}")
     public ResponseEntity<TransferTicketDto> updateTicket(
                                 @PathVariable Long ticketId, 
-                                @RequestBody TransferTicketDto dto) {
-        return ResponseEntity.ok(ticketService.updateTicket_Status(ticketId, dto));
+                                @RequestParam("status") String status) {
+        return ResponseEntity.ok(ticketService.updateTicket_Status(ticketId, status));
     }
 
 }

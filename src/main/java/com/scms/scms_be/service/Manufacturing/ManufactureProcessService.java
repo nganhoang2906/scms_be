@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureProcess;
-import com.scms.scms_be.model.request.Manufaacturing.ManuProcessRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureProcessRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
@@ -64,9 +64,17 @@ public class ManufactureProcessService {
     private ManufactureProcessDto convertToDto(ManufactureProcess process) {
         ManufactureProcessDto dto = new ManufactureProcessDto();
         dto.setId(process.getId());
+
         dto.setMoId(process.getOrder().getMoId());
+        dto.setMoCode(process.getOrder().getMoCode());
+
         dto.setStageId(process.getStage().getStageId());
+        dto.setStageName(process.getStage().getStageName());
+        dto.setStageOrder(process.getStage().getStageOrder());
+
+
         dto.setStartedOn(process.getStartedOn());
+
         dto.setFinishedOn(process.getFinishedOn());
         dto.setStatus(process.getStatus());
         return dto;

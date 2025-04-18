@@ -9,6 +9,8 @@ public class BOMDetailDto {
     private Long bomId;
 
     private Long itemId;
+    private String itemCode;
+    private String itemName;
 
     private Long quantity;
     private String note;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
-import com.scms.scms_be.model.request.Manufaacturing.ManuOrderRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
@@ -90,9 +90,16 @@ public class ManufactureOrderService {
     private ManufactureOrderDto convertToDto(ManufactureOrder mo) {
         ManufactureOrderDto dto = new ManufactureOrderDto();
         dto.setMoId(mo.getMoId());
-        dto.setItemId(mo.getItem().getItemId());
-        dto.setLineId(mo.getLine().getLineId());
         dto.setMoCode(mo.getMoCode());
+
+        dto.setItemId(mo.getItem().getItemId());
+        dto.setItemCode(mo.getItem().getItemCode());
+        dto.setItemName(mo.getItem().getItemName());
+
+        dto.setLineId(mo.getLine().getLineId());
+        dto.setLineCode(mo.getLine().getLineCode());
+        dto.setLineName(mo.getLine().getLineName());
+
         dto.setType(mo.getType());
         dto.setQuantity(mo.getQuantity());
         dto.setEstimatedStartTime(mo.getEstimatedStartTime());

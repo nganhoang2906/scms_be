@@ -15,4 +15,6 @@ public interface ManufactureOrderRepository extends JpaRepository<ManufactureOrd
 
     List<ManufactureOrder> findByItem_Company_CompanyId(Long companyId);
 
+    ManufactureOrder findByMoCode(String moCode);
+
 }

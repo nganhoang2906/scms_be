@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.BOMDetailDto;
 import com.scms.scms_be.model.dto.Manufacture.BOMDto;
+import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.Manufacturing.BOM;
 import com.scms.scms_be.model.entity.Manufacturing.BOMDetail;
-import com.scms.scms_be.model.request.Manufaacturing.BOMDetailRequest;
-import com.scms.scms_be.model.request.Manufaacturing.BOMRequest;
+import com.scms.scms_be.model.request.Manufacturing.BOMDetailRequest;
+import com.scms.scms_be.model.request.Manufacturing.BOMRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.Manufacturing.BOMDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.BOMRepository;
@@ -34,16 +35,21 @@ public class BOMService {
     public BOMDto createBOM(BOMRequest request) {
         Item item = itemRepo.findById(request.getItemId())
                 .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
-        if (item.getItemType().equals("Nguyên vật liệu")) {
-            throw new CustomException("Item trong BOM phải là Thành phẩm hoặc Bán thành phẩm!", HttpStatus.BAD_REQUEST);
-        }        
-        String newBomCode = generateNewBomCode();
+        Company company = item.getCompany();
+        List<BOM> existingBOMs = bomRepo.findByItem_Company_CompanyId(company.getCompanyId());
+        for (BOM existingBOM : existingBOMs) {
+            if (existingBOM.getItem().getItemId().equals(item.getItemId())) {
+                throw new CustomException("Item đã tồn tại trong BOM!", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        String newBomCode = generateNewBomCode(item.getItemId());
 
         BOM bom = new BOM();
         bom.setItem(item);
         bom.setBomCode(newBomCode);
         bom.setDescription(request.getDescription());
-        bom.setStatus("Đang sử dụng");
+        bom.setStatus("Đang hoạt động");
 
         BOM savedBOM = bomRepo.save(bom);
 
@@ -54,6 +60,13 @@ public class BOMService {
 
             Item detailItem = itemRepo.findById(newdetail.getItemId())
                     .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
+            List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(savedBOM.getBomId());
+            boolean isDuplicate = existingDetails.stream()
+                    .anyMatch(detail -> detail.getItem().getItemId().equals(detailItem.getItemId()));
+            if (isDuplicate) {
+                throw new CustomException("Item này đã tồn tại trong BOMDetail!", HttpStatus.BAD_REQUEST);
+            }
+
 
             BOMDetail detail = new BOMDetail();
             detail.setBom(savedBOM);
@@ -87,6 +100,34 @@ public class BOMService {
         bom.setDescription(request.getDescription());
         bom.setStatus(request.getStatus());
 
+        List<BOMDetailRequest> detailRequests = request.getBomDetailList();
+        List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
+
+        for (BOMDetailRequest newDetail : detailRequests) {
+            Item item = itemRepo.findById(newDetail.getItemId())
+                    .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
+
+            BOMDetail matchedDetail = existingDetails.stream()
+                    .filter(detail -> detail.getItem().getItemId().equals(newDetail.getItemId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (matchedDetail != null) {
+                // update existing
+                matchedDetail.setQuantity(newDetail.getQuantity());
+                matchedDetail.setNote(newDetail.getNote());
+                bomDetailRepo.save(matchedDetail);
+            } else {
+                // create new
+                BOMDetail detail = new BOMDetail();
+                detail.setBom(bom);
+                detail.setItem(item);
+                detail.setQuantity(newDetail.getQuantity());
+                detail.setNote(newDetail.getNote());
+                bomDetailRepo.save(detail);
+            }
+        }
+
         BOM updatedBOM = bomRepo.save(bom);
         return convertToDto(updatedBOM);
     }
@@ -98,82 +139,19 @@ public class BOMService {
         bomRepo.deleteById(bomId);
     }
 
-    public BOMDto addBomDetail(Long bomId, BOMDetailRequest detailDTO) {
-        BOM bom = bomRepo.findById(bomId)
-                .orElseThrow(() -> new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND));
-
-        if (detailDTO.getItemId().equals(bom.getItem().getItemId())) {
-            throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
-        }
-
-        List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
-        boolean isDuplicate = existingDetails.stream()
-                .anyMatch(detail -> detail.getItem().getItemId().equals(detailDTO.getItemId()));
-        if (isDuplicate) {
-            throw new CustomException("Item này đã tồn tại trong BOMDetail!", HttpStatus.BAD_REQUEST);
-        }
-
-        Item item = itemRepo.findById(detailDTO.getItemId())
-                .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
-
-        BOMDetail detail = new BOMDetail();
-        detail.setBom(bom);
-        detail.setItem(item);
-        detail.setQuantity(detailDTO.getQuantity());
-        detail.setNote(detailDTO.getNote());
-        bomDetailRepo.save(detail);
-        BOM newbom = bomRepo.findById(bom.getBomId())
-                .orElseThrow(() -> new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND));
-        return convertToDto(newbom);
-    }
-
-    public BOMDto updateBOMDetail(Long bomId, Long bomDetailId, BOMDetailRequest detailDTO) {
-        BOMDetail detail = bomDetailRepo.findById(bomDetailId)
-                .orElseThrow(() -> new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND));
-
-        BOM bom = bomRepo.findById(bomId)
-                .orElseThrow(() -> new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND));
-
-        if (detailDTO.getItemId().equals(bom.getItem().getItemId())) {
-            throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
-        }
-        for (BOMDetail existingDetail : bomDetailRepo.findByBom_BomId(bomId)) {
-            if (existingDetail.getItem().getItemId().equals(detailDTO.getItemId()) 
-                            && !existingDetail.getId().equals(bomDetailId)) {
-                throw new CustomException("Item này đã tồn tại trong BOMDetail!", HttpStatus.BAD_REQUEST);
-            }
-        }
-        Item item = itemRepo.findById(detailDTO.getItemId())
-                .orElseThrow(() -> new CustomException("Nguyên liệu không tồn tại!", HttpStatus.NOT_FOUND));
-
-        detail.setItem(item);
-        detail.setQuantity(detailDTO.getQuantity());
-        detail.setNote(detailDTO.getNote());
-        bomDetailRepo.save(detail);
-        BOM newbom = bomRepo.findById(bom.getBomId())
-                .orElseThrow(() -> new CustomException("BOM không tồn tại!", HttpStatus.NOT_FOUND));
-        return convertToDto(newbom);
-    }
-
-    public void deleteBOMDetail(Long bomDetailId) {
-        if (!bomDetailRepo.existsById(bomDetailId)) {
-            throw new CustomException("Chi tiết BOM không tồn tại!", HttpStatus.NOT_FOUND);
-        }
-        bomDetailRepo.deleteById(bomDetailId);
-    }
-
-    private String generateNewBomCode() {
-        Long count = bomRepo.count();
-        return String.format("BOM-%04d", count + 1);
+    private String generateNewBomCode(Long itemId) {
+        return String.format("BOM-", itemId);
     }
 
     private BOMDto convertToDto(BOM bom) {
         BOMDto dto = new BOMDto();
         dto.setBomId(bom.getBomId());
         dto.setBomCode(bom.getBomCode());
+
         dto.setItemId(bom.getItem().getItemId());
         dto.setItemCode(bom.getItem().getItemCode());
         dto.setItemName(bom.getItem().getItemName());
+
         dto.setDescription(bom.getDescription());
         dto.setStatus(bom.getStatus());
 
@@ -190,7 +168,11 @@ public class BOMService {
         BOMDetailDto dto = new BOMDetailDto();
         dto.setId(detail.getId());
         dto.setBomId(detail.getBom().getBomId());
+
         dto.setItemId(detail.getItem().getItemId());
+        dto.setItemName(detail.getItem().getItemName());
+        dto.setItemCode(detail.getItem().getItemCode());
+        
         dto.setQuantity(detail.getQuantity());
         dto.setNote(detail.getNote());
         return dto;

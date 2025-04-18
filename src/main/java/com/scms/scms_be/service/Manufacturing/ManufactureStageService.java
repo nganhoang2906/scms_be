@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
-import com.scms.scms_be.model.request.Manufaacturing.ManuStageRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuStageRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
@@ -69,9 +69,14 @@ public class ManufactureStageService {
     private ManufactureStageDto convertToDto(ManufactureStage stage) {
         ManufactureStageDto dto = new ManufactureStageDto();
         dto.setStageId(stage.getStageId());
+
         dto.setItemId(stage.getItem().getItemId());
+        dto.setItemCode(stage.getItem().getItemCode());
+        dto.setItemName(stage.getItem().getItemName());
+
         dto.setStageName(stage.getStageName());
         dto.setStageOrder(stage.getStageOrder());
+        
         dto.setEstimatedTime(stage.getEstimatedTime());
         dto.setDescription(stage.getDescription());
         return dto;

@@ -9,8 +9,11 @@ public class ManufactureProcessDto {
     private Long id;
 
     private Long moId;
+    private String moCode;
     
     private Long stageId;
+    private String stageName;
+    private Integer stageOrder;
 
     private Date startedOn;
     private Date finishedOn;

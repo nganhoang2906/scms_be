@@ -7,9 +7,11 @@ import lombok.Data;
 public class TransferTicketDetailDto {
     private Long TTdetailId;
     
-    private Long ticket_id;
+    private Long ticketId;
 
-    private Long item_id;
+    private Long itemId;
+    private String itemCode;
+    private String itemName;
 
     private Double quantity;
     private String note;

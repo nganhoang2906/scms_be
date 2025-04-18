@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDto;
-import com.scms.scms_be.model.request.Manufaacturing.ManuOrderRequest;
-import com.scms.scms_be.model.request.Manufaacturing.ManuProcessRequest;
-import com.scms.scms_be.model.request.Manufaacturing.ManuStageRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuStageRequest;
 import com.scms.scms_be.service.Manufacturing.ManufactureOrderService;
 import com.scms.scms_be.service.Manufacturing.ManufactureProcessService;
 import com.scms.scms_be.service.Manufacturing.ManufactureStageService;
@@ -72,7 +72,7 @@ public class ManufactureController {
 
     // --- ManufactureOrder ---
 
-    @PostMapping("/user/create-order/{itemId}/{lineId}")
+    @PostMapping("/user/create-mo/{itemId}/{lineId}")
     public ResponseEntity<ManufactureOrderDto> createOrder(
             @PathVariable Long itemId, 
             @PathVariable Long lineId, 
@@ -80,25 +80,25 @@ public class ManufactureController {
         return ResponseEntity.ok(orderService.createOrder( itemId, lineId,order));
     }
 
-    @GetMapping("/user/get-all-order-in-item/{itemId}")
+    @GetMapping("/user/get-all-mo-in-item/{itemId}")
     public ResponseEntity<List<ManufactureOrderDto>> getAllOrders(
             @PathVariable Long itemId) {
         return ResponseEntity.ok(orderService.getAllManufactureOrdersbyItemId(itemId));
     }
 
-    @GetMapping("/user/get-all-order-in-com/{companyId}")
+    @GetMapping("/user/get-all-mo-in-com/{companyId}")
     public ResponseEntity<List<ManufactureOrderDto>> getAllOrdersByCompany(
             @PathVariable Long companyId) {
         return ResponseEntity.ok(orderService.getAllManufactureOrdersByCompanyId(companyId));
     }
 
-    @GetMapping("/user/get-order/{moid}")
+    @GetMapping("/user/get-mo/{moid}")
     public ResponseEntity<ManufactureOrderDto> getOrder(
             @PathVariable Long moid) {
         return ResponseEntity.ok(orderService.getById(moid));
     }
 
-    @PutMapping("/user/update-order/{moid}")
+    @PutMapping("/user/update-mo/{moid}")
     public ResponseEntity<ManufactureOrderDto> updateOrder(
             @PathVariable Long moid, 
             @RequestBody ManuOrderRequest order) {

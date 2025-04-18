@@ -8,12 +8,16 @@ import lombok.Data;
 public class ManufactureOrderDto {
     
     private Long moId;
-
-    private Long itemId;
-    private Long lineId;
-    
     private String moCode;
 
+    private Long itemId;
+    private String itemCode;
+    private String itemName;
+
+    private Long lineId;
+    private String lineCode;
+    private String lineName;
+    
     private String type;
     private Integer quantity;
 

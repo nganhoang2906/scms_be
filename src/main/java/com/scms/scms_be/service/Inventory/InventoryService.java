@@ -123,8 +123,15 @@ public class InventoryService {
     public InventoryDto convertToDto(Inventory inventory){
         InventoryDto inventoryDto = new InventoryDto();
         inventoryDto.setInventoryId(inventory.getInventoryId());
+
         inventoryDto.setWarehouseId(inventory.getWarehouse().getWarehouseId());
+        inventoryDto.setWarehouseName(inventory.getWarehouse().getWarehouseName());
+        inventoryDto.setWarehouseCode(inventory.getWarehouse().getWarehouseCode());
+
         inventoryDto.setItemId(inventory.getItem().getItemId());
+        inventoryDto.setItemName(inventory.getItem().getItemName());
+        inventoryDto.setItemCode(inventory.getItem().getItemCode());
+        
         inventoryDto.setQuantity(inventory.getQuantity());
         inventoryDto.setOnDemandQuantity(inventory.getOnDemandQuantity());
         return inventoryDto;

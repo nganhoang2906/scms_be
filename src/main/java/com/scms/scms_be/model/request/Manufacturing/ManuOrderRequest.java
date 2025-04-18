@@ -1,4 +1,4 @@
-package com.scms.scms_be.model.request.Manufaacturing;
+package com.scms.scms_be.model.request.Manufacturing;
 
 import java.util.Date;
 

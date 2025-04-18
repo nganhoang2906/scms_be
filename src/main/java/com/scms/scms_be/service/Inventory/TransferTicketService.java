@@ -17,6 +17,8 @@ import com.scms.scms_be.model.entity.General.Warehouse;
 import com.scms.scms_be.model.entity.Inventory.Inventory;
 import com.scms.scms_be.model.entity.Inventory.TransferTicket;
 import com.scms.scms_be.model.entity.Inventory.TransferTicketDetail;
+import com.scms.scms_be.model.request.Inventory.TransferTicketDetailRequest;
+import com.scms.scms_be.model.request.Inventory.TransferTicketRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.WarehouseRepository;
@@ -47,53 +49,53 @@ public class TransferTicketService {
     @Autowired
     private InventoryService inventoryService;
 
-    public TransferTicketDto createTicket(TransferTicketDto dto) {
+    public TransferTicketDto createTicket(TransferTicketRequest request) {
         TransferTicket ticket = new TransferTicket();
         
-        Company company = companyRepo.findById(dto.getCompany_id())
+        Company company = companyRepo.findById(request.getCompany_id())
             .orElseThrow(() -> new CustomException("Company không tồn tại", HttpStatus.NOT_FOUND));
         
-        Warehouse fromWarehouse = warehouseRepo.findById(dto.getFrom_warehouse_id())
+        Warehouse fromWarehouse = warehouseRepo.findById(request.getFrom_warehouse_id())
             .orElseThrow(() -> new CustomException("Kho gửi không tồn tại", HttpStatus.NOT_FOUND));
         
-        Warehouse toWarehouse = warehouseRepo.findById(dto.getTo_warehouse_id())
+        Warehouse toWarehouse = warehouseRepo.findById(request.getTo_warehouse_id())
             .orElseThrow(() -> new CustomException("Kho nhận không tồn tại", HttpStatus.NOT_FOUND));
 
         ticket.setCompany(company);
-        ticket.setTicketCode(generateTransferTicketCode(dto.getCompany_id()));
+        ticket.setTicketCode(generateTransferTicketCode(request.getCompany_id()));
         ticket.setFromWarehouse(fromWarehouse);
         ticket.setToWarehouse(toWarehouse);
-        ticket.setReason(dto.getReason());
-        ticket.setCreatedBy(dto.getCreatedBy());
+        ticket.setReason(request.getReason());
+        ticket.setCreatedBy(request.getCreatedBy());
         ticket.setCreatedOn(LocalDateTime.now());
         ticket.setLastUpdatedOn(LocalDateTime.now());
-        ticket.setStatus(dto.getStatus());
-        ticket.setFile(dto.getFile());
+        ticket.setStatus(request.getStatus());
+        ticket.setFile(request.getFile());
 
         TransferTicket savedTicket = ticketRepo.save(ticket);
 
-        if (dto.getTransferTicketDetails() != null) {
-            for (TransferTicketDetailDto detailDto : dto.getTransferTicketDetails()) {
+        if (request.getTransferTicketDetails() != null) {
+            for (TransferTicketDetailRequest detailRequest : request.getTransferTicketDetails()) {
                 
-                Item item = itemRepo.findById(detailDto.getItem_id())
+                Item item = itemRepo.findById(detailRequest.getItem_id())
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
                 
                 Inventory inventory = inventoryRepo.findByItem_ItemIdAndWarehouse_WarehouseId(
                     item.getItemId(),fromWarehouse.getWarehouseId());
                 
-                if ( (inventory.getQuantity()- inventory.getOnDemandQuantity()) < detailDto.getQuantity()) {
+                if ( (inventory.getQuantity()- inventory.getOnDemandQuantity()) < detailRequest.getQuantity()) {
                     throw new CustomException("Số lượng item "+ item.getItemName() +" trong kho không đủ", HttpStatus.BAD_REQUEST);
                 }
 
                 TransferTicketDetail detail = new TransferTicketDetail();
                 detail.setTicket(savedTicket);
                 detail.setItem(item);
-                detail.setQuantity(detailDto.getQuantity());
-                detail.setNote(detailDto.getNote());
+                detail.setQuantity(detailRequest.getQuantity());
+                detail.setNote(detailRequest.getNote());
                 detailRepo.save(detail);
                 
                 inventoryService.increaseOnDemand(
-                    inventory.getInventoryId(), detailDto.getQuantity());
+                    inventory.getInventoryId(), detailRequest.getQuantity());
                     
             }
         }
@@ -120,11 +122,17 @@ public class TransferTicketService {
             .toList();
     }
 
-    public TransferTicketDto updateTicket_Status(Long id, TransferTicketDto dto) {
+    public TransferTicketDto updateTicket_Status(Long id, String status) {
         TransferTicket ticket = ticketRepo.findById(id).orElseThrow();
-        
-        ticket.setStatus(dto.getStatus());
+        if (ticket.getStatus().equals("Đã hoàn thành")) {
+            throw new CustomException("Ticket đã hoàn thành không thể thay đổi trạng thái", HttpStatus.BAD_REQUEST);
+        }
+        if (ticket.getStatus().equals("Đã hủy")){
+            throw new CustomException("Ticket đã hủy không thể thay đổi trạng thái", HttpStatus.BAD_REQUEST);
+        }
 
+        ticket.setStatus(status);
+        ticket.setLastUpdatedOn(LocalDateTime.now());
         return convertToDto(ticketRepo.save(ticket));
     }
 
@@ -137,10 +145,18 @@ public class TransferTicketService {
     private TransferTicketDto convertToDto(TransferTicket ticket) {
         TransferTicketDto dto = new TransferTicketDto();
         dto.setTicketId(ticket.getTicketId());
-        dto.setCompany_id(ticket.getCompany().getCompanyId());
+        dto.setCompanyId(ticket.getCompany().getCompanyId());
+
         dto.setTicketCode(ticket.getTicketCode());
-        dto.setFrom_warehouse_id(ticket.getFromWarehouse().getWarehouseId());
-        dto.setTo_warehouse_id(ticket.getToWarehouse().getWarehouseId());
+
+        dto.setFrom_warehouseId(ticket.getFromWarehouse().getWarehouseId());
+        dto.setFrom_warehouseName(ticket.getFromWarehouse().getWarehouseName());
+        dto.setFrom_warehouseCode(ticket.getFromWarehouse().getWarehouseCode());
+
+        dto.setTo_warehouseId(ticket.getToWarehouse().getWarehouseId());
+        dto.setTo_warehouseName(ticket.getToWarehouse().getWarehouseName());
+        dto.setTo_warehouseCode(ticket.getToWarehouse().getWarehouseCode());
+
         dto.setReason(ticket.getReason());
         dto.setCreatedBy(ticket.getCreatedBy());
         dto.setCreatedOn(ticket.getCreatedOn());
@@ -160,8 +176,12 @@ public class TransferTicketService {
     private TransferTicketDetailDto convertToDetailDto(TransferTicketDetail detail) {
         TransferTicketDetailDto dto = new TransferTicketDetailDto();
         dto.setTTdetailId(detail.getTTdetailId());
-        dto.setTicket_id(detail.getTicket().getTicketId());
-        dto.setItem_id(detail.getItem().getItemId());
+        dto.setTicketId(detail.getTicket().getTicketId());
+        
+        dto.setItemId(detail.getItem().getItemId());
+        dto.setItemCode(detail.getItem().getItemCode());
+        dto.setItemName(detail.getItem().getItemName());
+
         dto.setQuantity(detail.getQuantity());
         dto.setNote(detail.getNote());
         return dto;

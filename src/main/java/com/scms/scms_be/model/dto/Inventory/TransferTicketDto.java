@@ -11,13 +11,17 @@ public class TransferTicketDto {
 
     private Long ticketId;
 
-    private Long company_id;
+    private Long companyId;
 
     private String ticketCode;
 
-    private Long from_warehouse_id;
+    private Long from_warehouseId;
+    private String from_warehouseCode;
+    private String from_warehouseName;
 
-    private Long to_warehouse_id;
+    private Long to_warehouseId;
+    private String to_warehouseCode;
+    private String to_warehouseName;
 
     private String reason;
     private String createdBy;

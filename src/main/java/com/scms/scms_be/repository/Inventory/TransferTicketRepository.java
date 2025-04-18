@@ -16,4 +16,6 @@ public interface TransferTicketRepository extends JpaRepository<TransferTicket,L
 
     int countByTicketCodeStartingWith(String prefix);
 
+    TransferTicket findByTicketCode(String ticketCode);
+
 }
