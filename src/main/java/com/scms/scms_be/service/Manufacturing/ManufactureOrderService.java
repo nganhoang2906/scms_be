@@ -15,6 +15,7 @@ import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
+import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
 @Service
 public class ManufactureOrderService {
@@ -28,7 +29,16 @@ public class ManufactureOrderService {
     @Autowired 
     private ManufactureLineRepository lineRepo;
 
+    @Autowired
+    private ManufactureStageRepository stageRepo;
+
     public ManufactureOrderDto createOrder( Long itemId, Long lineId ,ManuOrderRequest orderRequest) {
+        
+        if(stageRepo.findByItem_ItemId(itemId).isEmpty()) {
+            throw new CustomException("Chưa có stage nào cho item này", HttpStatus.NOT_FOUND);
+        }
+
+        
         ManufactureOrder order = new ManufactureOrder();
         order.setMoCode(generateMOCode(itemId, lineId));    
         order.setType(orderRequest.getType());

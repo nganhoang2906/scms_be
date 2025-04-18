@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.Manufacture.BOMDto;
-import com.scms.scms_be.model.request.Manufacturing.BOMDetailRequest;
 import com.scms.scms_be.model.request.Manufacturing.BOMRequest;
 import com.scms.scms_be.service.Manufacturing.BOMService;
 
