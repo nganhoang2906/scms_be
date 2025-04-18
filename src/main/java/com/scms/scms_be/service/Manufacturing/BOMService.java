@@ -106,6 +106,19 @@ public class BOMService {
 
         // Save updated or new details
         for (BOMDetailRequest newDetail : detailRequests) {
+            if (newDetail.getItemId().equals(updatedBOM.getItem().getItemId())) {
+                throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
+            }
+
+            Item detailItem = itemRepo.findById(newDetail.getItemId())
+                    .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
+            List<BOMDetail> listDetails = bomDetailRepo.findByBom_BomId(updatedBOM.getBomId());
+            boolean isDuplicate = listDetails.stream()
+                    .anyMatch(detail -> detail.getItem().getItemId().equals(detailItem.getItemId()));
+            if (isDuplicate) {
+                throw new CustomException("Có nguyên vật liệu trùng nhau!", HttpStatus.BAD_REQUEST);
+            }
+
             Item item = itemRepo.findById(newDetail.getItemId())
                     .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
 
