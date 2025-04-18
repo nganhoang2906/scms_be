@@ -99,10 +99,12 @@ public class BOMService {
 
         bom.setDescription(request.getDescription());
         bom.setStatus(request.getStatus());
+        BOM updatedBOM = bomRepo.save(bom);
 
         List<BOMDetailRequest> detailRequests = request.getBomDetailList();
         List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
 
+        // Save updated or new details
         for (BOMDetailRequest newDetail : detailRequests) {
             Item item = itemRepo.findById(newDetail.getItemId())
                     .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
@@ -113,12 +115,10 @@ public class BOMService {
                     .orElse(null);
 
             if (matchedDetail != null) {
-                // update existing
                 matchedDetail.setQuantity(newDetail.getQuantity());
                 matchedDetail.setNote(newDetail.getNote());
                 bomDetailRepo.save(matchedDetail);
             } else {
-                // create new
                 BOMDetail detail = new BOMDetail();
                 detail.setBom(bom);
                 detail.setItem(item);
@@ -128,7 +128,17 @@ public class BOMService {
             }
         }
 
-        BOM updatedBOM = bomRepo.save(bom);
+        // Delete removed details
+        List<Long> newItemIds = detailRequests.stream()
+                .map(BOMDetailRequest::getItemId)
+                .collect(Collectors.toList());
+
+        for (BOMDetail existingDetail : existingDetails) {
+            if (!newItemIds.contains(existingDetail.getItem().getItemId())) {
+                bomDetailRepo.delete(existingDetail);
+            }
+        }
+
         return convertToDto(updatedBOM);
     }
 
@@ -140,7 +150,7 @@ public class BOMService {
     }
 
     private String generateNewBomCode(Long itemId) {
-        return String.format("BOM-", itemId);
+        return String.format("BOM-"+ itemId);
     }
 
     private BOMDto convertToDto(BOM bom) {
