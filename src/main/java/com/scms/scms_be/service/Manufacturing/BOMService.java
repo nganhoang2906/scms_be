@@ -1,6 +1,8 @@
 package com.scms.scms_be.service.Manufacturing;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,19 +106,26 @@ public class BOMService {
         List<BOMDetailRequest> detailRequests = request.getBomDetailList();
         List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
 
+        // Lấy danh sách itemId từ bomDetailList
+        List<Long> detailItemIds = request.getBomDetailList().stream()
+                .map(BOMDetailRequest::getItemId)
+                .collect(Collectors.toList());
+
+        // Kiểm tra trùng lặp trong danh sách
+        Set<Long> uniqueItemIds = new HashSet<>(detailItemIds);
+        if (uniqueItemIds.size() < detailItemIds.size()) {
+            throw new CustomException("Item trong BOMDetail bị trùng lặp!", HttpStatus.BAD_REQUEST);
+        }
+
+        // Kiểm tra trùng với itemId của BOM
+        if (detailItemIds.contains(request.getItemId())) {
+            throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
+        }
+        
         // Save updated or new details
         for (BOMDetailRequest newDetail : detailRequests) {
             if (newDetail.getItemId().equals(updatedBOM.getItem().getItemId())) {
                 throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
-            }
-
-            Item detailItem = itemRepo.findById(newDetail.getItemId())
-                    .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
-            List<BOMDetail> listDetails = bomDetailRepo.findByBom_BomId(updatedBOM.getBomId());
-            boolean isDuplicate = listDetails.stream()
-                    .anyMatch(detail -> detail.getItem().getItemId().equals(detailItem.getItemId()));
-            if (isDuplicate) {
-                throw new CustomException("Có nguyên vật liệu trùng nhau!", HttpStatus.BAD_REQUEST);
             }
 
             Item item = itemRepo.findById(newDetail.getItemId())
