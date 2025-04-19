@@ -12,9 +12,9 @@ public class ManufactureProcessDto {
     private Long moId;
     private String moCode;
     
-    private Long stageId;
-    private String stageName;
-    private Integer stageOrder;
+    private Long stageDetailId;
+    private String stageDetailName;
+    private Integer stageDetailOrder;
 
     private LocalDateTime startedOn;
     private LocalDateTime finishedOn;

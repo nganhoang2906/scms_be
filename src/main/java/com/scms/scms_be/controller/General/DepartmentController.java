@@ -31,7 +31,4 @@ public class DepartmentController {
         DepartmentDto department = departmentService.getDepartmentById(departmentId);
         return ResponseEntity.ok(department);
     }
-
-
-   
 }

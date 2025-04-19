@@ -25,13 +25,10 @@ public class ManufactureStageController {
     @Autowired 
     private  ManufactureStageService stageService;
 
-    // --- ManufactureStage ---
-
     @PostMapping("/user/create-stage/{itemId}")
     public ResponseEntity<ManufactureStageDto> createStage(
-            @PathVariable Long itemId ,
             @RequestBody ManuStageRequest stage) {
-        return ResponseEntity.ok(stageService.createStage(itemId,stage));
+        return ResponseEntity.ok(stageService.createStage(stage));
     }
 
     @GetMapping("/user/get-all-stage/{itemId}")
@@ -57,7 +54,7 @@ public class ManufactureStageController {
     public ResponseEntity<String> deleteStage(
         @PathVariable Long stageId) {
         stageService.deleteStage(stageId);
-        return  ResponseEntity.ok("Đã xoá Stage thành công");
+        return  ResponseEntity.ok("Đã xoá công đoạn sản xuất thành công");
     }
 
 

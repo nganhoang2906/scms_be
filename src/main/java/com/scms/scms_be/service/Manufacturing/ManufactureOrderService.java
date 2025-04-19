@@ -1,7 +1,6 @@
 package com.scms.scms_be.service.Manufacturing;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
+import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
+import com.scms.scms_be.model.entity.Manufacturing.ManufactureStageDetail;
 import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
+import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
+import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
 @Service
@@ -33,13 +36,18 @@ public class ManufactureOrderService {
     @Autowired
     private ManufactureStageRepository stageRepo;
 
+    @Autowired
+    private ManufactureStageDetailRepository stageDetailRepo;
+
+    @Autowired
+    private ManufactureProcessService processService;
+
     public ManufactureOrderDto createOrder( Long itemId, Long lineId ,ManuOrderRequest orderRequest) {
         
         if(stageRepo.findByItem_ItemId(itemId).isEmpty()) {
             throw new CustomException("Chưa có stage nào cho item này", HttpStatus.NOT_FOUND);
         }
 
-        
         ManufactureOrder order = new ManufactureOrder();
         order.setMoCode(generateMOCode(itemId, lineId));    
         order.setType(orderRequest.getType());
@@ -55,7 +63,18 @@ public class ManufactureOrderService {
         order.setCreatedOn( LocalDateTime.now());
         order.setLastUpdatedOn( LocalDateTime.now());
         order.setStatus(orderRequest.getStatus());
-        return convertToDto(moRepo.save(order));
+
+        moRepo.save(order);
+        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByItem_ItemId(itemId);
+        for(ManufactureStageDetail  stageDetail : stageDetailList) {
+            ManuProcessRequest processRequest = new ManuProcessRequest();
+            processRequest.setMoId(order.getMoId());
+            processRequest.setStageDetailId(stageDetail.getStageDetailId());
+            
+            processService.createManuProcess(processRequest);
+        }
+
+        throw new CustomException("Tạo MO thành công", HttpStatus.OK);
     }
 
     public List<ManufactureOrderDto> getAllManufactureOrdersbyItemId(Long itemId) {
@@ -87,7 +106,6 @@ public class ManufactureOrderService {
         mo.setEstimatedStartTime(update.getEstimatedStartTime());
         mo.setEstimatedEndTime(update.getEstimatedEndTime());
         mo.setCreatedBy(update.getCreatedBy());
-        mo.setCreatedOn(mo.getCreatedOn());
         mo.setLastUpdatedOn( LocalDateTime.now());
         mo.setStatus(update.getStatus());
         
@@ -95,7 +113,7 @@ public class ManufactureOrderService {
     }
     public String generateMOCode(Long itemId, Long lineId) {
         int count = moRepo.countByItemItemIdAndLineLineId(itemId, lineId);
-        return "MO-" + itemId  + lineId +  String.format("%d", count + 1);
+        return "MO" + itemId  + lineId +  String.format("%d", count + 1);
     }
     
 

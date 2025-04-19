@@ -24,7 +24,6 @@ public class ManufactureLineController {
     @Autowired
     private ManufactureLineService lineService;
 
-    // Tạo ManufactureLine
     @PostMapping("/comad/create-mf-line/{plantId}")
     public ResponseEntity<ManufactureLineDto> createLine(
             @PathVariable Long plantId,
@@ -32,21 +31,18 @@ public class ManufactureLineController {
         return ResponseEntity.ok(lineService.createLine(plantId, line));
     }
 
-    // Lấy tất cả ManufactureLine của một xưởng
     @GetMapping("/user/get-all-mf-line-in-company/{companyId}")
     public ResponseEntity<List<ManufactureLineDto>> getAllLinesInCompany(
             @PathVariable Long companyId) {
         return ResponseEntity.ok(lineService.getAllLinesInCompany(companyId));
     }
 
-    // Lấy ManufactureLine theo ID
     @GetMapping("/user/get-mf-line/{lineId}")
     public ResponseEntity<ManufactureLineDto> getLineById(
         @PathVariable Long lineId) {
         return ResponseEntity.ok(lineService.getLineById(lineId));
     }
 
-    // Cập nhật ManufactureLine
     @PutMapping("/comad/update-mf-line/{lineId}")
     public ResponseEntity<ManufactureLineDto> updateLine(
             @PathVariable Long lineId,

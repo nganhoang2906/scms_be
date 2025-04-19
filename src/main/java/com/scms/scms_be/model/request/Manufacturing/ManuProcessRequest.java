@@ -6,7 +6,12 @@ import lombok.Data;
 
 @Data
 public class ManuProcessRequest {
+    private Long moId;
+
+    private Long stageDetailId;
+
     private LocalDateTime startedOn;
     private LocalDateTime finishedOn;
+    
     private String status;
 }

@@ -30,25 +30,21 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    // Tạo mới nhân viên
     @PostMapping("/comad/create-employee")
     public ResponseEntity<EmployeeDto> createEmployee( @RequestBody EmployeeRequest employeeRequest) {
         return ResponseEntity.ok(employeeService.createEmployee( employeeRequest));
     }
 
-    // Lấy danh sách nhân viên trong công ty
     @GetMapping("/user/get-all-employee-in-com/{companyId}")
     public ResponseEntity<List<EmployeeDto>> getAllEmployeeInCompany(@PathVariable Long companyId) {
         return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
     }
 
-    // Lấy nhân viên theo ID (chỉ xem trong công ty)
     @GetMapping("/user/get-employee/{employeeId}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId) {
         return ResponseEntity.ok(employeeService.getEmployeeById( employeeId));
     }
 
-    // Chỉnh sửa thông tin cá nhân (chỉ user đó có thể sửa)
     @PutMapping("/user/update-employee/{employeeId}")
     public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long employeeId,
@@ -75,7 +71,7 @@ public class EmployeeController {
             String avatarUrl = employeeService.updateEmployeeAvatar(employeeId, avatarFile);
             return ResponseEntity.ok(avatarUrl);
         } catch (IOException e) {
-            throw new CustomException("Upload avatar thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("Tải lên ảnh thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
   

@@ -60,6 +60,4 @@ public class CompanyController {
             throw new CustomException("Upload logo thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

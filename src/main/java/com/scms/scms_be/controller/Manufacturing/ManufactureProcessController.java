@@ -20,16 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class ManufactureProcessController {
-    // --- ManufactureProcess ---
+
     @Autowired
     private final ManufactureProcessService processService;
     
     @PostMapping("/user/create-process/{moId}/{stageId}")
     public ResponseEntity<ManufactureProcessDto> createProcess(
-        @PathVariable Long moId, 
-        @PathVariable Long stageId, 
         @RequestBody ManuProcessRequest process) {
-        return ResponseEntity.ok(processService.create( moId, stageId,process));
+        return ResponseEntity.ok(processService.createManuProcess( process));
     }
 
     @GetMapping("/user/get-all-process-in-com/{companyId}")
@@ -38,16 +36,16 @@ public class ManufactureProcessController {
         return ResponseEntity.ok(processService.getAllByMoId(moId));
     }
 
-    @GetMapping("/user/get-process/{mpid}")
+    @GetMapping("/user/get-process/{processId}")
     public ResponseEntity<ManufactureProcessDto> getProcess(
-        @PathVariable Long mpid) {
-        return ResponseEntity.ok(processService.getById(mpid));
+        @PathVariable Long processId) {
+        return ResponseEntity.ok(processService.getById(processId));
     }
 
-    @PutMapping("/user/update-process/{mpid}")
+    @PutMapping("/user/update-process/{processId}")
     public ResponseEntity<ManufactureProcessDto> updateProcess(
-        @PathVariable Long mpid, 
+        @PathVariable Long processId, 
         @RequestBody ManuProcessRequest process) {
-        return ResponseEntity.ok(processService.update(mpid, process));
+        return ResponseEntity.ok(processService.update(processId, process));
     }
 }

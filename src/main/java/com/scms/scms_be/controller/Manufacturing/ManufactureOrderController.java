@@ -23,7 +23,6 @@ public class ManufactureOrderController {
 
     @Autowired
     private final ManufactureOrderService orderService;
-    // --- ManufactureOrder ---
 
     @PostMapping("/user/create-mo/{itemId}/{lineId}")
     public ResponseEntity<ManufactureOrderDto> createOrder(
@@ -57,6 +56,5 @@ public class ManufactureOrderController {
             @RequestBody ManuOrderRequest order) {
         return ResponseEntity.ok(orderService.update(moid, order));
     }
-
-
+    
 }

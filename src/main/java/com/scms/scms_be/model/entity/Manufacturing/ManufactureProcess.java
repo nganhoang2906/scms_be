@@ -28,8 +28,8 @@ public class ManufactureProcess {
     private ManufactureOrder order;
     
     @ManyToOne 
-    @JoinColumn(name = "stage_id") 
-    private ManufactureStage stage;
+    @JoinColumn(name = "stage_detail_id") 
+    private ManufactureStageDetail stageDetail;
 
     private LocalDateTime startedOn;
     private LocalDateTime finishedOn;

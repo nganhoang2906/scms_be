@@ -7,10 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
+import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDetailDto;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureStageDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
+import com.scms.scms_be.model.entity.Manufacturing.ManufactureStageDetail;
+import com.scms.scms_be.model.request.Manufacturing.ManuStageDetailRequest;
 import com.scms.scms_be.model.request.Manufacturing.ManuStageRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
+import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
 @Service
@@ -22,18 +26,29 @@ public class ManufactureStageService {
     @Autowired
     private ItemRepository itemRepo;
 
-
+    @Autowired
+    private ManufactureStageDetailRepository stageDetailRepo;
     
 
-    public ManufactureStageDto createStage(Long itemId, ManuStageRequest stageRequest) {
+    public ManufactureStageDto createStage( ManuStageRequest stageRequest) {
         ManufactureStage stage = new ManufactureStage();
-        stage.setStageName(stageRequest.getStageName());
-        stage.setStageOrder(stageRequest.getStageOrder());
-        stage.setEstimatedTime(stageRequest.getEstimatedTime());
+      
         stage.setDescription(stageRequest.getDescription());
         
-        stage.setItem(itemRepo.findById(itemId)
+        stage.setItem(itemRepo.findById(stageRequest.getItemId())
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
+
+        for(ManuStageDetailRequest detailRequest : stageRequest.getStageDetails()) {
+            ManufactureStageDetail stageDetail = new ManufactureStageDetail();
+            
+            stageDetail.setStage(stage);
+            stageDetail.setStageName(detailRequest.getStageName());
+            stageDetail.setStageOrder(detailRequest.getStageOrder());
+            stageDetail.setEstimatedTime(detailRequest.getEstimatedTime());
+            stageDetail.setDescription(detailRequest.getDescription());
+
+            stageDetailRepo.save(stageDetail);
+        }
         ManufactureStage saved = stageRepo.save(stage);
         return convertToDto(saved);
     }
@@ -51,13 +66,20 @@ public class ManufactureStageService {
     public ManufactureStageDto updateStage(Long stageId, ManuStageRequest stage) {
         ManufactureStage exist = stageRepo.findById(stageId)
                 .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
-        
-        exist.setStageName(stage.getStageName());
-        exist.setStageOrder(stage.getStageOrder());
-        exist.setEstimatedTime(stage.getEstimatedTime());
+
         exist.setDescription(stage.getDescription());
-        ManufactureStage updated = stageRepo.save(exist);
-        return convertToDto(updated);
+
+        for (ManuStageDetailRequest detailRequest : stage.getStageDetails()) {
+            ManufactureStageDetail stageDetail = new ManufactureStageDetail();
+            stageDetail.setStage(exist);
+            stageDetail.setStageName(detailRequest.getStageName());
+            stageDetail.setStageOrder(detailRequest.getStageOrder());
+            stageDetail.setEstimatedTime(detailRequest.getEstimatedTime());
+            stageDetail.setDescription(detailRequest.getDescription());
+
+            stageDetailRepo.save(stageDetail);
+        }
+        return convertToDto(stageRepo.save(exist));
     }
 
     public void deleteStage(Long stageId) {
@@ -74,11 +96,26 @@ public class ManufactureStageService {
         dto.setItemCode(stage.getItem().getItemCode());
         dto.setItemName(stage.getItem().getItemName());
 
-        dto.setStageName(stage.getStageName());
-        dto.setStageOrder(stage.getStageOrder());
-        
-        dto.setEstimatedTime(stage.getEstimatedTime());
         dto.setDescription(stage.getDescription());
+
+        List<ManufactureStageDetailDto> details = stageDetailRepo
+                .findByStage_StageId(stage.getStageId())
+                .stream()
+                .map(this::convertToDetailDto)
+                .toList();
+        dto.setStageDetails(details);
+
+        return dto;
+    }
+
+    public ManufactureStageDetailDto convertToDetailDto(ManufactureStageDetail stageDetail) {
+        ManufactureStageDetailDto dto = new ManufactureStageDetailDto();
+        dto.setStageDetailId(stageDetail.getStageDetailId());
+        dto.setStageId(stageDetail.getStage().getStageId());
+        dto.setStageName(stageDetail.getStageName());
+        dto.setStageOrder(stageDetail.getStageOrder());
+        dto.setEstimatedTime(stageDetail.getEstimatedTime());
+        dto.setDescription(stageDetail.getDescription());
         return dto;
     }
 }

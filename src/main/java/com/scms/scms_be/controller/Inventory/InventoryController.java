@@ -70,5 +70,4 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.updateInventory(inventoryId, inventory));
     }
 
-
 }

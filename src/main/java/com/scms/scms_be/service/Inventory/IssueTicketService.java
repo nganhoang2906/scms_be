@@ -159,7 +159,7 @@ public class IssueTicketService {
     }
 
     public String generateTicketCode(Long companyId, String referenceCode) {
-        String prefix = "IssueTk-" + companyId  + referenceCode;
+        String prefix = "IT" + companyId  + referenceCode.substring(2);
         return prefix;
     }
 

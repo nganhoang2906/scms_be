@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class ReceiveTicketController {
+    
     @Autowired
     private final ReceiveTicketService receiveTicketService;
 

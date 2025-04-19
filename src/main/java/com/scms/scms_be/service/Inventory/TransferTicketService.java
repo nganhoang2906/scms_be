@@ -137,7 +137,7 @@ public class TransferTicketService {
     }
 
     public String generateTransferTicketCode(Long companyId) {
-        String prefix = "TT-" + companyId + "-";
+        String prefix = "TT" + companyId ;
         int count = ticketRepo.countByTicketCodeStartingWith(prefix);
         return prefix + String.format("%04d", count + 1);
     }

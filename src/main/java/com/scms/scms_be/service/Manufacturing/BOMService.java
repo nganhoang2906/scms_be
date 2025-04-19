@@ -3,6 +3,7 @@ package com.scms.scms_be.service.Manufacturing;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,7 +175,9 @@ public class BOMService {
     }
 
     private String generateNewBomCode(Long itemId) {
-        return String.format("BOM-"+ itemId);
+        String prefix = "BOM" + itemId ;
+        int count = bomRepo.countByBomCodeStartingWith(prefix);
+        return prefix + String.format("%04d", count + 1);
     }
 
     private BOMDto convertToDto(BOM bom) {

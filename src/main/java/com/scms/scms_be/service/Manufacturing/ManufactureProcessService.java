@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.itextpdf.text.pdf.AcroFields.Item;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureProcess;
 import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureProcessRepository;
+import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
 @Service
@@ -23,17 +25,18 @@ public class ManufactureProcessService {
     @Autowired 
     private ManufactureOrderRepository orderRepo;
     @Autowired 
-    private ManufactureStageRepository stageRepo;
+    private ManufactureStageDetailRepository stageDetailRepo;
 
-    public ManufactureProcessDto create( Long moId, Long stageId,ManuProcessRequest processRequest) {
+    public ManufactureProcessDto createManuProcess( ManuProcessRequest processRequest) {
         ManufactureProcess process = new ManufactureProcess();
         process.setStartedOn(processRequest.getStartedOn());
         process.setFinishedOn(processRequest.getFinishedOn());
         process.setStatus(processRequest.getStatus());
         
-        process.setOrder(orderRepo.findById(moId)
+
+        process.setOrder(orderRepo.findById(processRequest.getMoId())
             .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND)));
-        process.setStage(stageRepo.findById(stageId)
+        process.setStageDetail(stageDetailRepo.findById(processRequest.getStageDetailId())
             .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND)));
         
             return convertToDto(processRepo.save(process));
@@ -68,10 +71,9 @@ public class ManufactureProcessService {
         dto.setMoId(process.getOrder().getMoId());
         dto.setMoCode(process.getOrder().getMoCode());
 
-        dto.setStageId(process.getStage().getStageId());
-        dto.setStageName(process.getStage().getStageName());
-        dto.setStageOrder(process.getStage().getStageOrder());
-
+        dto.setStageDetailId(process.getStageDetail().getStageDetailId());
+        dto.setStageDetailName(process.getStageDetail().getStageName());
+        dto.setStageDetailOrder(process.getStageDetail().getStageOrder());
 
         dto.setStartedOn(process.getStartedOn());
 

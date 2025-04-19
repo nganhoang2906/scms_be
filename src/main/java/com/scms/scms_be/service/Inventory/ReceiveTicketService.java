@@ -170,7 +170,7 @@ public class ReceiveTicketService {
     }
 
     public String generateTicketCode(Long companyId, String referenceCode) {
-        String prefix = "ReceiveTk-" + companyId  + referenceCode;
+        String prefix = "RT" + companyId  + referenceCode.substring(2);
         return prefix;
     }
 

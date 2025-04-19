@@ -24,7 +24,6 @@ public class ManufacturePlantController {
     @Autowired
     private ManufacturePlantService plantService;
 
-    // Tạo ManufacturePlant
     @PostMapping("/comad/create-mf-plant/{companyId}")
     public ResponseEntity<ManufacturePlantDto> createPlant(
             @PathVariable Long companyId,
@@ -32,19 +31,16 @@ public class ManufacturePlantController {
         return ResponseEntity.ok(plantService.createPlant(companyId, plant));
     }
 
-    // Lấy tất cả ManufacturePlant của công ty
     @GetMapping("/user/get-all-mf-plant-in-com/{companyId}")
     public ResponseEntity<List<ManufacturePlantDto>> getAllPlants(@PathVariable Long companyId) {
         return ResponseEntity.ok(plantService.getAllPlantsInCompany(companyId));
     }
 
-    // Lấy ManufacturePlant theo ID
     @GetMapping("/user/get-mf-plant/{plantId}")
     public ResponseEntity<ManufacturePlantDto> getPlantById(@PathVariable Long plantId) {
         return ResponseEntity.ok(plantService.getPlantById(plantId));
     }
 
-    // Cập nhật ManufacturePlant
     @PutMapping("/comad/update-mf-plant/{plantId}")
     public ResponseEntity<ManufacturePlantDto> updatePlant(
             @PathVariable Long plantId,

@@ -12,5 +12,6 @@ public interface BOMRepository extends JpaRepository<BOM, Long> {
     boolean existsByBomCode(String bomCode);
     List<BOM> findByItem_Company_CompanyId(Long companyId);
     BOM  findByItem_ItemId(Long itemId);
+    int countByBomCodeStartingWith(String prefix);
 
 }

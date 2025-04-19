@@ -25,35 +25,30 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // Tạo Product
     @PostMapping("/comad/create-product/{itemId}")
     public ResponseEntity<ProductDto> create(@PathVariable Long itemId, @RequestBody ProductRequest product) {
         ProductDto createdProduct = productService.createProduct(itemId, product);
         return ResponseEntity.ok(createdProduct);
     }
 
-    // Lấy tất cả Product trong Item
     @GetMapping("/user/get-all-product-in-item/{itemId}")
     public ResponseEntity<List<ProductDto>> getAllByItem(@PathVariable Long itemId) {
         List<ProductDto> products = productService.getAllProductsByItem(itemId);
         return ResponseEntity.ok(products);
     }
 
-    // Lấy Product theo ID
     @GetMapping("/user/get-product/{productId}")
     public ResponseEntity<ProductDto> getById(@PathVariable Long productId) {
         ProductDto product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
 
-    // Cập nhật Product
     @PutMapping("/comad/update-product/{productId}")
     public ResponseEntity<ProductDto> update(@PathVariable Long productId, @RequestBody ProductRequest product) {
         ProductDto updatedProduct = productService.updateProduct(productId, product);
         return ResponseEntity.ok(updatedProduct);
     }
 
-    // Xóa Product
     @DeleteMapping("/comad/delete-product/{productId}")
     public ResponseEntity<String> delete(@PathVariable Long productId) {
         boolean deleted = productService.deleteProduct(productId);
