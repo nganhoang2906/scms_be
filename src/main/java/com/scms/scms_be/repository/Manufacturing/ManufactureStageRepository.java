@@ -10,6 +10,6 @@ import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
 
 @Repository
 public interface ManufactureStageRepository extends JpaRepository<ManufactureStage, Long> {
-    List<ManufactureStage> findByItem_ItemId(Long itemId); 
+    ManufactureStage findByItem_ItemId(Long itemId); 
 
 }

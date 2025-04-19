@@ -53,8 +53,8 @@ public class ManufactureStageService {
         return convertToDto(saved);
     }
 
-    public List<ManufactureStageDto> getAllStagesByItemId(Long itemId) {
-        return stageRepo.findByItem_ItemId(itemId).stream().map(this::convertToDto).toList();
+    public ManufactureStageDto getStagesByItemId(Long itemId) {
+        return convertToDto(stageRepo.findByItem_ItemId(itemId));
     }
 
     public ManufactureStageDto getStageById(Long stageId) {

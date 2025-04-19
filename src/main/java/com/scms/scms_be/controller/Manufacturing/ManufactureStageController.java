@@ -31,10 +31,10 @@ public class ManufactureStageController {
         return ResponseEntity.ok(stageService.createStage(stage));
     }
 
-    @GetMapping("/user/get-all-stage/{itemId}")
-    public ResponseEntity<List<ManufactureStageDto>> getAllStagesByItemId(
+    @GetMapping("/user/get-stage/{itemId}")
+    public ResponseEntity<ManufactureStageDto> getStagesByItemId(
             @PathVariable Long itemId) {
-        return ResponseEntity.ok(stageService.getAllStagesByItemId(itemId));
+        return ResponseEntity.ok(stageService.getStagesByItemId(itemId));
     }
 
     @GetMapping("/user/get-stage/{stageId}")

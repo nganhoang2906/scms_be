@@ -26,10 +26,8 @@ public class ManufactureOrderController {
 
     @PostMapping("/user/create-mo/{itemId}/{lineId}")
     public ResponseEntity<ManufactureOrderDto> createOrder(
-            @PathVariable Long itemId, 
-            @PathVariable Long lineId, 
-            @RequestBody ManuOrderRequest order) {
-        return ResponseEntity.ok(orderService.createOrder( itemId, lineId,order));
+            @RequestBody ManuOrderRequest request) {
+        return ResponseEntity.ok(orderService.createOrder( request));
     }
 
     @GetMapping("/user/get-all-mo-in-item/{itemId}")

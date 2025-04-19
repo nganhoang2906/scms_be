@@ -12,6 +12,7 @@ import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
+import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStageDetail;
 import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
 import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
@@ -42,30 +43,28 @@ public class ManufactureOrderService {
     @Autowired
     private ManufactureProcessService processService;
 
-    public ManufactureOrderDto createOrder( Long itemId, Long lineId ,ManuOrderRequest orderRequest) {
+    public ManufactureOrderDto createOrder(ManuOrderRequest orderRequest) {
         
-        if(stageRepo.findByItem_ItemId(itemId).isEmpty()) {
-            throw new CustomException("Chưa có stage nào cho item này", HttpStatus.NOT_FOUND);
-        }
 
         ManufactureOrder order = new ManufactureOrder();
-        order.setMoCode(generateMOCode(itemId, lineId));    
+        order.setMoCode(generateMOCode(orderRequest.getItemId(), orderRequest.getLineId()));    
         order.setType(orderRequest.getType());
         order.setQuantity(orderRequest.getQuantity());
         order.setEstimatedStartTime(orderRequest.getEstimatedStartTime());
         order.setEstimatedEndTime(orderRequest.getEstimatedEndTime());
         order.setCreatedBy(orderRequest.getCreatedBy());
         
-        order.setItem(itemRepo.findById(itemId).orElseThrow(() 
+        order.setItem(itemRepo.findById(orderRequest.getItemId()).orElseThrow(() 
             -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
-        order.setLine(lineRepo.findById(lineId).orElseThrow(() 
+        order.setLine(lineRepo.findById(orderRequest.getLineId()).orElseThrow(() 
             -> new CustomException("Line không tồn tại", HttpStatus.NOT_FOUND)));
         order.setCreatedOn( LocalDateTime.now());
         order.setLastUpdatedOn( LocalDateTime.now());
         order.setStatus(orderRequest.getStatus());
 
         moRepo.save(order);
-        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByItem_ItemId(itemId);
+        ManufactureStage stage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
+        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByStage_StageId(stage.getStageId());
         for(ManufactureStageDetail  stageDetail : stageDetailList) {
             ManuProcessRequest processRequest = new ManuProcessRequest();
             processRequest.setMoId(order.getMoId());
