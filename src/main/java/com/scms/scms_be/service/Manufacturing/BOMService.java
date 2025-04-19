@@ -89,10 +89,12 @@ public class BOMService {
                 .collect(Collectors.toList());
     }
 
-    public BOMDto getBOMById(Long bomId) {
-        BOM bom = bomRepo.findById(bomId)
-                .orElseThrow(() -> new CustomException("Không tìm thấy BOM!", HttpStatus.NOT_FOUND));
-        return convertToDto(bom);
+    public BOMDto getBOMByItemid(Long itemId) {
+        BOM bom = bomRepo.findByItem_ItemId(itemId);
+        if (bom == null) {
+            throw new CustomException("BOM không tồn tại", HttpStatus.NOT_FOUND);
+        }
+       return convertToDto(bom);
     }
 
     public BOMDto updateBOM(Long bomId, BOMRequest request) {

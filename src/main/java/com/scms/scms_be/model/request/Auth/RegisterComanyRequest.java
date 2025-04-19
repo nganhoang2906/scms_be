@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class RegisterComanyRequest {
     // Thông tin công ty
-    private String companyCode;
     private String companyName;
     private String taxCode;
     private String address;

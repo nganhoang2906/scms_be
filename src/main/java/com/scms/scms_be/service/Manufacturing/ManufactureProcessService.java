@@ -39,11 +39,11 @@ public class ManufactureProcessService {
             return convertToDto(processRepo.save(process));
     }
 
-    public List<ManufactureProcessDto> getAllByCompany(Long companyId) {
-        return processRepo.findByOrder_Item_Company_CompanyId(companyId)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public List<ManufactureProcessDto> getAllByMoId(Long moId) {
+        List<ManufactureProcess> processes = processRepo.findByOrder_MoId(moId);
+        return processes.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
     }
 
     public ManufactureProcessDto getById(Long id) {

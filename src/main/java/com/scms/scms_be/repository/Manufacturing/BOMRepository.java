@@ -11,5 +11,6 @@ import com.scms.scms_be.model.entity.Manufacturing.BOM;
 public interface BOMRepository extends JpaRepository<BOM, Long> {
     boolean existsByBomCode(String bomCode);
     List<BOM> findByItem_Company_CompanyId(Long companyId);
+    BOM  findByItem_ItemId(Long itemId);
 
 }

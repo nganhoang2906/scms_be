@@ -37,8 +37,8 @@ public class BOMController {
 
     @GetMapping("/user/get-bom/{bomId}")
     public ResponseEntity<BOMDto> getBOMById(
-            @PathVariable Long bomId) {
-        return ResponseEntity.ok(bomService.getBOMById(bomId));
+            @PathVariable Long itemId) {
+        return ResponseEntity.ok(bomService.getBOMByItemid(itemId));
     }
 
     @PutMapping("/user/update-bom/{bomId}")

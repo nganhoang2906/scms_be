@@ -70,7 +70,7 @@ public class AuthService {
 
         Company company = new Company();
         company.setCompanyName(registrationRequest.getCompanyName());
-        company.setCompanyCode(registrationRequest.getCompanyCode());
+        company.setCompanyCode(generateCompanyCode());
         company.setTaxCode(registrationRequest.getTaxCode());
         company.setAddress(registrationRequest.getAddress());
         company.setCountry(registrationRequest.getCountry());
@@ -88,17 +88,14 @@ public class AuthService {
             departmentNames.add("Sản xuất");
         }
 
-        int departmentIndex = departmentRepo.countByCompanyCompanyId(company.getCompanyId()) + 1;
-
         List<Department> departments = new ArrayList<>();
         for (String departmentName : departmentNames) {
             Department department = new Department();
             department.setCompany(company);
-            department.setDepartmentCode(company.getCompanyCode() + "-D" + departmentIndex);
+            department.setDepartmentCode(generateDepartmentCode(company.getCompanyId()));
             department.setDepartmentName(departmentName);
             department = departmentRepo.save(department);
             departments.add(department);
-            departmentIndex++;
         }
 
         Department managementDepartment = departments.stream()
@@ -128,6 +125,17 @@ public class AuthService {
         usersRepo.save(newUser);
         emailService.sendOtpToEmail(registrationRequest.getEmail(), otp);
         throw new CustomException("Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.", HttpStatus.OK);
+    }
+
+    public String generateCompanyCode() {
+        String prefix = "C";
+        int count = companyRepo.countByCompanyCodeStartingWith(prefix);
+        return prefix + String.format("%04d", count + 1);
+    }
+    public String generateDepartmentCode(Long companyId) {
+        String prefix = "D" + companyId + "-";
+        int count = departmentRepo.countByDepartmentCodeStartingWith(prefix);
+        return prefix + String.format("%04d", count + 1);
     }
 
     public void verifyOtp(VerifyOtpRequest request) {

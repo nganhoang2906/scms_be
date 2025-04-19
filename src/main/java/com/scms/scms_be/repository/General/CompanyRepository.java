@@ -12,4 +12,5 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     Optional<Company> findByTaxCode(String taxCode);
     boolean existsByCompanyCode(String companyCode);
     boolean existsByTaxCode(String taxCode);
+    int countByCompanyCodeStartingWith(String prefix);
 }

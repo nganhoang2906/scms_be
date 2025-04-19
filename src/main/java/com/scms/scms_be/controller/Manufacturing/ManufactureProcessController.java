@@ -34,8 +34,8 @@ public class ManufactureProcessController {
 
     @GetMapping("/user/get-all-process-in-com/{companyId}")
     public ResponseEntity<List<ManufactureProcessDto>> getAllProcesses(
-        @PathVariable Long companyId) {
-        return ResponseEntity.ok(processService.getAllByCompany(companyId));
+        @PathVariable Long moId) {
+        return ResponseEntity.ok(processService.getAllByMoId(moId));
     }
 
     @GetMapping("/user/get-process/{mpid}")

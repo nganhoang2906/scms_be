@@ -13,4 +13,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     boolean existsByDepartmentCode(String departmentCode);
     int countByCompanyCompanyId(Long companyId);
+
+    int countByDepartmentCodeStartingWith(String prefix);
 }
