@@ -1,9 +1,11 @@
 package com.scms.scms_be.model.entity.Purchasing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import com.scms.scms_be.model.entity.General.Company;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -42,13 +45,14 @@ public class PurchaseOrder {
 
     private String description;
     private String createdBy;
+    
+    private LocalDateTime createdOn;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdatedOn;
+    private LocalDateTime lastUpdatedOn;
 
     private String status;
+
+     @OneToMany(mappedBy = "po", orphanRemoval = true , cascade = CascadeType.ALL)
+    private List<PurchaseOrderDetail> purchaseOrderDetails;
 }
 

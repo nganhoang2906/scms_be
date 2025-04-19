@@ -1,12 +1,12 @@
 package com.scms.scms_be.model.request.Manufacturing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
 public class ManuProcessRequest {
-    private Date startedOn;
-    private Date finishedOn;
+    private LocalDateTime startedOn;
+    private LocalDateTime finishedOn;
     private String status;
 }

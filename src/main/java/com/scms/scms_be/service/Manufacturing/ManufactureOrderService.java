@@ -1,5 +1,6 @@
 package com.scms.scms_be.service.Manufacturing;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,8 +52,8 @@ public class ManufactureOrderService {
             -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
         order.setLine(lineRepo.findById(lineId).orElseThrow(() 
             -> new CustomException("Line không tồn tại", HttpStatus.NOT_FOUND)));
-        order.setCreatedOn(new Date());
-        order.setLastUpdatedOn(new Date());
+        order.setCreatedOn( LocalDateTime.now());
+        order.setLastUpdatedOn( LocalDateTime.now());
         order.setStatus(orderRequest.getStatus());
         return convertToDto(moRepo.save(order));
     }
@@ -87,15 +88,16 @@ public class ManufactureOrderService {
         mo.setEstimatedEndTime(update.getEstimatedEndTime());
         mo.setCreatedBy(update.getCreatedBy());
         mo.setCreatedOn(mo.getCreatedOn());
-        mo.setLastUpdatedOn(new Date());
+        mo.setLastUpdatedOn( LocalDateTime.now());
         mo.setStatus(update.getStatus());
         
         return convertToDto(moRepo.save(mo));
     }
     public String generateMOCode(Long itemId, Long lineId) {
-        String moCode = "MO-"+itemId + "-" + lineId + "-" + System.currentTimeMillis();
-        return moCode;
+        int count = moRepo.countByItemItemIdAndLineLineId(itemId, lineId);
+        return "MO-" + itemId  + lineId +  String.format("%d", count + 1);
     }
+    
 
     private ManufactureOrderDto convertToDto(ManufactureOrder mo) {
         ManufactureOrderDto dto = new ManufactureOrderDto();

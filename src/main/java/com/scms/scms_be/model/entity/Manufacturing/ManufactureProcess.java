@@ -1,6 +1,6 @@
 package com.scms.scms_be.model.entity.Manufacturing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public class ManufactureProcess {
     @JoinColumn(name = "stage_id") 
     private ManufactureStage stage;
 
-    private Date startedOn;
-    private Date finishedOn;
+    private LocalDateTime startedOn;
+    private LocalDateTime finishedOn;
     private String status;
 }

@@ -1,6 +1,6 @@
 package com.scms.scms_be.model.entity.Purchasing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.scms.scms_be.model.entity.General.Company;
 
@@ -40,16 +40,14 @@ public class RequestForQuotation {
     @JoinColumn(name = "requested_company_id", nullable=false)
     private Company requestedCompany;
 
-    @Temporal(TemporalType.DATE)
-    private Date needByDate;
+     
+    private LocalDateTime needByDate;
 
     private String createdBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn;
+    private LocalDateTime createdOn;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdatedOn;
+    private LocalDateTime lastUpdatedOn;
 
     private String status;
 }

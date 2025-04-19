@@ -6,6 +6,6 @@ import lombok.Data;
 public class BOMDetailRequest {
     private Long itemId;
 
-    private Long quantity;
+    private Double quantity;
     private String note;
 }

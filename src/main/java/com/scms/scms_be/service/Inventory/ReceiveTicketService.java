@@ -1,6 +1,7 @@
 package com.scms.scms_be.service.Inventory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,11 +15,16 @@ import com.scms.scms_be.model.dto.Inventory.ReceiveTicketDetailDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.General.Warehouse;
+import com.scms.scms_be.model.entity.Inventory.IssueTicketDetail;
 import com.scms.scms_be.model.entity.Inventory.ReceiveTicket;
 import com.scms.scms_be.model.entity.Inventory.ReceiveTicketDetail;
 import com.scms.scms_be.model.entity.Inventory.TransferTicket;
+import com.scms.scms_be.model.entity.Inventory.TransferTicketDetail;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 import com.scms.scms_be.model.entity.Purchasing.PurchaseOrder;
+import com.scms.scms_be.model.entity.Purchasing.PurchaseOrderDetail;
+import com.scms.scms_be.model.entity.Sales.SalesOrder;
+import com.scms.scms_be.model.entity.Sales.SalesOrderDetail;
 import com.scms.scms_be.model.request.Inventory.ReceiveTicketDetailRequest;
 import com.scms.scms_be.model.request.Inventory.ReceiveTicketRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
@@ -71,40 +77,64 @@ public class ReceiveTicketService {
         ticket.setReason(request.getReason());
         ticket.setReceiveType(request.getReceiveType());
 
+        List<ReceiveTicketDetail> details = new ArrayList<>();
+
         if(request.getReceiveType().equals("Manufacture Order")){
             ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoCode(request.getReferenceCode());
             ticket.setReferenceId(manufactureOrder.getMoId());
+            ReceiveTicketDetail detail = new ReceiveTicketDetail();
+            detail.setTicket(ticket);
+            Item item = itemRepo.findById(manufactureOrder.getItem().getItemId())
+                    .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+            detail.setItem(item);
+            detail.setQuantity(manufactureOrder.getQuantity());
+            detail.setNote(request.getNote());
+            details.add(detail);
         }
         else if(request.getReceiveType().equals("Purchase Order")){
             PurchaseOrder purchaseOrder = purchaseOrderRepository.findByPoCode(request.getReferenceCode());
             ticket.setReferenceId(purchaseOrder.getPoId());
+            List<PurchaseOrderDetail> purchaseOrderDetails = purchaseOrder.getPurchaseOrderDetails();
+            for (PurchaseOrderDetail purchaseOrderDetail : purchaseOrderDetails) {
+                ReceiveTicketDetail detail = new ReceiveTicketDetail();
+                detail.setTicket(ticket);
+                Item item = itemRepo.findById(purchaseOrderDetail.getItem().getItemId())
+                        .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+                detail.setItem(item);
+                detail.setQuantity(purchaseOrderDetail.getQuantity());
+                detail.setNote(request.getNote());
+                details.add(detail);
+            }
         }
          else  if(request.getReceiveType().equals("Transfer Ticket")){
             TransferTicket transferTicket = transferTicketRepository.findByTicketCode(request.getReferenceCode());
             ticket.setReferenceId(transferTicket.getTicketId());
+            List<TransferTicketDetail> transferTicketDetails = transferTicket.getTransferTicketDetails();
+            for (TransferTicketDetail transferTicketDetail : transferTicketDetails) {
+                ReceiveTicketDetail detail = new ReceiveTicketDetail();
+                detail.setTicket(ticket);
+                Item item = itemRepo.findById(transferTicketDetail.getItem().getItemId())
+                        .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+                detail.setItem(item);
+                detail.setQuantity(transferTicketDetail.getQuantity());
+                detail.setNote(request.getNote());
+                details.add(detail);
+            }
         } else {
             throw new CustomException("Loại phiếu không hợp lệ!", HttpStatus.BAD_REQUEST);
         }
+
         
         ticket.setCreatedBy(request.getCreatedBy());
         ticket.setCreatedOn(LocalDateTime.now());
+        ticket.setLastUpdatedOn(LocalDateTime.now());
         ticket.setStatus(request.getStatus());
         ticket.setFile(request.getFile());
 
+        ticket.setReceiveTicketDetails(details);
+
         ReceiveTicket saved = ticketRepo.save(ticket);
 
-        for (ReceiveTicketDetailRequest d : request.getReceiveTicketDetails()) {
-            Item item = itemRepo.findById(d.getItemId())
-                    .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
-
-            ReceiveTicketDetail detail = new ReceiveTicketDetail();
-            detail.setTicket(saved);
-            detail.setItem(item);
-            detail.setQuantity(d.getQuantity());
-            detail.setNote(d.getNote());
-
-            detailRepo.save(detail);
-        }
 
         return convertToDto(saved);
     }
@@ -137,6 +167,11 @@ public class ReceiveTicketService {
 
         ticketRepo.save(ticket);
         return convertToDto(ticket);
+    }
+
+    public String generateTicketCode(Long companyId, String referenceCode) {
+        String prefix = "ReceiveTk-" + companyId  + referenceCode;
+        return prefix;
     }
 
     private ReceiveTickeDto convertToDto(ReceiveTicket ticket) {

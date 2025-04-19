@@ -31,6 +31,6 @@ public class PurchaseOrderDetail {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    private Integer quantity;
+    private Double quantity;
     private String note;
 }

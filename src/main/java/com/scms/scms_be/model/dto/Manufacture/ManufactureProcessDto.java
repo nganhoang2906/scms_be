@@ -1,5 +1,6 @@
 package com.scms.scms_be.model.dto.Manufacture;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Data;
@@ -15,8 +16,8 @@ public class ManufactureProcessDto {
     private String stageName;
     private Integer stageOrder;
 
-    private Date startedOn;
-    private Date finishedOn;
+    private LocalDateTime startedOn;
+    private LocalDateTime finishedOn;
     private String status;
     
 }

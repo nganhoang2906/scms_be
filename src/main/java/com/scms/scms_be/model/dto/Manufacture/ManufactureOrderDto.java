@@ -1,5 +1,6 @@
 package com.scms.scms_be.model.dto.Manufacture;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Data;
@@ -19,13 +20,13 @@ public class ManufactureOrderDto {
     private String lineName;
     
     private String type;
-    private Integer quantity;
+    private Double quantity;
 
-    private Date estimatedStartTime;
-    private Date estimatedEndTime;
+    private LocalDateTime estimatedStartTime;
+    private LocalDateTime estimatedEndTime;
 
     private String createdBy;
-    private Date createdOn;
-    private Date lastUpdatedOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime lastUpdatedOn;
     private String status;
 }

@@ -23,5 +23,5 @@ public class ReceiveTicketRequest {
     private String status;
     private String file;
 
-    private List<ReceiveTicketDetailRequest> receiveTicketDetails;
+    private String note;
 }

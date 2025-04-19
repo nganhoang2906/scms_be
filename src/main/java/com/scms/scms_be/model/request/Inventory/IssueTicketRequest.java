@@ -24,5 +24,5 @@ public class IssueTicketRequest {
     private String status;
     private String file;
 
-    private List<IssueTicketDetailRequest> details;
+    private String note;
 }

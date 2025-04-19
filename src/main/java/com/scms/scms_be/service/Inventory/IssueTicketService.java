@@ -1,6 +1,7 @@
 package com.scms.scms_be.service.Inventory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,10 @@ import com.scms.scms_be.model.entity.General.Warehouse;
 import com.scms.scms_be.model.entity.Inventory.IssueTicket;
 import com.scms.scms_be.model.entity.Inventory.IssueTicketDetail;
 import com.scms.scms_be.model.entity.Inventory.TransferTicket;
+import com.scms.scms_be.model.entity.Inventory.TransferTicketDetail;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 import com.scms.scms_be.model.entity.Sales.SalesOrder;
-import com.scms.scms_be.model.request.Inventory.IssueTicketDetailRequest;
+import com.scms.scms_be.model.entity.Sales.SalesOrderDetail;
 import com.scms.scms_be.model.request.Inventory.IssueTicketRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ItemRepository;
@@ -55,24 +57,58 @@ public class IssueTicketService {
                 .orElseThrow(() -> new CustomException("Company not found", HttpStatus.NOT_FOUND));
         Warehouse warehouse = warehouseRepo.findById(request.getWarehouseId())
                 .orElseThrow(() -> new CustomException("Warehouse not found", HttpStatus.NOT_FOUND));
+        
         IssueTicket ticket = new IssueTicket();
         ticket.setCompany(company);
         ticket.setWarehouse(warehouse);
+        ticket.setTicketCode(generateTicketCode(company.getCompanyId(),request.getReferenceCode()));
         ticket.setIssueDate(request.getIssueDate());
         ticket.setReason(request.getReason());
         ticket.setIssueType(request.getIssueType());
 
+        List<IssueTicketDetail> details = new ArrayList<>();
+
         if(request.getIssueType().equals("Manufacture Order")){
             ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoCode(request.getReferenceCode());
             ticket.setReferenceId(manufactureOrder.getMoId());
+            IssueTicketDetail detail = new IssueTicketDetail();
+            detail.setTicket(ticket);
+            Item item = itemRepo.findById(manufactureOrder.getItem().getItemId())
+                    .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+            detail.setItem(item);
+            detail.setQuantity(manufactureOrder.getQuantity());
+            detail.setNote(request.getNote());
+            details.add(detail);
         }
         else if(request.getIssueType().equals("Sales Order")){
             SalesOrder salesOrder = salesOrderRepository.findBySoCode(request.getReferenceCode());
             ticket.setReferenceId(salesOrder.getSoId());
+            List<SalesOrderDetail> salesOrderDetails = salesOrder.getSalesOrderDetails();
+            for (SalesOrderDetail salesOrderDetail : salesOrderDetails) {
+                IssueTicketDetail detail = new IssueTicketDetail();
+                detail.setTicket(ticket);
+                Item item = itemRepo.findById(salesOrderDetail.getItem().getItemId())
+                        .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+                detail.setItem(item);
+                detail.setQuantity(salesOrderDetail.getQuantity());
+                detail.setNote(request.getNote());
+                details.add(detail);
+            }
         }
          else  if(request.getIssueType().equals("Transfer Ticket")){
             TransferTicket transferTicket = transferTicketRepository.findByTicketCode(request.getReferenceCode());
             ticket.setReferenceId(transferTicket.getTicketId());
+            List<TransferTicketDetail> transferTicketDetails = transferTicket.getTransferTicketDetails();
+            for (TransferTicketDetail transferTicketDetail : transferTicketDetails) {
+                IssueTicketDetail detail = new IssueTicketDetail();
+                detail.setTicket(ticket);
+                Item item = itemRepo.findById(transferTicketDetail.getItem().getItemId())
+                        .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+                detail.setItem(item);
+                detail.setQuantity(transferTicketDetail.getQuantity());
+                detail.setNote(request.getNote());
+                details.add(detail);
+            }
         } else {
             throw new CustomException("Loại phiếu không hợp lệ!", HttpStatus.BAD_REQUEST);
         }
@@ -84,19 +120,9 @@ public class IssueTicketService {
         ticket.setCreatedOn(LocalDateTime.now());
         ticket.setLastUpdatedOn(LocalDateTime.now());
 
+        ticket.setIssueTicketDetails(details);
+
         IssueTicket issueTicket= ticketRepo.save(ticket);
-
-        for( IssueTicketDetailRequest detailRequest : request.getDetails()){
-            Item item = itemRepo.findById(detailRequest.getItemId())
-                    .orElseThrow(() -> new CustomException("Item not found", HttpStatus.NOT_FOUND));
-
-            IssueTicketDetail detail = new IssueTicketDetail();
-            detail.setTicket(ticket);
-            detail.setItem(item);
-            detail.setQuantity(detailRequest.getQuantity());
-            detail.setNote(detailRequest.getNote());
-            detailRepo.save(detail);
-        }
 
         return convertToDto(issueTicket); 
     }
@@ -130,6 +156,11 @@ public class IssueTicketService {
 
         ticketRepo.save(ticket);
         return convertToDto(ticket);
+    }
+
+    public String generateTicketCode(Long companyId, String referenceCode) {
+        String prefix = "IssueTk-" + companyId  + referenceCode;
+        return prefix;
     }
 
     public IssueTicketDto convertToDto(IssueTicket ticket) {

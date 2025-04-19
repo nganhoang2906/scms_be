@@ -12,6 +12,6 @@ public class BOMDetailDto {
     private String itemCode;
     private String itemName;
 
-    private Long quantity;
+    private Double quantity;
     private String note;
 }

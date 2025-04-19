@@ -1,5 +1,6 @@
 package com.scms.scms_be.model.entity.Manufacturing;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.scms.scms_be.model.entity.General.Item;
@@ -39,13 +40,13 @@ public class ManufactureOrder {
     private String moCode;
 
     private String type;
-    private Integer quantity;
+    private Double quantity;
 
-    private Date estimatedStartTime;
-    private Date estimatedEndTime;
+    private LocalDateTime estimatedStartTime;
+    private LocalDateTime estimatedEndTime;
 
     private String createdBy;
-    private Date createdOn;
-    private Date lastUpdatedOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime lastUpdatedOn;
     private String status;
 }

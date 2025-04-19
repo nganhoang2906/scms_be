@@ -17,4 +17,6 @@ public interface ManufactureOrderRepository extends JpaRepository<ManufactureOrd
 
     ManufactureOrder findByMoCode(String moCode);
 
+    int countByItemItemIdAndLineLineId(Long itemId, Long lineId);
+
 }

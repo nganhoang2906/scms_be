@@ -1,16 +1,16 @@
 package com.scms.scms_be.model.request.Manufacturing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
 public class ManuOrderRequest {
     private String type;
-    private Integer quantity;
+    private Double quantity;
 
-    private Date estimatedStartTime;
-    private Date estimatedEndTime;
+    private LocalDateTime estimatedStartTime;
+    private LocalDateTime estimatedEndTime;
 
     private String createdBy;
 
