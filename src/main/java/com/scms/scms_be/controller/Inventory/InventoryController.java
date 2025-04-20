@@ -26,6 +26,11 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
+    @PostMapping("/user/create-inventory")
+    public ResponseEntity<InventoryDto> createInventory(@RequestBody InventoryRequest inventory) {
+        return ResponseEntity.ok(inventoryService.createInventory(inventory));
+    }
+
     @PostMapping("/user/put-item-to-inventory")
     public ResponseEntity<InventoryDto> putItemToInventory(@RequestBody putItemToInventoryRequest request) {
         return ResponseEntity.ok(inventoryService.putItemToInventory(request));
@@ -45,17 +50,21 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.consumeOnDemand(inventoryId, amount));
     }
 
-    @GetMapping("/user/get-all-inventory-by-item/{itemId}")
+    @GetMapping("/user/get-all-inventory-by-item-and-warehouse/{itemId}/{warehouseId}")
     public ResponseEntity<List<InventoryDto>> getAllByItem(
-            @PathVariable Long itemId) {
-        return ResponseEntity.ok(inventoryService.getAllInventoryByItem(itemId));
+            @PathVariable Long itemId,
+            @PathVariable Long warehouseId) {
+        return ResponseEntity.ok(inventoryService.getInventoryByItemAndWarehouse(itemId, warehouseId));
     }
 
-    @GetMapping("/user/get-all-inventory-in-warehouse/{warehouseId}")
-    public ResponseEntity<List<InventoryDto>> getAllByWarehouse(
-            @PathVariable Long warehouseId) {
-        return ResponseEntity.ok(inventoryService.getAllInventoryByWarehouse(warehouseId));
+    @GetMapping("/user/check-inventory/{itemId}/{warehouseId}")
+    public ResponseEntity<Object> checkInventory(
+            @PathVariable Long itemId,
+            @PathVariable Long warehouseId,
+            @RequestParam Double amount) {
+        return ResponseEntity.ok(inventoryService.checkInventory(itemId, warehouseId, amount));
     }
+
 
     @GetMapping("/user/get-inventory/{inventoryId}")
     public ResponseEntity<InventoryDto> getById(

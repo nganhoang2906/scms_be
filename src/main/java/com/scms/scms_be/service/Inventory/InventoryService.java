@@ -27,18 +27,52 @@ public class InventoryService {
     
     @Autowired
     private WarehouseRepository warehouseRepository;
-    
-    public List<InventoryDto> getAllInventoryByItem(Long itemId) {
-        List<Inventory> inventories = inventoryRepository.findAllByItem_ItemId(itemId);
-        return inventories.stream()
-                .map(this::convertToDto)
-                .toList();
+
+    public InventoryDto createInventory(InventoryRequest inventoryRequest) {
+        Inventory inventory = new Inventory();
+        Item item = itemRepository.findById(inventoryRequest.getItemId())
+                .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
+        Warehouse warehouse = warehouseRepository.findById(inventoryRequest.getWarehouseId())
+                .orElseThrow(() -> new CustomException("Warehouse không tồn tại", HttpStatus.NOT_FOUND));
+        
+        inventory.setItem(item);
+        inventory.setWarehouse(warehouse);
+        inventory.setQuantity(inventoryRequest.getQuantity());
+        inventory.setOnDemandQuantity(0.0); // Khởi tạo số lượng đã đặt là 0
+        
+        Inventory savedInventory = inventoryRepository.save(inventory);
+        return convertToDto(savedInventory);
     }
-    public List<InventoryDto> getAllInventoryByWarehouse(long warehouseId) {
-        List<Inventory> inventories = inventoryRepository.findAllByWarehouse_WarehouseId(warehouseId);
-        return inventories.stream()
-                .map(this::convertToDto)
-                .toList();
+    
+    public List<InventoryDto> getInventoryByItemAndWarehouse(Long itemId, Long warehouseId) {
+        if(itemId ==0 ){
+            List<Inventory> inventories = inventoryRepository.findAllByItem_ItemId(itemId);
+            return inventories.stream()
+                    .map(this::convertToDto)
+                    .toList();
+        }else if(warehouseId == 0){
+            List<Inventory> inventories = inventoryRepository.findAllByWarehouse_WarehouseId(warehouseId);
+            return inventories.stream()
+                    .map(this::convertToDto)
+                    .toList();
+        }else {
+            List<Inventory> inventories = inventoryRepository.findAllByItem_ItemIdAndWarehouse_WarehouseId(itemId, warehouseId);
+            return inventories.stream()
+                    .map(this::convertToDto)
+                    .toList();
+        }
+    }
+
+    public Object checkInventory(Long itemId, Long warehouseId,Double amount) {
+        Inventory inventory = inventoryRepository.findByItem_ItemIdAndWarehouse_WarehouseId(itemId, warehouseId);
+        if (inventory == null) {
+            throw new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND);
+        }
+        Double available = inventory.getQuantity() - inventory.getOnDemandQuantity();
+        if ( available < amount) {
+            throw new CustomException("Không đủ hàng tồn! Sản phẩm chỉ còn " + available, HttpStatus.BAD_REQUEST);
+        }
+        throw new CustomException("Đủ hàng tồn!", HttpStatus.OK);
     }
     
     public InventoryDto getInventoryById(long inventoryId) {
@@ -60,9 +94,7 @@ public class InventoryService {
         throw new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND);
     }
 
-    //Tăng Quantity 
     public InventoryDto putItemToInventory(putItemToInventoryRequest inventoryRequest) {
-        // Kiểm tra xem inventory đã tồn tại chưa (theo itemId và warehouseId)
         Inventory existingInventory = inventoryRepository.findByItem_ItemIdAndWarehouse_WarehouseId(
                 inventoryRequest.getItemId(),
                 inventoryRequest.getWarehouseId()
@@ -78,16 +110,16 @@ public class InventoryService {
                     .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
             Warehouse warehouse = warehouseRepository.findById(inventoryRequest.getWarehouseId())
                     .orElseThrow(() -> new CustomException("Warehouse không tồn tại", HttpStatus.NOT_FOUND));
-            inventory.setItem(item);  // Đảm bảo bạn có constructor hoặc setEntityId
+            inventory.setItem(item);  
             inventory.setWarehouse(warehouse);
             inventory.setQuantity(inventoryRequest.getQuantity());
-            inventory.setOnDemandQuantity(0.0); // hoặc 1 giá trị mặc định
+            inventory.setOnDemandQuantity(0.0); 
             inventory = inventoryRepository.save(inventory);
         }
 
         return convertToDto(inventory);
     }
-    // Tăng onDemandQuantity nếu còn đủ hàng tồn
+
     public InventoryDto increaseOnDemand(Long inventoryId, Double n) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
                 .orElseThrow(() -> new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND));
@@ -103,7 +135,6 @@ public class InventoryService {
         return convertToDto(updated);
     }
 
-    // Giảm cả onDemand và Quantity
     public InventoryDto consumeOnDemand(Long inventoryId, Double n) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
                 .orElseThrow(() -> new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND));

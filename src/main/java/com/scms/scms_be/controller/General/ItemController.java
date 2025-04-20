@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.model.dto.General.ItemDto;
-import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.request.General.ItemRequest;
 import com.scms.scms_be.service.General.ItemService;
 
@@ -45,7 +44,7 @@ public class ItemController {
     }
 
     @PutMapping("/comad/update-item/{itemId}")
-    public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody Item item) {
+    public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemRequest item) {
         ItemDto updatedItem = itemService.updateItem(itemId, item);
         return ResponseEntity.ok(updatedItem);
     }

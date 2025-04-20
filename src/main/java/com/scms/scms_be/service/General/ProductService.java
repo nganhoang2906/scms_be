@@ -34,7 +34,7 @@ public class ProductService {
         
         product.setItem(item);
         product.setSerialNumber(UUID.randomUUID().toString().substring(0, 8));
-        product.setBatchId(newProduct.getBatchId());
+        product.setBatchNo(newProduct.getBatchNo());
         product.setQrCode(newProduct.getQrCode());
         return convertToDto(productRepo.save(product));
     }
@@ -54,7 +54,7 @@ public class ProductService {
         Product existing = productRepo.findById(productId)
                 .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại!", HttpStatus.NOT_FOUND));
 
-        existing.setBatchId(updated.getBatchId());
+        existing.setBatchNo(updated.getBatchNo());
         existing.setQrCode(updated.getQrCode());
         return convertToDto(productRepo.save(existing));
     }
@@ -72,8 +72,10 @@ public class ProductService {
         ProductDto dto = new ProductDto();
         dto.setProductId(product.getProductId());
         dto.setItemId(product.getItem().getItemId());
+        dto.setItemName(product.getItem().getItemName());
+        dto.setTechnicalSpecifications(product.getItem().getTechnicalSpecifications());
         dto.setSerialNumber(product.getSerialNumber());
-        dto.setBatchId(product.getBatchId());
+        dto.setBatchNo(product.getBatchNo());
         dto.setQrCode(product.getQrCode());
         dto.setCurrentCompanyId(product.getCurrentCompanyId());
         return dto;

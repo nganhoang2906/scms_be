@@ -41,6 +41,11 @@ public class ManufactureLineService {
         line.setDescription(newLine.getDescription());
         return convertToDto(lineRepo.save(line));
     }
+    public String generateLineCode(Long companyId) {
+        String prefix = "ML"+String.format("%04d", companyId);
+        int count = lineRepo.countByLineCodeStartingWith(prefix);
+        return prefix + String.format("%03d", count + 1);
+    }
 
     public List<ManufactureLineDto> getAllLinesInPlant(Long plantId) {
         List<ManufactureLine> lines = lineRepo.findByPlantPlantId(plantId);

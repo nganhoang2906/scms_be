@@ -25,7 +25,6 @@ public class ManufacturePlantService {
     @Autowired
     private CompanyRepository companyRepo;
 
-    // Tạo ManufacturePlant
     public ManufacturePlantDto createPlant(Long companyId, ManuPlantRequest newPlant) {
         Company company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
@@ -35,26 +34,30 @@ public class ManufacturePlantService {
         }
         ManufacturePlant plant = new ManufacturePlant();
         plant.setCompany(company);
-        plant.setPlantCode(newPlant.getPlantCode());
+        plant.setPlantCode(generatePlantCode(companyId));
         plant.setPlantName(newPlant.getPlantName());
         plant.setDescription(newPlant.getDescription());
         return convertToDto(plantRepo.save(plant));
     }
 
-    // Lấy tất cả ManufacturePlant của công ty
+    public String generatePlantCode(Long companyId) {
+        String prefix = "MP"+String.format("%04d", companyId);
+        int count = plantRepo.countByPlantCodeStartingWith(prefix);
+        return prefix + String.format("%03d", count + 1);
+    }
+
+
     public List<ManufacturePlantDto> getAllPlantsInCompany(Long companyId) {
         List<ManufacturePlant> plants = plantRepo.findByCompanyCompanyId(companyId);
         return plants.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    // Lấy ManufacturePlant theo ID
     public ManufacturePlantDto getPlantById(Long plantId) {
         ManufacturePlant plant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Xưởng không tồn tại!", HttpStatus.NOT_FOUND));
         return convertToDto(plant);
     }
 
-    // Cập nhật ManufacturePlant
     public ManufacturePlantDto updatePlant(Long plantId, ManuPlantRequest updatedPlant) {
         ManufacturePlant existingPlant = plantRepo.findById(plantId)
                 .orElseThrow(() -> new CustomException("Xưởng không tồn tại!", HttpStatus.NOT_FOUND));

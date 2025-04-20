@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.entity.Manufacturing;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.General.ManufactureLine;

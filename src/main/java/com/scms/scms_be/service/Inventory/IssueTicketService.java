@@ -61,7 +61,7 @@ public class IssueTicketService {
         IssueTicket ticket = new IssueTicket();
         ticket.setCompany(company);
         ticket.setWarehouse(warehouse);
-        ticket.setTicketCode(generateTicketCode(company.getCompanyId(),request.getReferenceCode()));
+        ticket.setTicketCode(generateTicketCode(company.getCompanyId()));
         ticket.setIssueDate(request.getIssueDate());
         ticket.setReason(request.getReason());
         ticket.setIssueType(request.getIssueType());
@@ -115,10 +115,10 @@ public class IssueTicketService {
 
 
         ticket.setCreatedBy(request.getCreatedBy());
-        ticket.setStatus(request.getStatus());
-        ticket.setFile(request.getFile());
         ticket.setCreatedOn(LocalDateTime.now());
         ticket.setLastUpdatedOn(LocalDateTime.now());
+        ticket.setStatus(request.getStatus());
+        ticket.setFile(request.getFile());
 
         ticket.setIssueTicketDetails(details);
 
@@ -158,10 +158,13 @@ public class IssueTicketService {
         return convertToDto(ticket);
     }
 
-    public String generateTicketCode(Long companyId, String referenceCode) {
-        String prefix = "IT" + companyId  + referenceCode.substring(2);
-        return prefix;
+    public String generateTicketCode(Long companyId) {
+        String prefix = "IT"+String.format("%04d", companyId);
+        String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
+        int count = ticketRepo.countByTicketCodeStartingWith(prefix);
+        return prefix +year+ String.format("%03d", count + 1);
     }
+
 
     public IssueTicketDto convertToDto(IssueTicket ticket) {
         IssueTicketDto dto = new IssueTicketDto();

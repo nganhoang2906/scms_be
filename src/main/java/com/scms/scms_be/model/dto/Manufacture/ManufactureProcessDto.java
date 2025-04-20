@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.dto.Manufacture;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.Data;
 

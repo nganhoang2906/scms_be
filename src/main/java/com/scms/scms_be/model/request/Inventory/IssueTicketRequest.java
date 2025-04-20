@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.request.Inventory;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.Data;
 @Data

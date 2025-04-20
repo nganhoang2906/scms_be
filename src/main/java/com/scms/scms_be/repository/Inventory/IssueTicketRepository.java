@@ -10,4 +10,6 @@ public interface IssueTicketRepository extends JpaRepository<IssueTicket, Long> 
 
     List<IssueTicket> findByCompany_CompanyId(Long companyId);
 
+    int countByTicketCodeStartingWith(String prefix);
+
 }

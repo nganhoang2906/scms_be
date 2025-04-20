@@ -6,9 +6,11 @@ import lombok.Data;
 public class ProductDto {
     private Long productId;
     private Long itemId;
+    private String itemName;
+    private String technicalSpecifications;
     private Long currentCompanyId;
     private String serialNumber;
-    private Long batchId;
+    private Long batchNo;
     private String qrCode;
 
 }

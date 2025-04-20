@@ -34,7 +34,7 @@ public class ItemService {
         }
         Item item = new Item();
         item.setCompany(company);
-        item.setItemCode(newitem.getItemCode());
+        item.setItemCode(generateItemCode(companyId));
         item.setItemName(newitem.getItemName());
         item.setItemType(newitem.getItemType());
         item.setUom(newitem.getUom());
@@ -43,6 +43,11 @@ public class ItemService {
         item.setExportPrice(newitem.getExportPrice());
         item.setDescription(newitem.getDescription());
         return convertToDto(itemRepo.save(item));
+    }
+    public String generateItemCode(Long companyId) {
+        String prefix = "T"+String.format("%04d", companyId);
+        int count = itemRepo.countByItemCodeStartingWith(prefix);
+        return prefix + String.format("%05d", count + 1);
     }
 
     public List<ItemDto> getAllItemsInCompany(Long companyId) {
@@ -56,7 +61,7 @@ public class ItemService {
         return convertToDto(item);
     }
 
-    public ItemDto updateItem(Long itemId, Item updatedItem) {
+    public ItemDto updateItem(Long itemId, ItemRequest updatedItem) {
         Item existingItem = itemRepo.findById(itemId)
                 .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));
 

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.itextpdf.text.pdf.AcroFields.Item;
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureProcessDto;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureProcess;
@@ -15,7 +14,6 @@ import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureProcessRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepository;
-import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 
 @Service
 public class ManufactureProcessService {

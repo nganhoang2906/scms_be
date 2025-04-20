@@ -10,4 +10,5 @@ import com.scms.scms_be.model.entity.General.Item;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByCompanyCompanyId(Long companyId);
     boolean existsByItemCode(String itemCode);
+    int countByItemCodeStartingWith(String prefix);
 }

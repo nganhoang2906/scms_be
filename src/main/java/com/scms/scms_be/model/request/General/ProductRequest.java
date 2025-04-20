@@ -6,6 +6,6 @@ import lombok.Data;
 public class ProductRequest {
     private Long currentCompanyId;
 
-    private Long batchId;
+    private Long batchNo;
     private String qrCode;
 }

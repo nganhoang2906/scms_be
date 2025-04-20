@@ -15,7 +15,6 @@ import com.scms.scms_be.model.dto.Inventory.ReceiveTicketDetailDto;
 import com.scms.scms_be.model.entity.General.Company;
 import com.scms.scms_be.model.entity.General.Item;
 import com.scms.scms_be.model.entity.General.Warehouse;
-import com.scms.scms_be.model.entity.Inventory.IssueTicketDetail;
 import com.scms.scms_be.model.entity.Inventory.ReceiveTicket;
 import com.scms.scms_be.model.entity.Inventory.ReceiveTicketDetail;
 import com.scms.scms_be.model.entity.Inventory.TransferTicket;
@@ -23,9 +22,6 @@ import com.scms.scms_be.model.entity.Inventory.TransferTicketDetail;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 import com.scms.scms_be.model.entity.Purchasing.PurchaseOrder;
 import com.scms.scms_be.model.entity.Purchasing.PurchaseOrderDetail;
-import com.scms.scms_be.model.entity.Sales.SalesOrder;
-import com.scms.scms_be.model.entity.Sales.SalesOrderDetail;
-import com.scms.scms_be.model.request.Inventory.ReceiveTicketDetailRequest;
 import com.scms.scms_be.model.request.Inventory.ReceiveTicketRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ItemRepository;
@@ -72,7 +68,7 @@ public class ReceiveTicketService {
         ReceiveTicket ticket = new ReceiveTicket();
         ticket.setCompany(company);
         ticket.setWarehouse(warehouse);
-        ticket.setTicketCode(request.getTicketCode());
+        ticket.setTicketCode(generateTicketCode(request.getCompanyId()));
         ticket.setReceiveDate(request.getReceiveDate());
         ticket.setReason(request.getReason());
         ticket.setReceiveType(request.getReceiveType());
@@ -169,9 +165,11 @@ public class ReceiveTicketService {
         return convertToDto(ticket);
     }
 
-    public String generateTicketCode(Long companyId, String referenceCode) {
-        String prefix = "RT" + companyId  + referenceCode.substring(2);
-        return prefix;
+    public String generateTicketCode(Long companyId) {
+        String prefix = "RT"+String.format("%04d", companyId);
+        String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
+        int count = ticketRepo.countByTicketCodeStartingWith(prefix);
+        return prefix +year+ String.format("%03d", count + 1);
     }
 
     private ReceiveTickeDto convertToDto(ReceiveTicket ticket) {

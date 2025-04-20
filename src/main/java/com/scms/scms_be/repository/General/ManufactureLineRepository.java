@@ -11,4 +11,6 @@ import com.scms.scms_be.model.entity.General.ManufactureLine;
 public interface ManufactureLineRepository extends JpaRepository<ManufactureLine, Long> {
     List<ManufactureLine> findByPlantPlantId(Long plantId);
     boolean existsByLineCode(String lineCode);
+
+    Integer countByLineCodeStartingWith(String lineCodePrefix);
 }

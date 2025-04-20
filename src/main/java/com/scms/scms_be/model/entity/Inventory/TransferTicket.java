@@ -45,8 +45,10 @@ public class TransferTicket {
 
     private String reason;
     private String createdBy;
+
     private LocalDateTime createdOn;
     private LocalDateTime lastUpdatedOn;
+    
     private String status;
     private String file;
 
