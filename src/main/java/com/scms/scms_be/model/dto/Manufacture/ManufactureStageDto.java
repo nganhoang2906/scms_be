@@ -8,6 +8,7 @@ import lombok.Data;
 public class ManufactureStageDto 
 {
     private Long stageId;
+    private String stageCode;
 
     private Long itemId;
     private String itemName; 

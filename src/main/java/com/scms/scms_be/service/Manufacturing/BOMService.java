@@ -55,7 +55,7 @@ public class BOMService {
 
         BOM savedBOM = bomRepo.save(bom);
 
-        for (BOMDetailRequest newdetail : request.getBomDetailList()) {
+        for (BOMDetailRequest newdetail : request.getBomDetails()) {
             if (newdetail.getItemId().equals(savedBOM.getItem().getItemId())) {
                 throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
             }
@@ -89,7 +89,7 @@ public class BOMService {
                 .collect(Collectors.toList());
     }
 
-    public BOMDto getBOMByItemid(Long itemId) {
+    public BOMDto getBOMByItem(Long itemId) {
         BOM bom = bomRepo.findByItem_ItemId(itemId);
         if (bom == null) {
             throw new CustomException("BOM không tồn tại", HttpStatus.NOT_FOUND);
@@ -105,26 +105,22 @@ public class BOMService {
         bom.setStatus(request.getStatus());
         BOM updatedBOM = bomRepo.save(bom);
 
-        List<BOMDetailRequest> detailRequests = request.getBomDetailList();
+        List<BOMDetailRequest> detailRequests = request.getBomDetails();
         List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
 
-        // Lấy danh sách itemId từ bomDetailList
-        List<Long> detailItemIds = request.getBomDetailList().stream()
+        List<Long> detailItemIds = request.getBomDetails().stream()
                 .map(BOMDetailRequest::getItemId)
                 .collect(Collectors.toList());
 
-        // Kiểm tra trùng lặp trong danh sách
         Set<Long> uniqueItemIds = new HashSet<>(detailItemIds);
         if (uniqueItemIds.size() < detailItemIds.size()) {
             throw new CustomException("Item trong BOMDetail bị trùng lặp!", HttpStatus.BAD_REQUEST);
         }
 
-        // Kiểm tra trùng với itemId của BOM
         if (detailItemIds.contains(request.getItemId())) {
             throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
         }
         
-        // Save updated or new details
         for (BOMDetailRequest newDetail : detailRequests) {
             if (newDetail.getItemId().equals(updatedBOM.getItem().getItemId())) {
                 throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
@@ -174,7 +170,7 @@ public class BOMService {
     }
 
     private String generateNewBomCode(Long itemId) {
-        String prefix = "BOM" + itemId ;
+        String prefix = "BOM" + itemId;
         int count = bomRepo.countByBomCodeStartingWith(prefix);
         return prefix + String.format("%04d", count + 1);
     }

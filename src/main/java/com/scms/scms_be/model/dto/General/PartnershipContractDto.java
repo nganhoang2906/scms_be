@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.dto.General;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
@@ -21,5 +20,4 @@ public class PartnershipContractDto {
     private String status;
     private byte[] file;
 
-    private List<PartnershipContractDto> ContractList;
 }

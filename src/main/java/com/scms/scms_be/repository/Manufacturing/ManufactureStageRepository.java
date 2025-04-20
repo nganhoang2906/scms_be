@@ -14,5 +14,5 @@ public interface ManufactureStageRepository extends JpaRepository<ManufactureSta
     ManufactureStage findByItem_ItemId(Long itemId);
 
     List<ManufactureStage> findByItem_Company_CompanyId(Long companyId); 
-
+    Integer countByStageCodeStartingWith(String prefix);
 }

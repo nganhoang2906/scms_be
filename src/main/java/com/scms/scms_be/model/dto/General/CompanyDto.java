@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.dto.General;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
@@ -25,5 +24,4 @@ public class CompanyDto {
     private String logoUrl;
     private String status;
 
-    private List<CompanyDto> companyList;
 }

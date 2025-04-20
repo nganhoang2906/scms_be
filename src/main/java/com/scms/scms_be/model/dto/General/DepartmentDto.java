@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.dto.General;
 
-import java.util.List;
 
 import lombok.Data;
 
@@ -11,5 +10,4 @@ public class DepartmentDto {
     private String departmentCode;
     private String departmentName;
 
-    private List<DepartmentDto> DepartmentList;
 }

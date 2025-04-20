@@ -35,10 +35,10 @@ public class BOMController {
         return ResponseEntity.ok(bomService.getAllBOMInCom(companyId));
     }
 
-    @GetMapping("/user/get-bom/{bomId}")
+    @GetMapping("/user/get-bom/{itemId}")
     public ResponseEntity<BOMDto> getBOMById(
             @PathVariable Long itemId) {
-        return ResponseEntity.ok(bomService.getBOMByItemid(itemId));
+        return ResponseEntity.ok(bomService.getBOMByItem(itemId));
     }
 
     @PutMapping("/user/update-bom/{bomId}")

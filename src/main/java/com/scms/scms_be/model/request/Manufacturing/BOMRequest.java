@@ -10,5 +10,5 @@ public class BOMRequest {
     private String description;
     private String status;
 
-    private List<BOMDetailRequest> bomDetailList;
+    private List<BOMDetailRequest> bomDetails;
 }

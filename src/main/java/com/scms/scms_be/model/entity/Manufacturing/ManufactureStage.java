@@ -5,6 +5,7 @@ import java.util.List;
 import com.scms.scms_be.model.entity.General.Item;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,9 @@ public class ManufactureStage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stageId;
+
+    @Column(nullable = false, unique = true)
+    private String stageCode; 
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)

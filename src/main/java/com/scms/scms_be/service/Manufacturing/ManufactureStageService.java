@@ -1,5 +1,6 @@
 package com.scms.scms_be.service.Manufacturing;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,18 @@ public class ManufactureStageService {
 
     public ManufactureStageDto createStage( ManuStageRequest stageRequest) {
         ManufactureStage stage = new ManufactureStage();
+        stage.setStageCode(generateStageCode(stageRequest.getItemId()));
       
         stage.setDescription(stageRequest.getDescription());
         
         stage.setItem(itemRepo.findById(stageRequest.getItemId())
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
 
+        ManufactureStage saveStage = stageRepo.save(stage);
         for(ManuStageDetailRequest detailRequest : stageRequest.getStageDetails()) {
             ManufactureStageDetail stageDetail = new ManufactureStageDetail();
             
-            stageDetail.setStage(stage);
+            stageDetail.setStage(saveStage);
             stageDetail.setStageName(detailRequest.getStageName());
             stageDetail.setStageOrder(detailRequest.getStageOrder());
             stageDetail.setEstimatedTime(detailRequest.getEstimatedTime());
@@ -49,9 +52,15 @@ public class ManufactureStageService {
 
             stageDetailRepo.save(stageDetail);
         }
-        ManufactureStage saved = stageRepo.save(stage);
-        return convertToDto(saved);
+
+        return convertToDto(saveStage);
     }
+    public String generateStageCode(Long itemId) {
+        String prefix = "MS"+ itemId;
+        int count = stageRepo.countByStageCodeStartingWith(prefix);
+        return prefix + String.format("%02d", count + 1);
+    }
+
 
     public ManufactureStageDto getStagesByItemId(Long itemId) {
         return convertToDto(stageRepo.findByItem_ItemId(itemId));
@@ -98,6 +107,7 @@ public class ManufactureStageService {
     private ManufactureStageDto convertToDto(ManufactureStage stage) {
         ManufactureStageDto dto = new ManufactureStageDto();
         dto.setStageId(stage.getStageId());
+        dto.setStageCode(stage.getStageCode());
 
         dto.setItemId(stage.getItem().getItemId());
         dto.setItemCode(stage.getItem().getItemCode());

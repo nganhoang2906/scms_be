@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.exception.CustomException;
 import com.scms.scms_be.model.dto.Manufacture.ManufactureOrderDto;
+import com.scms.scms_be.model.entity.Manufacturing.BOM;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStage;
 import com.scms.scms_be.model.entity.Manufacturing.ManufactureStageDetail;
@@ -17,6 +18,7 @@ import com.scms.scms_be.model.request.Manufacturing.ManuOrderRequest;
 import com.scms.scms_be.model.request.Manufacturing.ManuProcessRequest;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.General.ManufactureLineRepository;
+import com.scms.scms_be.repository.Manufacturing.BOMRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureOrderRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepository;
 import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
@@ -42,8 +44,19 @@ public class ManufactureOrderService {
     @Autowired
     private ManufactureProcessService processService;
 
+    @Autowired
+    private BOMRepository bomRepo;
+
     public ManufactureOrderDto createOrder(ManuOrderRequest orderRequest) {
-        
+        BOM bom = bomRepo.findByItem_ItemId(orderRequest.getItemId());
+        if (bom == null) {
+            throw new CustomException("BOM không tồn tại", HttpStatus.NOT_FOUND);
+        }
+        ManufactureStage stage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
+        if (stage == null) {
+            throw new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND);
+        }
+    
 
         ManufactureOrder order = new ManufactureOrder();
         order.setMoCode(generateMOCode(orderRequest.getItemId(), orderRequest.getLineId()));    
@@ -62,8 +75,8 @@ public class ManufactureOrderService {
         order.setStatus(orderRequest.getStatus());
 
         moRepo.save(order);
-        ManufactureStage stage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
-        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByStage_StageId(stage.getStageId());
+        ManufactureStage newStage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
+        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByStage_StageId(newStage.getStageId());
         for(ManufactureStageDetail  stageDetail : stageDetailList) {
             ManuProcessRequest processRequest = new ManuProcessRequest();
             processRequest.setMoId(order.getMoId());
@@ -71,6 +84,8 @@ public class ManufactureOrderService {
             
             processService.createManuProcess(processRequest);
         }
+
+       
 
         throw new CustomException("Tạo MO thành công", HttpStatus.OK);
     }

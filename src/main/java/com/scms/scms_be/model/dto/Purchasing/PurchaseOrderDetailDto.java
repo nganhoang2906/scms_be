@@ -6,6 +6,7 @@ import lombok.Data;
 public class PurchaseOrderDetailDto {
     private Long purchaseOrderDetailId;
     private Long poId;
+    private String poCode;
 
     private Long itemId;
     private String itemCode;

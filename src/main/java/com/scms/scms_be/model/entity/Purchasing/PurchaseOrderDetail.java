@@ -33,4 +33,5 @@ public class PurchaseOrderDetail {
 
     private Double quantity;
     private String note;
+    
 }

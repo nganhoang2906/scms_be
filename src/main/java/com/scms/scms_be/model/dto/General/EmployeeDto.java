@@ -1,7 +1,6 @@
 package com.scms.scms_be.model.dto.General;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
@@ -22,5 +21,4 @@ public class EmployeeDto {
     private String avatarUrl;
     private String status;
 
-    private List<EmployeeDto> employeeList;
 }

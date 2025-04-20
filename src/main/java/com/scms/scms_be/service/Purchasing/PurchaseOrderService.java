@@ -51,20 +51,20 @@ public class PurchaseOrderService {
         purchaseOrder.setCreatedOn(LocalDateTime.now());
         purchaseOrder.setLastUpdatedOn(LocalDateTime.now());
 
-        List<PurchaseOrderDetailRequest> poDetailRequestList = purchaseOrderRequest.getPurchaseOrderDetails();
+        PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.save(purchaseOrder);
 
-        for(PurchaseOrderDetailRequest  poDetailRequest : poDetailRequestList) {
+        for(PurchaseOrderDetailRequest  poDetailRequest : purchaseOrderRequest.getPurchaseOrderDetails()) {
             Item item = itemRepository.findById(poDetailRequest.getItemId())    
                     .orElseThrow(() -> new CustomException("Item not found", HttpStatus.NOT_FOUND));
             PurchaseOrderDetail newPoDeatil = new PurchaseOrderDetail();
-            newPoDeatil.setPo(purchaseOrder);
+            newPoDeatil.setPo(savedPurchaseOrder);
             newPoDeatil.setItem(item);
             newPoDeatil.setQuantity(poDetailRequest.getQuantity());
             newPoDeatil.setNote(poDetailRequest.getNote());
             poDetailRepository.save(newPoDeatil);
         }
 
-        return convertToDto(purchaseOrderRepository.save(purchaseOrder));
+        return convertToDto(savedPurchaseOrder);
     }
 
     public List<PurchaseOrderDto> getAllPoByCompany(Long companyId) {
@@ -143,6 +143,8 @@ public class PurchaseOrderService {
     public PurchaseOrderDetailDto convertToDetailDto(PurchaseOrderDetail purchaseOrderDetail) {
         PurchaseOrderDetailDto purchaseOrderDetailDto = new PurchaseOrderDetailDto();
         purchaseOrderDetailDto.setPurchaseOrderDetailId(purchaseOrderDetail.getPurchaseOrderDetailId());
+        purchaseOrderDetailDto.setPoId(purchaseOrderDetail.getPo().getPoId());
+        purchaseOrderDetailDto.setPoCode(purchaseOrderDetail.getPo().getPoCode());
         purchaseOrderDetailDto.setItemId(purchaseOrderDetail.getItem().getItemId());
         purchaseOrderDetailDto.setItemName(purchaseOrderDetail.getItem().getItemName());
         purchaseOrderDetailDto.setItemCode(purchaseOrderDetail.getItem().getItemCode());

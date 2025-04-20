@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.dto.General;
 
-import java.util.List;
 
 import lombok.Data;
 
@@ -16,6 +15,4 @@ public class ItemDto {
     private Double importPrice;
     private Double exportPrice;
     private String description;
-
-    private List<ItemDto> ItemList;
 }

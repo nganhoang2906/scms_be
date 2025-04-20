@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.dto.General;
 
-import java.util.List;
 
 import lombok.Data;
 
@@ -15,5 +14,4 @@ public class ManufactureLineDto {
   private double capacity;
   private String description;
 
-  private List<ManufactureLineDto> LineList;
 }

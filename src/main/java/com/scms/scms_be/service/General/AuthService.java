@@ -88,17 +88,14 @@ public class AuthService {
             departmentNames.add("Sản xuất");
         }
 
-        int departmentIndex = departmentRepo.countByCompanyCompanyId(company.getCompanyId()) + 1;
-
         List<Department> departments = new ArrayList<>();
         for (String departmentName : departmentNames) {
             Department department = new Department();
             department.setCompany(company);
-            department.setDepartmentCode("D" + company.getCompanyCode().substring(1) + departmentIndex);    
+            department.setDepartmentCode(generateDepartmentCode(company.getCompanyId()));    
             department.setDepartmentName(departmentName);
             department = departmentRepo.save(department);
             departments.add(department);
-            departmentIndex++;
         }
 
         Department managementDepartment = departments.stream()
@@ -135,11 +132,11 @@ public class AuthService {
         int count = companyRepo.countByCompanyCodeStartingWith(prefix);
         return prefix + String.format("%04d", count + 1);
     }
-    // public String generateDepartmentCode(Long companyId) {
-    //     String prefix = "D" + companyId; 
-    //     int count = departmentRepo.countByDepartmentCodeStartingWith(prefix);
-    //     return prefix + String.format("%04d", count + 1);
-    // }
+    public String generateDepartmentCode(Long companyId) {
+        String prefix = "D" + companyId; 
+        int count = departmentRepo.countByDepartmentCodeStartingWith(prefix);
+        return prefix + String.format("%02d", count + 1);
+    }
 
     public void verifyOtp(VerifyOtpRequest request) {
         User user = usersRepo.findByEmail(request.getEmail())
