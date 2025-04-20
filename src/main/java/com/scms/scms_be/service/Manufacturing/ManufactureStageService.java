@@ -63,6 +63,13 @@ public class ManufactureStageService {
         return convertToDto(stage);
     }
 
+    public List<ManufactureStageDto> getAllStagesInCompany(Long companyId) {
+        List<ManufactureStage> stages = stageRepo.findByItem_Company_CompanyId(companyId);
+        return stages.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
     public ManufactureStageDto updateStage(Long stageId, ManuStageRequest stage) {
         ManufactureStage exist = stageRepo.findById(stageId)
                 .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));

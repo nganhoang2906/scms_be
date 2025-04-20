@@ -138,8 +138,9 @@ public class TransferTicketService {
 
     public String generateTransferTicketCode(Long companyId) {
         String prefix = "TT" + companyId ;
+        String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
         int count = ticketRepo.countByTicketCodeStartingWith(prefix);
-        return prefix + String.format("%04d", count + 1);
+        return prefix +year+ String.format("%04d", count + 1);
     }
 
     private TransferTicketDto convertToDto(TransferTicket ticket) {

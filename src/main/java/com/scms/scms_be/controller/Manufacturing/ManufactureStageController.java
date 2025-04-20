@@ -1,5 +1,7 @@
 package com.scms.scms_be.controller.Manufacturing;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,22 +25,28 @@ public class ManufactureStageController {
     @Autowired 
     private  ManufactureStageService stageService;
 
-    @PostMapping("/user/create-stage/{itemId}")
+    @PostMapping("/user/create-stage")
     public ResponseEntity<ManufactureStageDto> createStage(
             @RequestBody ManuStageRequest stage) {
         return ResponseEntity.ok(stageService.createStage(stage));
     }
 
-    @GetMapping("/user/get-stage/{itemId}")
+    @GetMapping("/user/get-stage-by-item/{itemId}")
     public ResponseEntity<ManufactureStageDto> getStagesByItemId(
             @PathVariable Long itemId) {
         return ResponseEntity.ok(stageService.getStagesByItemId(itemId));
     }
 
-    @GetMapping("/user/get-stage/{stageId}")
+    @GetMapping("/user/get-stage-by-id/{stageId}")
     public ResponseEntity<ManufactureStageDto> getStage(
             @PathVariable Long stageId) {
         return ResponseEntity.ok(stageService.getStageById(stageId));
+    }
+
+    @GetMapping("/user/get-all-stage-in-company/{companyId}")
+    public ResponseEntity<List<ManufactureStageDto>> getAllStageInCompany(
+            @PathVariable Long companyId) {
+        return ResponseEntity.ok(stageService.getAllStagesInCompany(companyId));
     }
 
     @PutMapping("/user/update-stage/{stageId}")

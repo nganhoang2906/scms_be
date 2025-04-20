@@ -24,13 +24,13 @@ public class ManufactureProcessController {
     @Autowired
     private final ManufactureProcessService processService;
     
-    @PostMapping("/user/create-process/{moId}/{stageId}")
+    @PostMapping("/user/create-process")
     public ResponseEntity<ManufactureProcessDto> createProcess(
         @RequestBody ManuProcessRequest process) {
         return ResponseEntity.ok(processService.createManuProcess( process));
     }
 
-    @GetMapping("/user/get-all-process-in-com/{companyId}")
+    @GetMapping("/user/get-all-process-in-mo/{moId}")
     public ResponseEntity<List<ManufactureProcessDto>> getAllProcesses(
         @PathVariable Long moId) {
         return ResponseEntity.ok(processService.getAllByMoId(moId));

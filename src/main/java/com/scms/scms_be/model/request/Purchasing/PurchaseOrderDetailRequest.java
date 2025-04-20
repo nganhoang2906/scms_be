@@ -1,5 +1,10 @@
 package com.scms.scms_be.model.request.Purchasing;
 
-public class PurchaseOrderDetailRequest {
+import lombok.Data;
 
+@Data
+public class PurchaseOrderDetailRequest {
+    private Long itemId;
+    private Double quantity;
+    private String note;
 }

@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseOrder {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long poId;
@@ -43,11 +42,8 @@ public class PurchaseOrder {
 
     private String description;
     private String createdBy;
-    
     private LocalDateTime createdOn;
-
     private LocalDateTime lastUpdatedOn;
-
     private String status;
 
      @OneToMany(mappedBy = "po", orphanRemoval = true , cascade = CascadeType.ALL)
