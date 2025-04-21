@@ -80,7 +80,7 @@ public class AuthService {
         company.setJoinDate(new Date());
         company.setPhoneNumber(registrationRequest.getPhoneNumber());
         company.setEmail(registrationRequest.getEmail());
-        company.setStatus("Đang hoat động");
+        company.setStatus("Đang hoạt động");
         company = companyRepo.save(company);
 
         List<String> departmentNames = new ArrayList<>(Arrays.asList("Quản trị", "Kho", "Vận chuyển", "Mua hàng", "Bán hàng"));
@@ -106,9 +106,10 @@ public class AuthService {
         Employee employee = new Employee();
         employee.setDepartment(managementDepartment);
         employee.setEmployeeCode(registrationRequest.getEmployeeCode());
+        employee.setEmployeeName(registrationRequest.getRepresentativeName());
         employee.setPosition("Quản lý");
         employee.setEmail(registrationRequest.getEmail());
-        employee.setStatus("Đang hoạt động");
+        employee.setStatus("Đang làm việc");
         employee = employeeRepo.save(employee);
 
         String otp = String.format("%06d", new Random().nextInt(999999));

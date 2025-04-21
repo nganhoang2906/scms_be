@@ -36,6 +36,7 @@ public class ManufactureStageService {
         stage.setStageCode(generateStageCode(stageRequest.getItemId()));
       
         stage.setDescription(stageRequest.getDescription());
+        stage.setStatus(stageRequest.getStatus());
         
         stage.setItem(itemRepo.findById(stageRequest.getItemId())
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
@@ -84,6 +85,7 @@ public class ManufactureStageService {
                 .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND));
 
         exist.setDescription(stage.getDescription());
+        exist.setStatus(stage.getStatus());
 
         for (ManuStageDetailRequest detailRequest : stage.getStageDetails()) {
             ManufactureStageDetail stageDetail = new ManufactureStageDetail();
@@ -108,12 +110,11 @@ public class ManufactureStageService {
         ManufactureStageDto dto = new ManufactureStageDto();
         dto.setStageId(stage.getStageId());
         dto.setStageCode(stage.getStageCode());
-
         dto.setItemId(stage.getItem().getItemId());
         dto.setItemCode(stage.getItem().getItemCode());
         dto.setItemName(stage.getItem().getItemName());
-
         dto.setDescription(stage.getDescription());
+        dto.setStatus(stage.getStatus());
 
         List<ManufactureStageDetailDto> details = stageDetailRepo
                 .findByStage_StageId(stage.getStageId())

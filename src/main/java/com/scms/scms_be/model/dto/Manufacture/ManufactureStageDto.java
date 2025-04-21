@@ -15,6 +15,7 @@ public class ManufactureStageDto
     private String itemCode; 
     
     private String description;
+    private String status;
 
     private List<ManufactureStageDetailDto> stageDetails; // List of stage details associated with this stage
 }

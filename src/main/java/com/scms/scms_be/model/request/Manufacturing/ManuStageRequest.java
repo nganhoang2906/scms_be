@@ -10,6 +10,7 @@ public class ManuStageRequest {
     private Long itemId;
 
     private String description;
+    private String status;
 
     private List<ManuStageDetailRequest> stageDetails; 
     

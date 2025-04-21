@@ -29,7 +29,7 @@ public class ManufactureProcessService {
         ManufactureProcess process = new ManufactureProcess();
         process.setStartedOn(processRequest.getStartedOn());
         process.setFinishedOn(processRequest.getFinishedOn());
-        process.setStatus(processRequest.getStatus());
+        process.setStatus("Chưa thực hiện");
         
 
         process.setOrder(orderRepo.findById(processRequest.getMoId())

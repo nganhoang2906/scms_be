@@ -51,7 +51,7 @@ public class BOMService {
         bom.setItem(item);
         bom.setBomCode(newBomCode);
         bom.setDescription(request.getDescription());
-        bom.setStatus("Đang hoạt động");
+        bom.setStatus("Đang sử dụng");
 
         BOM savedBOM = bomRepo.save(bom);
 

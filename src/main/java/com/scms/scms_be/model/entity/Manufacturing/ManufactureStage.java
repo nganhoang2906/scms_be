@@ -36,6 +36,7 @@ public class ManufactureStage {
     private Item item;
     
     private String description;
+    private String status;
 
     @OneToMany(mappedBy = "stage", orphanRemoval = true , cascade = CascadeType.ALL)
     private List<ManufactureStageDetail> stageDetails; // List of stage details associated with this stage

@@ -85,8 +85,6 @@ public class ManufactureOrderService {
             processService.createManuProcess(processRequest);
         }
 
-       
-
         throw new CustomException("Tạo MO thành công", HttpStatus.OK);
     }
 

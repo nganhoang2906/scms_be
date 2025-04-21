@@ -24,7 +24,7 @@ public class ManufactureOrderController {
     @Autowired
     private final ManufactureOrderService orderService;
 
-    @PostMapping("/user/create-mo/{itemId}/{lineId}")
+    @PostMapping("/user/create-mo")
     public ResponseEntity<ManufactureOrderDto> createOrder(
             @RequestBody ManuOrderRequest request) {
         return ResponseEntity.ok(orderService.createOrder( request));
