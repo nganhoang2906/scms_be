@@ -45,7 +45,7 @@ public class ItemService {
         return convertToDto(itemRepo.save(item));
     }
     public String generateItemCode(Long companyId) {
-        String prefix = "T"+String.format("%04d", companyId);
+        String prefix = "I"+String.format("%04d", companyId);
         int count = itemRepo.countByItemCodeStartingWith(prefix);
         return prefix + String.format("%05d", count + 1);
     }

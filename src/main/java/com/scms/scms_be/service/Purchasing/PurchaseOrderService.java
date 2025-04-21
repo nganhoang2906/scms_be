@@ -53,6 +53,10 @@ public class PurchaseOrderService {
 
         PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.save(purchaseOrder);
 
+        if (purchaseOrderRequest.getPurchaseOrderDetails() == null || purchaseOrderRequest.getPurchaseOrderDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống", HttpStatus.BAD_REQUEST);
+        }
+
         for(PurchaseOrderDetailRequest  poDetailRequest : purchaseOrderRequest.getPurchaseOrderDetails()) {
             Item item = itemRepository.findById(poDetailRequest.getItemId())    
                     .orElseThrow(() -> new CustomException("Item not found", HttpStatus.NOT_FOUND));
@@ -80,14 +84,6 @@ public class PurchaseOrderService {
                 .map(this::convertToDto)
                 .toList();
     }
-
-    public List<PurchaseOrderDto> getAllPoByCompanyAndSupplierCompany(Long companyId, Long supplierCompanyId) {
-        List<PurchaseOrder> purchaseOrders = purchaseOrderRepository.findByCompany_CompanyIdAndSuplierCompany_CompanyId(companyId, supplierCompanyId);
-        return purchaseOrders.stream()
-                .map(this::convertToDto)
-                .toList();
-    }
-
 
     public PurchaseOrderDto getPurchaseOrderById(Long poId) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(poId)

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class RfqDetail {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long RfqDetailId;
 
     @ManyToOne
     @JoinColumn(name = "rfq_id", nullable = false)

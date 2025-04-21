@@ -53,7 +53,7 @@ public class ProductController {
     public ResponseEntity<String> delete(@PathVariable Long productId) {
         boolean deleted = productService.deleteProduct(productId);
         if (deleted) {
-            return ResponseEntity.ok("Sản phẩm đã được xóa thành công.");
+            return ResponseEntity.ok("Hàng hóa đã được xóa thành công.");
         } else {
             return ResponseEntity.notFound().build();
         }

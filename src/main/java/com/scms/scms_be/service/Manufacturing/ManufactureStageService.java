@@ -42,6 +42,11 @@ public class ManufactureStageService {
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
 
         ManufactureStage saveStage = stageRepo.save(stage);
+
+        if (stageRequest.getStageDetails() == null || stageRequest.getStageDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
+        }
+
         for(ManuStageDetailRequest detailRequest : stageRequest.getStageDetails()) {
             ManufactureStageDetail stageDetail = new ManufactureStageDetail();
             
@@ -86,6 +91,10 @@ public class ManufactureStageService {
 
         exist.setDescription(stage.getDescription());
         exist.setStatus(stage.getStatus());
+
+        if(stage.getStageDetails() == null || stage.getStageDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
+        }
 
         for (ManuStageDetailRequest detailRequest : stage.getStageDetails()) {
             ManufactureStageDetail stageDetail = new ManufactureStageDetail();

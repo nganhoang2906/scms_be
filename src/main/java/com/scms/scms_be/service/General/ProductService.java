@@ -46,13 +46,13 @@ public class ProductService {
 
     public ProductDto getProductById(Long id) {
         Product product = productRepo.findById(id)
-                .orElseThrow(() -> new CustomException("Không tìm thấy sản phẩm!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Không tìm thấy hàng hóa!", HttpStatus.NOT_FOUND));
         return convertToDto(product);
     }
 
     public ProductDto updateProduct(Long productId, ProductRequest updated) {
         Product existing = productRepo.findById(productId)
-                .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại!", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Hàng hóa không tồn tại!", HttpStatus.NOT_FOUND));
 
         existing.setBatchNo(updated.getBatchNo());
         existing.setQrCode(updated.getQrCode());

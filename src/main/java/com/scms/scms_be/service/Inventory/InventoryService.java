@@ -35,7 +35,9 @@ public class InventoryService {
                 .orElseThrow(() -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND));
         Warehouse warehouse = warehouseRepository.findById(inventoryRequest.getWarehouseId())
                 .orElseThrow(() -> new CustomException("Warehouse không tồn tại", HttpStatus.NOT_FOUND));
-        
+        if(inventoryRepository.existsByItem_ItemIdAndWarehouse_WarehouseId(inventoryRequest.getItemId(), inventoryRequest.getWarehouseId())) {
+            throw new CustomException("Inventory đã tồn tại!", HttpStatus.BAD_REQUEST);
+        }
         inventory.setItem(item);
         inventory.setWarehouse(warehouse);
         inventory.setQuantity(inventoryRequest.getQuantity());
@@ -80,16 +82,16 @@ public class InventoryService {
         }
     }
 
-    public Object checkInventory(Long itemId, Long warehouseId,Double amount) {
+    public Boolean checkInventory(Long itemId, Long warehouseId,Double amount) {
         Inventory inventory = inventoryRepository.findByItem_ItemIdAndWarehouse_WarehouseId(itemId, warehouseId);
         if (inventory == null) {
             throw new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND);
         }
         Double available = inventory.getQuantity() - inventory.getOnDemandQuantity();
         if ( available < amount) {
-            throw new CustomException("Không đủ hàng tồn! Sản phẩm chỉ còn " + available, HttpStatus.BAD_REQUEST);
-        }
-        throw new CustomException("Đủ hàng tồn!", HttpStatus.OK);
+            return false;
+         }
+        return true;
     }
     
     public InventoryDto getInventoryById(long inventoryId) {

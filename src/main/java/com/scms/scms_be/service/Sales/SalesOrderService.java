@@ -63,6 +63,11 @@ public class SalesOrderService {
         
         SalesOrder savedSalesOrder = salesOrderRepository.save(salesOrder);
 
+        if (salesOrderRequest.getSalesOrderDetails() == null || salesOrderRequest.getSalesOrderDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
+        }
+
+
         for (SalesOrderDetailRequest salesOrderDetailRequest : salesOrderRequest.getSalesOrderDetails()) {
             Item item = itemRepository.findById(salesOrderDetailRequest.getItemId())
                     .orElseThrow(() -> new CustomException("Item không tồn tại!", HttpStatus.NOT_FOUND));

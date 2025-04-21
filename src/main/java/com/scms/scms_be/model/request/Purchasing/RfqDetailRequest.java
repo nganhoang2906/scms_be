@@ -1,5 +1,10 @@
 package com.scms.scms_be.model.request.Purchasing;
 
-public class RfqDetailRequest {
+import lombok.Data;
 
+@Data
+public class RfqDetailRequest {
+    private Long itemId;
+    private Double quantity;
+    private String note;
 }

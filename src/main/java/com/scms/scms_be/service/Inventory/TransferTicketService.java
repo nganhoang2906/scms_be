@@ -74,6 +74,10 @@ public class TransferTicketService {
 
         TransferTicket savedTicket = ticketRepo.save(ticket);
 
+        if(request.getTransferTicketDetails() == null || request.getTransferTicketDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa phiếu chuyển kho không được để trống", HttpStatus.BAD_REQUEST);
+        }
+
         if (request.getTransferTicketDetails() != null) {
             for (TransferTicketDetailRequest detailRequest : request.getTransferTicketDetails()) {
                 

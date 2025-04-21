@@ -55,6 +55,10 @@ public class BOMService {
 
         BOM savedBOM = bomRepo.save(bom);
 
+        if (request.getBomDetails() == null || request.getBomDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
+        }
+
         for (BOMDetailRequest newdetail : request.getBomDetails()) {
             if (newdetail.getItemId().equals(savedBOM.getItem().getItemId())) {
                 throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
@@ -105,6 +109,10 @@ public class BOMService {
         bom.setStatus(request.getStatus());
         BOM updatedBOM = bomRepo.save(bom);
 
+        if (request.getBomDetails() == null || request.getBomDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
+        }
+
         List<BOMDetailRequest> detailRequests = request.getBomDetails();
         List<BOMDetail> existingDetails = bomDetailRepo.findByBom_BomId(bomId);
 
@@ -120,6 +128,7 @@ public class BOMService {
         if (detailItemIds.contains(request.getItemId())) {
             throw new CustomException("Item trong BOMDetail không được trùng với Item của BOM!", HttpStatus.BAD_REQUEST);
         }
+
         
         for (BOMDetailRequest newDetail : detailRequests) {
             if (newDetail.getItemId().equals(updatedBOM.getItem().getItemId())) {

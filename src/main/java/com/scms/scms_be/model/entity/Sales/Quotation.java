@@ -42,6 +42,7 @@ public class Quotation {
     @Column(unique = true, nullable = false)
     private String quotationCode;
 
+    private Double totalPrice;
     private LocalDate availableByDate;
     private String createdBy;
     private LocalDateTime createdOn;

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class QuotationDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long quotaionDetailId;
 
     @ManyToOne
     @JoinColumn(name = "quotation_id")
@@ -32,6 +32,6 @@ public class QuotationDetail {
     private Item item;
 
     private Double quantity;
-    private Double discountRate;
+    private Double itemPrice;
     private String note;
 }
