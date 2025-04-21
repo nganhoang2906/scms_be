@@ -1,5 +1,6 @@
 package com.scms.scms_be.service.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,22 +45,38 @@ public class InventoryService {
         return convertToDto(savedInventory);
     }
     
-    public List<InventoryDto> getInventoryByItemAndWarehouse(Long itemId, Long warehouseId) {
-        if(itemId ==0 ){
+    public List<InventoryDto> getInventoryByItemAndWarehouse(Long companyId, Long itemId, Long warehouseId) {
+        if(warehouseId == 0 && itemId != 0) {
             List<Inventory> inventories = inventoryRepository.findAllByItem_ItemId(itemId);
             return inventories.stream()
                     .map(this::convertToDto)
                     .toList();
-        }else if(warehouseId == 0){
+        }else  if(itemId == 0 && warehouseId != 0) {
             List<Inventory> inventories = inventoryRepository.findAllByWarehouse_WarehouseId(warehouseId);
             return inventories.stream()
                     .map(this::convertToDto)
                     .toList();
-        }else {
+        }else if(itemId != 0 && warehouseId != 0){ 
             List<Inventory> inventories = inventoryRepository.findAllByItem_ItemIdAndWarehouse_WarehouseId(itemId, warehouseId);
             return inventories.stream()
                     .map(this::convertToDto)
                     .toList();
+        } else if(itemId == 0 && warehouseId == 0) {
+            List<Item> items = itemRepository.findByCompanyCompanyId(companyId);
+            if (items.isEmpty() == true) {
+                throw new CustomException("Không tìm thấy mặt hàng!", HttpStatus.NOT_FOUND);
+            }
+            List<Inventory> inventories = new ArrayList<>();
+            for(Item item : items) {
+                List<Inventory> itemInventories = inventoryRepository.findByItem_ItemId(item.getItemId());
+                inventories.addAll(itemInventories);
+            }
+            return inventories.stream()
+                    .map(this::convertToDto)
+                    .toList();
+
+        }else{
+            throw new CustomException("Không tìm thấy Inventory!", HttpStatus.NOT_FOUND);
         }
     }
 

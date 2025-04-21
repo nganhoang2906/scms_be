@@ -50,11 +50,12 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.consumeOnDemand(inventoryId, amount));
     }
 
-    @GetMapping("/user/get-all-inventory-by-item-and-warehouse/{itemId}/{warehouseId}")
+    @GetMapping("/user/get-all-inventory/{companyId}/{itemId}/{warehouseId}")
     public ResponseEntity<List<InventoryDto>> getAllByItem(
+            @PathVariable Long companyId,
             @PathVariable Long itemId,
             @PathVariable Long warehouseId) {
-        return ResponseEntity.ok(inventoryService.getInventoryByItemAndWarehouse(itemId, warehouseId));
+        return ResponseEntity.ok(inventoryService.getInventoryByItemAndWarehouse( companyId, itemId, warehouseId));
     }
 
     @GetMapping("/user/check-inventory/{itemId}/{warehouseId}")

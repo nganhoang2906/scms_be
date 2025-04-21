@@ -18,5 +18,7 @@ public interface InventoryRepository extends JpaRepository<Inventory,Long> {
 
     List<Inventory> findAllByItem_ItemIdAndWarehouse_WarehouseId(long itemId, long warehouseId);
 
+    List<Inventory> findByItem_ItemId(Long itemId);
+
 
 }

@@ -88,7 +88,7 @@ public class EmployeeService {
             passwordEncoder.encode(request.getPassword()),
             role,
             null,
-            "Active",
+            "Đang hoạt động",
             true
         );
         userRepo.save(newUser);
