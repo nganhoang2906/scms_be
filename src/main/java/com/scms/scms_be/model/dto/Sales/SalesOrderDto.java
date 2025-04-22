@@ -16,6 +16,8 @@ public class SalesOrderDto {
     private Long poId;
     private String poCode;
 
+    private Double totalPrice;
+
     private String description;
     private String createdBy;
     private LocalDateTime createdOn;

@@ -13,6 +13,6 @@ public class SalesOrderDetailDto {
     private String itemName;
 
     private Double quantity;
-    private Double discountRate;
+    private Double itemPrice;
     private String note;
 }

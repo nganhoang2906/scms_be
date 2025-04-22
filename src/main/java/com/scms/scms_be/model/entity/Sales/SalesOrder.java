@@ -42,6 +42,7 @@ public class SalesOrder {
     @Column(unique = true, nullable = false)
     private String soCode;
 
+    private Double totalPrice;
     private String description;
     private String createdBy;
     private LocalDateTime createdOn;

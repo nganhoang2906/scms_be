@@ -36,30 +36,23 @@ public class SalesOrderService {
     
     @Autowired
     private  ItemRepository itemRepository;
-    
-    @Autowired
-    private CompanyRepository   companyRepository;
 
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
 
     public SalesOrderDto createSalesOrder(SalesOrderRequest salesOrderRequest) {
-        Company company = companyRepository.findById(salesOrderRequest.getCompanyId())
-                .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
-        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(salesOrderRequest.getPoId())
+         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(salesOrderRequest.getPoId())
                 .orElseThrow(() -> new CustomException("Đơn đặt hàng không tồn tại!", HttpStatus.NOT_FOUND));
         
         SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setSoCode(generateSalesOrderCode(salesOrderRequest.getCompanyId()));
-        salesOrder.setCompany(company);
+  
         salesOrder.setPurchaseOrder(purchaseOrder);
-        salesOrder.setSoCode(generateSalesOrderCode(company.getCompanyId()));
+        salesOrder.setSoCode(generateSalesOrderCode(purchaseOrder.getPoId()));
         salesOrder.setDescription(salesOrderRequest.getDescription());
         salesOrder.setCreatedBy(salesOrderRequest.getCreatedBy());
         salesOrder.setStatus(salesOrderRequest.getStatus());
         salesOrder.setCreatedOn(LocalDateTime.now());
         salesOrder.setLastUpdatedOn(LocalDateTime.now());
-
         
         SalesOrder savedSalesOrder = salesOrderRepository.save(salesOrder);
 

@@ -196,7 +196,8 @@ public class BOMService {
         dto.setDescription(bom.getDescription());
         dto.setStatus(bom.getStatus());
 
-        List<BOMDetailDto> details = bomDetailRepo.findByBom_BomId(bom.getBomId())
+        List<BOMDetailDto> details = bomDetailRepo
+                .findByBom_BomId(bom.getBomId())
                 .stream()
                 .map(this::convertToDetailDto)
                 .collect(Collectors.toList());

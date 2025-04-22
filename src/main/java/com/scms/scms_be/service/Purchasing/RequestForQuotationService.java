@@ -55,6 +55,10 @@ public class RequestForQuotationService {
    
         RequestForQuotation savedRFQ = rfqRepo.save(rfq);
 
+        if (request.getRfqDetails() == null || request.getRfqDetails().isEmpty()) {
+            throw new CustomException("Danh sách hàng hóa không được để trống", HttpStatus.BAD_REQUEST);
+        }
+
         for (RfqDetailRequest d : request.getRfqDetails()) {
             Item item = itemRepo.findById(d.getItemId())
                     .orElseThrow(() -> new CustomException("Item not found", HttpStatus.NOT_FOUND));
@@ -118,7 +122,9 @@ public class RequestForQuotationService {
         dto.setLastUpdatedOn(rfq.getLastUpdatedOn());
         dto.setStatus(rfq.getStatus());
 
-        List<RfqDetailDto> rfqDetails = rfq.getRfqDetails().stream()
+        List<RfqDetailDto> rfqDetails = rfqDetailRepo
+                .findByRfq_RfqId(rfq.getRfqId())
+                .stream()
                 .map(this::convertToDetailDto)
                 .collect(Collectors.toList());
         dto.setRfqDetails(rfqDetails);

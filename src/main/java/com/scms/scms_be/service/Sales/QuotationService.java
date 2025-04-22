@@ -1,7 +1,6 @@
 package com.scms.scms_be.service.Sales;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,6 @@ import com.scms.scms_be.model.request.Sales.QuotationRequest;
 import com.scms.scms_be.repository.General.CompanyRepository;
 import com.scms.scms_be.repository.General.ItemRepository;
 import com.scms.scms_be.repository.Purchasing.RequestForQuotationRepository;
-import com.scms.scms_be.repository.Purchasing.RfqDetailRepository;
 import com.scms.scms_be.repository.Sales.QuotationDetailRepository;
 import com.scms.scms_be.repository.Sales.QuotationRepository;
 
@@ -38,9 +36,6 @@ public class QuotationService {
 
     @Autowired
     private RequestForQuotationRepository rfqRepository;
-
-    @Autowired
-    private RfqDetailRepository rfqDetailRepository;
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -92,7 +87,7 @@ public class QuotationService {
                 .orElseThrow(() -> new CustomException("Quotation not found", HttpStatus.NOT_FOUND));
         return convertToDto(quotation); 
     }
-    
+
     public List<QuotationDto> getAllQuotationsByCompany(Long companyId) {
         List<Quotation> quotations = quotationRepository.findByCompany_CompanyId(companyId);
         return quotations.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -133,9 +128,11 @@ public class QuotationService {
     public QuotationDetailDto convertToDetailDto(QuotationDetail detail) {
         QuotationDetailDto dto = new QuotationDetailDto();
         dto.setQuotaionDetailId(detail.getQuotaionDetailId());
+        dto.setQuotationId(detail.getQuotation().getQuotationId());
         dto.setItemId(detail.getItem().getItemId());
         dto.setItemName(detail.getItem().getItemName());
         dto.setItemCode(detail.getItem().getItemCode());
+        dto.setItemPrice(detail.getItemPrice());
         dto.setQuantity(detail.getQuantity());
         dto.setNote(detail.getNote());
         return dto;

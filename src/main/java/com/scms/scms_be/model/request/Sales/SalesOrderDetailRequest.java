@@ -6,6 +6,6 @@ import lombok.Data;
 public class SalesOrderDetailRequest {
     private Long itemId;
     private Double quantity;
-    private Double discountRate;
+    private Double itemPrice;
     private String note;
 }

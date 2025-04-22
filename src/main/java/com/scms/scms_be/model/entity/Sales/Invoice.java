@@ -28,8 +28,12 @@ public class Invoice {
     private Long invoiceId;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @JoinColumn(name = "sales_company_id")
+    private Company salesCompany;
+
+    @ManyToOne
+    @JoinColumn(name = "purchare_company_id")
+    private Company purchaseCompany;
 
     @OneToOne
     @JoinColumn(name = "so_id")

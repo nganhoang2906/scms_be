@@ -64,6 +64,7 @@ public class PurchaseOrderService {
             newPoDeatil.setPo(savedPurchaseOrder);
             newPoDeatil.setItem(item);
             newPoDeatil.setQuantity(poDetailRequest.getQuantity());
+            newPoDeatil.setItemPrice(poDetailRequest.getItemPrice());
             newPoDeatil.setNote(poDetailRequest.getNote());
             poDetailRepository.save(newPoDeatil);
         }

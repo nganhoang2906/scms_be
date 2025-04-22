@@ -13,5 +13,6 @@ public class PurchaseOrderDetailDto {
     private String itemName;
 
     private Double quantity;
+    private Double itemPrice;
     private String note;
 }

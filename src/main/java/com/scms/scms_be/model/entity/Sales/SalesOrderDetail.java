@@ -32,6 +32,6 @@ public class SalesOrderDetail {
     private Item item;
 
     private Double quantity;
-    private Double discountRate;
+    private Double itemPrice;
     private String note;
 }

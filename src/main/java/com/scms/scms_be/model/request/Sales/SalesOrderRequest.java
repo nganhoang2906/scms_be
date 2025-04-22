@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class SalesOrderRequest {
-
-    private Long companyId;
     private Long poId;
 
     private String description;
