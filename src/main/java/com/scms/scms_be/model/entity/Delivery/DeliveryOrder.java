@@ -31,7 +31,7 @@ public class DeliveryOrder {
 
     @OneToOne
     @JoinColumn(name = "so_id",nullable = false)
-    private SalesOrder soId;
+    private SalesOrder salesOrder;
     
     private String createBy;
     private LocalDateTime createdOn;

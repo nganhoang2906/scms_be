@@ -193,6 +193,8 @@ public class AuthService {
         LoginResponse response = new LoginResponse();
         response.setToken(jwt);
         response.setEmployeeId(user.getEmployee().getEmployeeId());
+        response.setUserId(user.getUserId());
+        response.setEmployeeCode(user.getEmployee().getEmployeeCode());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
         response.setRole(user.getRole());

@@ -17,7 +17,7 @@ public class SalesOrderDto {
     private String poCode;
 
     private Double totalPrice;
-
+    private Double taxRate;
     private String description;
     private String createdBy;
     private LocalDateTime createdOn;

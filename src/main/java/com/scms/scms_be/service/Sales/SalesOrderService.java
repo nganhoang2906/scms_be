@@ -40,14 +40,19 @@ public class SalesOrderService {
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     public SalesOrderDto createSalesOrder(SalesOrderRequest salesOrderRequest) {
          PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(salesOrderRequest.getPoId())
                 .orElseThrow(() -> new CustomException("Đơn đặt hàng không tồn tại!", HttpStatus.NOT_FOUND));
-        
+        Company company = companyRepository.findById(salesOrderRequest.getCompanyId())
+                .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
         SalesOrder salesOrder = new SalesOrder();
-  
+        salesOrder.setCompany(company);
         salesOrder.setPurchaseOrder(purchaseOrder);
         salesOrder.setSoCode(generateSalesOrderCode(purchaseOrder.getPoId()));
+        salesOrder.setTaxRate(salesOrderRequest.getTaxRate());
         salesOrder.setDescription(salesOrderRequest.getDescription());
         salesOrder.setCreatedBy(salesOrderRequest.getCreatedBy());
         salesOrder.setStatus(salesOrderRequest.getStatus());
@@ -59,7 +64,7 @@ public class SalesOrderService {
         if (salesOrderRequest.getSalesOrderDetails() == null || salesOrderRequest.getSalesOrderDetails().isEmpty()) {
             throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
         }
-
+        Double totalPrice = 0.0;
 
         for (SalesOrderDetailRequest salesOrderDetailRequest : salesOrderRequest.getSalesOrderDetails()) {
             Item item = itemRepository.findById(salesOrderDetailRequest.getItemId())
@@ -67,11 +72,14 @@ public class SalesOrderService {
             SalesOrderDetail salesOrderDetail = new SalesOrderDetail();
             salesOrderDetail.setItem(item);
             salesOrderDetail.setQuantity(salesOrderDetailRequest.getQuantity());
+            salesOrderDetail.setItemPrice(item.getExportPrice());
             salesOrderDetail.setNote(salesOrderDetailRequest.getNote());
             salesOrderDetail.setSalesOrder(savedSalesOrder);
             salesOrderDetailRepository.save(salesOrderDetail);
+            totalPrice += salesOrderDetail.getItemPrice() * salesOrderDetail.getQuantity();
         }
-    
+        savedSalesOrder.setTotalPrice(totalPrice);
+        salesOrderRepository.save(savedSalesOrder);
 
         return convertToDto(savedSalesOrder);
     }
@@ -111,7 +119,7 @@ public class SalesOrderService {
     }
 
     public String generateSalesOrderCode(Long companyId) {
-        String prefix = "PO" + companyId ; 
+        String prefix = "SO" + String.valueOf(companyId).substring(1) ; 
         String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
         int count = salesOrderRepository.countBySoCodeStartingWith(prefix);
         return prefix + year + String.format("%04d", count + 1);
@@ -129,6 +137,8 @@ public class SalesOrderService {
         dto.setCreatedBy(salesOrder.getCreatedBy());
         dto.setCreatedOn(LocalDateTime.now());
         dto.setLastUpdatedOn(salesOrder.getLastUpdatedOn());
+        dto.setTotalPrice(salesOrder.getTotalPrice());
+        dto.setTaxRate(salesOrder.getTaxRate());
         dto.setDescription(salesOrder.getDescription());
         dto.setStatus(salesOrder.getStatus()); 
 
@@ -148,7 +158,10 @@ public class SalesOrderService {
         dto.setSoId(salesOrderDetail.getSalesOrder().getSoId());
         dto.setItemId(salesOrderDetail.getItem().getItemId());
         dto.setItemName(salesOrderDetail.getItem().getItemName());
+        dto.setItemCode(salesOrderDetail.getItem().getItemCode());
         dto.setQuantity(salesOrderDetail.getQuantity());
+        dto.setItemPrice(salesOrderDetail.getItemPrice());
+        dto.setNote(salesOrderDetail.getNote());
 
         return dto;
     }

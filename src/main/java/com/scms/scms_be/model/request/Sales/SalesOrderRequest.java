@@ -6,8 +6,10 @@ import lombok.Data;
 
 @Data
 public class SalesOrderRequest {
+    private Long companyId;
     private Long poId;
 
+    private Double taxRate;
     private String description;
     private String createdBy;
     private String status;

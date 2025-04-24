@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -49,8 +50,10 @@ public class Invoice {
     private String paymentMethod;
     private String createBy;
     private LocalDateTime createdOn;
-    private String seller;
-    private String buyer;
+
     private String status;
-    private String file;
+
+    @Lob
+    @Column(name = "file", columnDefinition = "LONGBLOb")
+    private byte[] file;
 }
