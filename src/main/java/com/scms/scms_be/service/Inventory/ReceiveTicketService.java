@@ -75,7 +75,7 @@ public class ReceiveTicketService {
 
         List<ReceiveTicketDetail> details = new ArrayList<>();
 
-        if(request.getReceiveType().equals("Manufacture Order")){
+        if(request.getReceiveType().equals("Sản xuất")){
             ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoCode(request.getReferenceCode());
             ticket.setReferenceId(manufactureOrder.getMoId());
             ReceiveTicketDetail detail = new ReceiveTicketDetail();
@@ -87,7 +87,7 @@ public class ReceiveTicketService {
             detail.setNote(request.getNote());
             details.add(detail);
         }
-        else if(request.getReceiveType().equals("Purchase Order")){
+        else if(request.getReceiveType().equals("Mua hàng")){
             PurchaseOrder purchaseOrder = purchaseOrderRepository.findByPoCode(request.getReferenceCode());
             ticket.setReferenceId(purchaseOrder.getPoId());
             List<PurchaseOrderDetail> purchaseOrderDetails = purchaseOrder.getPurchaseOrderDetails();
@@ -102,7 +102,7 @@ public class ReceiveTicketService {
                 details.add(detail);
             }
         }
-         else  if(request.getReceiveType().equals("Transfer Ticket")){
+         else  if(request.getReceiveType().equals("Chuyển kho")){
             TransferTicket transferTicket = transferTicketRepository.findByTicketCode(request.getReferenceCode());
             ticket.setReferenceId(transferTicket.getTicketId());
             List<TransferTicketDetail> transferTicketDetails = transferTicket.getTransferTicketDetails();
@@ -188,6 +188,16 @@ public class ReceiveTicketService {
 
         dto.setReceiveType(ticket.getReceiveType());
         dto.setReferenceId(ticket.getReferenceId());
+        if (ticket.getReceiveType().equals("Sản xuất")) {
+            ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoId(ticket.getReferenceId());
+            dto.setReferenceCode(manufactureOrder.getMoCode());
+        } else if (ticket.getReceiveType().equals("Mua hàng")) {
+            PurchaseOrder purchaseOrder = purchaseOrderRepository.findByPoId(ticket.getReferenceId());
+            dto.setReferenceCode(purchaseOrder.getPoCode());
+        } else if (ticket.getReceiveType().equals("Chuyển kho")) {
+            TransferTicket transferTicket = transferTicketRepository.findByTicketId(ticket.getReferenceId());
+            dto.setReferenceCode(transferTicket.getTicketCode());
+        }
 
         dto.setCreatedBy(ticket.getCreatedBy());
         dto.setCreatedOn(ticket.getCreatedOn());

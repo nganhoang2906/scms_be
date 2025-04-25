@@ -68,7 +68,7 @@ public class IssueTicketService {
 
         List<IssueTicketDetail> details = new ArrayList<>();
 
-        if(request.getIssueType().equals("Manufacture Order")){
+        if(request.getIssueType().equals("Sản xuất")){
             ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoCode(request.getReferenceCode());
             ticket.setReferenceId(manufactureOrder.getMoId());
             IssueTicketDetail detail = new IssueTicketDetail();
@@ -80,7 +80,7 @@ public class IssueTicketService {
             detail.setNote(request.getNote());
             details.add(detail);
         }
-        else if(request.getIssueType().equals("Sales Order")){
+        else if(request.getIssueType().equals("Bán hàng")){
             SalesOrder salesOrder = salesOrderRepository.findBySoCode(request.getReferenceCode());
             ticket.setReferenceId(salesOrder.getSoId());
             List<SalesOrderDetail> salesOrderDetails = salesOrder.getSalesOrderDetails();
@@ -95,7 +95,7 @@ public class IssueTicketService {
                 details.add(detail);
             }
         }
-         else  if(request.getIssueType().equals("Transfer Ticket")){
+         else  if(request.getIssueType().equals("Chuyển kho")){
             TransferTicket transferTicket = transferTicketRepository.findByTicketCode(request.getReferenceCode());
             ticket.setReferenceId(transferTicket.getTicketId());
             List<TransferTicketDetail> transferTicketDetails = transferTicket.getTransferTicketDetails();
@@ -170,7 +170,7 @@ public class IssueTicketService {
         IssueTicketDto dto = new IssueTicketDto();
         dto.setTicketId(ticket.getTicketId());
         dto.setCompanyId(ticket.getCompany().getCompanyId());
-
+        dto.setTicketCode(ticket.getTicketCode());  
         dto.setWarehouseId(ticket.getWarehouse().getWarehouseId());
         dto.setWarehouseCode(ticket.getWarehouse().getWarehouseCode());
         dto.setWarehouseName(ticket.getWarehouse().getWarehouseName());
@@ -178,7 +178,21 @@ public class IssueTicketService {
         dto.setIssueDate(ticket.getIssueDate());
         dto.setReason(ticket.getReason());
         dto.setIssueType(ticket.getIssueType());
+
         dto.setReferenceId(ticket.getReferenceId());
+        if(ticket.getIssueType().equals("Sản xuất")){
+            ManufactureOrder manufactureOrder = manufactureOrderRepository.findByMoId(ticket.getReferenceId());
+            dto.setReferenceCode(manufactureOrder.getMoCode());
+        } else if(ticket.getIssueType().equals("Bán hàng")){
+            SalesOrder salesOrder = salesOrderRepository.findBySoId(ticket.getReferenceId());
+            dto.setReferenceCode(salesOrder.getSoCode());
+        } else if(ticket.getIssueType().equals("Chuyển kho")){
+            TransferTicket transferTicket = transferTicketRepository.findByTicketId(ticket.getReferenceId());
+            dto.setReferenceCode(transferTicket.getTicketCode());
+        } else {
+            dto.setReferenceCode("N/A");
+        }
+
         dto.setCreatedBy(ticket.getCreatedBy());
 
         dto.setCreatedOn(LocalDateTime.now());

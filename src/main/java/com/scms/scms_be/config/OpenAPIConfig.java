@@ -23,14 +23,6 @@ public class OpenAPIConfig {
                 .url("http://localhost:8080")
                 .description("Local Server");
 
-        Server devServer = new Server()
-                .url("https://dev.yourdomain.com")
-                .description("Development Server");
-
-        Server prodServer = new Server()
-                .url("https://api.yourdomain.com")
-                .description("Production Server");
-
         SecurityScheme securityScheme = new SecurityScheme()
                 .name("bearerAuth")
                 .type(SecurityScheme.Type.HTTP)
@@ -45,15 +37,11 @@ public class OpenAPIConfig {
                         .title("SCMS Backend API")
                         .version("v1.0.0")
                         .description("API documentation for SCMS Backend")
-                        .contact(new Contact()
-                                .name("Team SCMS")
-                                .email("letrungducabcxyz@gmail.com")
-                                .url("https://yourdomain.com"))
                         .license(new License()
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT"))
                 )
-                .servers(List.of(localServer, devServer, prodServer))
+                .servers(List.of(localServer))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", securityScheme))
                 .security(List.of(securityRequirement));

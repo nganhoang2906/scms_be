@@ -19,4 +19,7 @@ public interface ManufactureOrderRepository extends JpaRepository<ManufactureOrd
 
     int countByItemItemIdAndLineLineId(Long itemId, Long lineId);
 
+    ManufactureOrder findByMoId(Long referenceId);
+
+
 }

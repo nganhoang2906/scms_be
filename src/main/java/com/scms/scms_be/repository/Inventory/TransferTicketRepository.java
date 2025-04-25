@@ -18,4 +18,6 @@ public interface TransferTicketRepository extends JpaRepository<TransferTicket,L
 
     TransferTicket findByTicketCode(String ticketCode);
 
+    TransferTicket findByTicketId(Long referenceId);
+
 }

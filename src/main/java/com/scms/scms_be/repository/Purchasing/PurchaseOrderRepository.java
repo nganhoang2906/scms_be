@@ -18,4 +18,6 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder,Lon
     List<PurchaseOrder> findBySuplierCompany_CompanyId(Long supplierCompanyId);
 
     List<PurchaseOrder> findByCompany_CompanyIdAndSuplierCompany_CompanyId(Long companyId, Long supplierCompanyId);
+
+    PurchaseOrder findByPoId(Long referenceId);
 }

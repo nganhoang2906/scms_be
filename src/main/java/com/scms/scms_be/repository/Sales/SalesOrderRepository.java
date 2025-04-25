@@ -13,4 +13,6 @@ public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
     int countBySoCodeStartingWith(String prefix);
 
     List<SalesOrder> findByPurchaseOrder_PoId(Long poId);
+
+    SalesOrder findBySoId(Long referenceId);
 }

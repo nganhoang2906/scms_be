@@ -21,6 +21,7 @@ public class IssueTicketDto {
 
     private String issueType; // mo/so/ticket
     private Long referenceId;
+    private String referenceCode;
     
     private String createdBy;
     private LocalDateTime createdOn;
