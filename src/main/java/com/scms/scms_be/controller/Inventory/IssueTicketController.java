@@ -16,27 +16,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IssueTicketController {
 
-    @Autowired
-    private IssueTicketService issueTicketService;
+  @Autowired
+  private IssueTicketService issueTicketService;
 
-    @PostMapping("/user/create-issue-ticket")
-    public ResponseEntity<IssueTicketDto> createIssueTicket(@RequestBody IssueTicketRequest request) {
-        IssueTicketDto created = issueTicketService.createIssueTicket(request);
-        return ResponseEntity.ok(created);
-    }
+  @PostMapping("/user/create-issue-ticket")
+  public ResponseEntity<IssueTicketDto> createIssueTicket(@RequestBody IssueTicketRequest request) {
+    IssueTicketDto created = issueTicketService.createIssueTicket(request);
+    return ResponseEntity.ok(created);
+  }
 
-    @GetMapping("/user/get-all-issue-ticket-in-com/{companyId}")
-    public ResponseEntity<List<IssueTicketDto>> getAllIssueTicketsByCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(issueTicketService.getAllInCompany(companyId));
-    }
+  @GetMapping("/user/get-all-issue-ticket-in-com/{companyId}")
+  public ResponseEntity<List<IssueTicketDto>> getAllIssueTicketsByCompany(@PathVariable Long companyId) {
+    return ResponseEntity.ok(issueTicketService.getAllInCompany(companyId));
+  }
 
-    @GetMapping("/user/get-issue-ticket/{ticketId}")
-    public ResponseEntity<IssueTicketDto> getIssueTicketById(@PathVariable Long ticketId) {
-        return ResponseEntity.ok(issueTicketService.getById(ticketId));
-    }
+  @GetMapping("/user/get-issue-ticket/{ticketId}")
+  public ResponseEntity<IssueTicketDto> getIssueTicketById(@PathVariable Long ticketId) {
+    return ResponseEntity.ok(issueTicketService.getById(ticketId));
+  }
 
-    @PutMapping("/user/update-issue-ticket-status/{ticketId}")
-    public ResponseEntity<IssueTicketDto> updateIssueTicketStatus(@PathVariable Long ticketId, @RequestParam String status) {
-        return ResponseEntity.ok(issueTicketService.updateStatus(ticketId, status));
-    }
-} 
+  @PutMapping("/user/update-issue-ticket/{ticketId}")
+  public ResponseEntity<IssueTicketDto> updateIssueTicketStatus(
+      @PathVariable Long ticketId,
+      @RequestBody IssueTicketRequest request) {
+    return ResponseEntity.ok(issueTicketService.updateTicket(ticketId, request));
+  }
+  
+}

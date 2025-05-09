@@ -8,7 +8,6 @@ import com.scms.scms_be.model.entity.Sales.SalesOrderDetail;
 
 public interface SalesOrderDetailRepository extends JpaRepository<SalesOrderDetail, Long> {
 
-    List<SalesOrderDetail> findBySalesOrder_SoId(Long soId);
+  List<SalesOrderDetail> findBySalesOrder_SoId(Long soId);
 
- 
 }

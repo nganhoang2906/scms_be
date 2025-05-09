@@ -7,22 +7,19 @@ import lombok.Data;
 
 @Data
 public class SalesOrderDto {
-    private Long soId;
-    private String soCode;
+  private Long soId;
+  private String soCode;
+  private Long companyId;
+  private String companyName;
+  private Long poId;
+  private String poCode;
+  private Double totalPrice;
+  private Double taxRate;
+  private String description;
+  private String createdBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 
-    private Long companyId;
-    private String companyName;
-
-    private Long poId;
-    private String poCode;
-
-    private Double totalPrice;
-    private Double taxRate;
-    private String description;
-    private String createdBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
-
-    private List<SalesOrderDetailDto> salesOrderDetails;
+  private List<SalesOrderDetailDto> salesOrderDetails;
 }

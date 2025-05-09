@@ -9,10 +9,13 @@ import com.scms.scms_be.model.entity.General.Department;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
-    List<Department> findByCompanyCompanyId(Long companyId);
+  
+  List<Department> findByCompanyCompanyId(Long companyId);
 
-    boolean existsByDepartmentCode(String departmentCode);
-    int countByCompanyCompanyId(Long companyId);
+  boolean existsByDepartmentCode(String departmentCode);
 
-    int countByDepartmentCodeStartingWith(String prefix);
+  int countByCompanyCompanyId(Long companyId);
+
+  int countByDepartmentCodeStartingWith(String prefix);
+  
 }

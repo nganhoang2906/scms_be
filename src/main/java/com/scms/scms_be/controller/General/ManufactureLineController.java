@@ -21,32 +21,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManufactureLineController {
 
-    @Autowired
-    private ManufactureLineService lineService;
+  @Autowired
+  private ManufactureLineService lineService;
 
-    @PostMapping("/comad/create-mf-line/{plantId}")
-    public ResponseEntity<ManufactureLineDto> createLine(
-            @PathVariable Long plantId,
-            @RequestBody ManuLineRequest line) {
-        return ResponseEntity.ok(lineService.createLine(plantId, line));
-    }
+  @PostMapping("/comad/create-mf-line/{plantId}")
+  public ResponseEntity<ManufactureLineDto> createLine(
+      @PathVariable Long plantId,
+      @RequestBody ManuLineRequest line) {
+    return ResponseEntity.ok(lineService.createLine(plantId, line));
+  }
 
-    @GetMapping("/user/get-all-mf-line-in-company/{companyId}")
-    public ResponseEntity<List<ManufactureLineDto>> getAllLinesInCompany(
-            @PathVariable Long companyId) {
-        return ResponseEntity.ok(lineService.getAllLinesInCompany(companyId));
-    }
+  @GetMapping("/user/get-all-mf-line-in-com/{companyId}")
+  public ResponseEntity<List<ManufactureLineDto>> getAllLinesInCompany(
+      @PathVariable Long companyId) {
+    return ResponseEntity.ok(lineService.getAllLinesInCompany(companyId));
+  }
 
-    @GetMapping("/user/get-mf-line/{lineId}")
-    public ResponseEntity<ManufactureLineDto> getLineById(
-        @PathVariable Long lineId) {
-        return ResponseEntity.ok(lineService.getLineById(lineId));
-    }
+  @GetMapping("/user/get-mf-line/{lineId}")
+  public ResponseEntity<ManufactureLineDto> getLineById(
+      @PathVariable Long lineId) {
+    return ResponseEntity.ok(lineService.getLineById(lineId));
+  }
 
-    @PutMapping("/comad/update-mf-line/{lineId}")
-    public ResponseEntity<ManufactureLineDto> updateLine(
-            @PathVariable Long lineId,
-            @RequestBody ManuLineRequest line) {
-        return ResponseEntity.ok(lineService.updateLine(lineId, line));
-    }
+  @PutMapping("/comad/update-mf-line/{lineId}")
+  public ResponseEntity<ManufactureLineDto> updateLine(
+      @PathVariable Long lineId,
+      @RequestBody ManuLineRequest line) {
+    return ResponseEntity.ok(lineService.updateLine(lineId, line));
+  }
+  
 }

@@ -8,10 +8,10 @@ import com.scms.scms_be.model.entity.Sales.Quotation;
 
 public interface QuotationRepository extends JpaRepository<Quotation, Long> {
 
-    int countByQuotationCodeStartingWith(String prefix);
+  int countByQuotationCodeStartingWith(String prefix);
 
-    List<Quotation> findByRfq_RfqId(Long rfqId);
+  List<Quotation> findByRfq_RfqId(Long rfqId);
 
-    List<Quotation> findByCompany_CompanyId(Long companyId);
+  List<Quotation> findByCompany_CompanyId(Long companyId);
 
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,28 +26,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseOrder {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long poId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long poId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable=false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    @Column(nullable = false, unique = true)
-    private String poCode;
+  @Column(nullable = false, unique = true)
+  private String poCode;
 
-    @ManyToOne
-    @JoinColumn(name = "suplier_company_id", nullable=false)
-    private Company suplierCompany;
+  @ManyToOne
+  @JoinColumn(name = "suplier_company_id", nullable = false)
+  private Company suplierCompany;
 
-    private String description;
-    private String createdBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
+  private String description;
+  private String createdBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 
-     @OneToMany(mappedBy = "po", orphanRemoval = true , cascade = CascadeType.ALL)
-    private List<PurchaseOrderDetail> purchaseOrderDetails;
+  @OneToMany(mappedBy = "po", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<PurchaseOrderDetail> purchaseOrderDetails;
 }
-

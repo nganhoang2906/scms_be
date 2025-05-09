@@ -21,27 +21,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WarehouseController {
 
-    @Autowired
-    private WarehouseService warehouseService;
+  @Autowired
+  private WarehouseService warehouseService;
 
-    @PostMapping("/comad/create-warehouse/{companyId}")
-    public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId, @RequestBody WarehouseRequest warehouse) {
-        return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
-    }
+  @PostMapping("/comad/create-warehouse/{companyId}")
+  public ResponseEntity<WarehouseDto> createWarehouse(@PathVariable Long companyId,
+      @RequestBody WarehouseRequest warehouse) {
+    return ResponseEntity.ok(warehouseService.createWarehouse(companyId, warehouse));
+  }
 
-    @GetMapping("/user/get-warehouse/{warehouseId}")
-    public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long warehouseId) {
-        return ResponseEntity.ok(warehouseService.getWarehouseById(warehouseId));
-    }
+  @GetMapping("/user/get-warehouse/{warehouseId}")
+  public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long warehouseId) {
+    return ResponseEntity.ok(warehouseService.getWarehouseById(warehouseId));
+  }
 
-    @GetMapping("/user/get-all-warehouse-in-company/{companyId}")
-    public ResponseEntity<List<WarehouseDto>> getAllWarehouseInCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(warehouseService.getAllWarehousesInCompany(companyId));
-    }
+  @GetMapping("/user/get-all-warehouse-in-com/{companyId}")
+  public ResponseEntity<List<WarehouseDto>> getAllWarehouseInCompany(@PathVariable Long companyId) {
+    return ResponseEntity.ok(warehouseService.getAllWarehousesInCompany(companyId));
+  }
 
-    @PutMapping("/comad/update-warehouse/{warehouseId}")
-    public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long warehouseId, @RequestBody WarehouseRequest updatedWarehouse) {
-        return ResponseEntity.ok(warehouseService.updateWarehouse(warehouseId, updatedWarehouse));
-    }
+  @PutMapping("/comad/update-warehouse/{warehouseId}")
+  public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long warehouseId,
+      @RequestBody WarehouseRequest updatedWarehouse) {
+    return ResponseEntity.ok(warehouseService.updateWarehouse(warehouseId, updatedWarehouse));
+  }
 
 }

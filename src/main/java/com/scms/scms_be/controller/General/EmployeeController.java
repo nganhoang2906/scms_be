@@ -26,53 +26,53 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class EmployeeController {
-   
-    @Autowired
-    private EmployeeService employeeService;
 
-    @PostMapping("/comad/create-employee")
-    public ResponseEntity<EmployeeDto> createEmployee( @RequestBody EmployeeRequest employeeRequest) {
-        return ResponseEntity.ok(employeeService.createEmployee( employeeRequest));
+  @Autowired
+  private EmployeeService employeeService;
+
+  @PostMapping("/comad/create-employee")
+  public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    return ResponseEntity.ok(employeeService.createEmployee(employeeRequest));
+  }
+
+  @GetMapping("/user/get-all-employee-in-com/{companyId}")
+  public ResponseEntity<List<EmployeeDto>> getAllEmployeeInCompany(@PathVariable Long companyId) {
+    return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
+  }
+
+  @GetMapping("/user/get-employee/{employeeId}")
+  public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId) {
+    return ResponseEntity.ok(employeeService.getEmployeeById(employeeId));
+  }
+
+  @PutMapping("/user/update-employee/{employeeId}")
+  public ResponseEntity<EmployeeDto> updateEmployee(
+      @PathVariable Long employeeId,
+      @RequestBody EmployeeRequest updatedEmployee) {
+    return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));
+  }
+
+  @DeleteMapping("/comad/delete-employee/{employeeId}")
+  public ResponseEntity<?> deleteEmployee(@PathVariable Long employeeId) {
+    boolean deleted = employeeService.deleteEmployeeById(employeeId);
+    if (deleted) {
+      return ResponseEntity.ok("Nhân viên và tài khoản liên quan đã được xóa thành công");
+    } else {
+      return ResponseEntity.notFound().build();
     }
+  }
 
-    @GetMapping("/user/get-all-employee-in-com/{companyId}")
-    public ResponseEntity<List<EmployeeDto>> getAllEmployeeInCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(employeeService.getAllEmployeesInCompany(companyId));
+  @PutMapping("/user/update-avatar/{employeeId}")
+  public ResponseEntity<String> updateEmployeeAvatar(
+      @PathVariable Long employeeId,
+      @RequestParam("avatar") MultipartFile avatarFile) {
+
+    try {
+      String avatarUrl = employeeService.updateEmployeeAvatar(employeeId, avatarFile);
+      return ResponseEntity.ok(avatarUrl);
+    } catch (IOException e) {
+      throw new CustomException("Cập nhật ảnh đại diện thất bại!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
 
-    @GetMapping("/user/get-employee/{employeeId}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId) {
-        return ResponseEntity.ok(employeeService.getEmployeeById( employeeId));
-    }
-
-    @PutMapping("/user/update-employee/{employeeId}")
-    public ResponseEntity<EmployeeDto> updateEmployee(
-            @PathVariable Long employeeId,
-            @RequestBody EmployeeRequest updatedEmployee) {
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeId, updatedEmployee));
-    }
-
-    @DeleteMapping("/comad/delete-employee/{employeeId}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long employeeId) {
-        boolean deleted = employeeService.deleteEmployeeById(employeeId);
-        if (deleted) {
-            return ResponseEntity.ok("Nhân viên và tài khoản liên quan đã được xóa thành công");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/user/update-avatar/{employeeId}")
-    public ResponseEntity<String> updateEmployeeAvatar(
-            @PathVariable Long employeeId,
-            @RequestParam("avatar") MultipartFile avatarFile) {
-
-        try {
-            String avatarUrl = employeeService.updateEmployeeAvatar(employeeId, avatarFile);
-            return ResponseEntity.ok(avatarUrl);
-        } catch (IOException e) {
-            throw new CustomException("Tải lên ảnh thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-  
 }

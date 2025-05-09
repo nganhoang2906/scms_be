@@ -19,40 +19,40 @@ import com.scms.scms_be.service.Manufacturing.BOMService;
 @RestController
 public class BOMController {
 
-    @Autowired
-    private BOMService bomService;
+  @Autowired
+  private BOMService bomService;
 
-    @PostMapping("/user/create-bom")
-    public ResponseEntity<BOMDto> createBOM(
-            @RequestBody BOMRequest request) {
-        BOMDto created = bomService.createBOM(request);
-        return ResponseEntity.ok(created);
-    }
+  @PostMapping("/user/create-bom")
+  public ResponseEntity<BOMDto> createBOM(
+      @RequestBody BOMRequest request) {
+    BOMDto created = bomService.createBOM(request);
+    return ResponseEntity.ok(created);
+  }
 
-    @GetMapping("/user/get-all-bom-in-com/{companyId}")
-    public ResponseEntity<List<BOMDto>> getAllBOMsByCompany(
-            @PathVariable Long companyId) {
-        return ResponseEntity.ok(bomService.getAllBOMInCom(companyId));
-    }
+  @GetMapping("/user/get-all-bom-in-com/{companyId}")
+  public ResponseEntity<List<BOMDto>> getAllBOMsByCompany(
+      @PathVariable Long companyId) {
+    return ResponseEntity.ok(bomService.getAllBOMInCom(companyId));
+  }
 
-    @GetMapping("/user/get-bom/{itemId}")
-    public ResponseEntity<BOMDto> getBOMById(
-            @PathVariable Long itemId) {
-        return ResponseEntity.ok(bomService.getBOMByItem(itemId));
-    }
+  @GetMapping("/user/get-bom/{itemId}")
+  public ResponseEntity<BOMDto> getBOMById(
+      @PathVariable Long itemId) {
+    return ResponseEntity.ok(bomService.getBOMByItem(itemId));
+  }
 
-    @PutMapping("/user/update-bom/{bomId}")
-    public ResponseEntity<BOMDto> updateBOM(
-            @PathVariable Long bomId, 
-            @RequestBody BOMRequest bom) {
-        return ResponseEntity.ok(bomService.updateBOM(bomId, bom));
-    }
+  @PutMapping("/user/update-bom/{bomId}")
+  public ResponseEntity<BOMDto> updateBOM(
+      @PathVariable Long bomId,
+      @RequestBody BOMRequest bom) {
+    return ResponseEntity.ok(bomService.updateBOM(bomId, bom));
+  }
 
-    @DeleteMapping("/comad/delete-bom/{bomId}")
-    public ResponseEntity<String> deleteBOM(
-            @PathVariable Long bomId) {
-        bomService.deleteBOM(bomId);
-        return ResponseEntity.ok("Đã xoá BOM");
-    }
+  @DeleteMapping("/comad/delete-bom/{bomId}")
+  public ResponseEntity<String> deleteBOM(
+      @PathVariable Long bomId) {
+    bomService.deleteBOM(bomId);
+    return ResponseEntity.ok("Đã xoá BOM");
+  }
 
 }

@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 public class PurchaseOrderRequest {
-    private Long companyId;
-    private Long suplierCompanyId;
-    private String description;
-    private String createdBy;
-    private String status;
+  private Long companyId;
+  private Long suplierCompanyId;
+  private String description;
+  private String createdBy;
+  private String status;
 
-    private List<PurchaseOrderDetailRequest> purchaseOrderDetails;
+  private List<PurchaseOrderDetailRequest> purchaseOrderDetails;
 }

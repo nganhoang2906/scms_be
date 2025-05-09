@@ -1,6 +1,5 @@
 package com.scms.scms_be.model.dto.General;
 
-
 import lombok.Data;
 
 @Data
@@ -13,5 +12,4 @@ public class ManufactureLineDto {
   private String lineName;
   private double capacity;
   private String description;
-
 }

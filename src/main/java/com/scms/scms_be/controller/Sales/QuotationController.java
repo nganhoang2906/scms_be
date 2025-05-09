@@ -15,26 +15,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuotationController {
 
-    @Autowired
-    private QuotationService quotationService;
+  @Autowired
+  private QuotationService quotationService;
 
-    @PostMapping("/user/create-quotation")
-    public ResponseEntity<QuotationDto> createQuotation(@RequestBody QuotationRequest request) {
-        return ResponseEntity.ok(quotationService.createQuotation(request));
-    }
+  @PostMapping("/user/create-quotation")
+  public ResponseEntity<QuotationDto> createQuotation(@RequestBody QuotationRequest request) {
+    return ResponseEntity.ok(quotationService.createQuotation(request));
+  }
 
-    @GetMapping("/user/get-quotation-by-id/{quotationId}")
-    public ResponseEntity<QuotationDto> getQuotationById(@PathVariable Long quotationId) {
-        return ResponseEntity.ok(quotationService.getQuotationById(quotationId));
-    }
+  @GetMapping("/user/get-quotation-by-id/{quotationId}")
+  public ResponseEntity<QuotationDto> getQuotationById(@PathVariable Long quotationId) {
+    return ResponseEntity.ok(quotationService.getQuotationById(quotationId));
+  }
 
-    @GetMapping("/user/get-all-quotations-by-company/{companyId}")
-    public ResponseEntity<List<QuotationDto>> getAllByCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(quotationService.getAllQuotationsByCompany(companyId));
-    }
+  @GetMapping("/user/get-all-quotations-in-com/{companyId}")
+  public ResponseEntity<List<QuotationDto>> getAllByCompany(@PathVariable Long companyId) {
+    return ResponseEntity.ok(quotationService.getAllQuotationsByCompany(companyId));
+  }
 
-    @GetMapping("/user/get-all-quotations-by-rfq/{rfqId}")
-    public ResponseEntity<List<QuotationDto>> getAllByRfq(@PathVariable Long rfqId) {
-        return ResponseEntity.ok(quotationService.getAllQuotationsByRfq(rfqId));
-    }
+  @GetMapping("/user/get-all-quotations-by-rfq/{rfqId}")
+  public ResponseEntity<List<QuotationDto>> getAllByRfq(@PathVariable Long rfqId) {
+    return ResponseEntity.ok(quotationService.getAllQuotationsByRfq(rfqId));
+  }
+  
 }

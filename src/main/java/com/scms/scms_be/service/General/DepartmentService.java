@@ -14,27 +14,26 @@ import com.scms.scms_be.repository.General.DepartmentRepository;
 
 @Service
 public class DepartmentService {
-    @Autowired
-    private DepartmentRepository departmentRepository;
+  @Autowired
+  private DepartmentRepository departmentRepository;
 
+  public DepartmentDto getDepartmentById(Long departmentId) {
+    Department department = departmentRepository.findById(departmentId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy bộ phận!", HttpStatus.NOT_FOUND));
+    return convertToDto(department);
+  }
 
-    public DepartmentDto getDepartmentById(Long departmentId) {
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new CustomException("Bộ phận không tồn tại!", HttpStatus.NOT_FOUND));
-        return convertToDto(department);
-    }
+  public List<DepartmentDto> getAllDepartmentInCompany(Long companyId) {
+    List<Department> departments = departmentRepository.findByCompanyCompanyId(companyId);
+    return departments.stream().map(this::convertToDto).collect(Collectors.toList());
+  }
 
-    public List<DepartmentDto> getAllDepartmentInCompany(Long companyId) {
-        List<Department> departments = departmentRepository.findByCompanyCompanyId(companyId);
-        return departments.stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    private DepartmentDto convertToDto(Department department) {
-        DepartmentDto dto = new DepartmentDto();
-        dto.setCompanyId(department.getCompany().getCompanyId());
-        dto.setDepartmentId(department.getDepartmentId());
-        dto.setDepartmentCode(department.getDepartmentCode());
-        dto.setDepartmentName(department.getDepartmentName());
-        return dto;
-    }
+  private DepartmentDto convertToDto(Department department) {
+    DepartmentDto dto = new DepartmentDto();
+    dto.setCompanyId(department.getCompany().getCompanyId());
+    dto.setDepartmentId(department.getDepartmentId());
+    dto.setDepartmentCode(department.getDepartmentCode());
+    dto.setDepartmentName(department.getDepartmentName());
+    return dto;
+  }
 }

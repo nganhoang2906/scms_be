@@ -26,129 +26,128 @@ import com.scms.scms_be.repository.Manufacturing.ManufactureStageRepository;
 @Service
 public class ManufactureOrderService {
 
-    @Autowired 
-    private ManufactureOrderRepository moRepo;
+  @Autowired
+  private ManufactureOrderRepository moRepo;
 
-    @Autowired 
-    private ItemRepository itemRepo;
+  @Autowired
+  private ItemRepository itemRepo;
 
-    @Autowired 
-    private ManufactureLineRepository lineRepo;
+  @Autowired
+  private ManufactureLineRepository lineRepo;
 
-    @Autowired
-    private ManufactureStageRepository stageRepo;
+  @Autowired
+  private ManufactureStageRepository stageRepo;
 
-    @Autowired
-    private ManufactureStageDetailRepository stageDetailRepo;
+  @Autowired
+  private ManufactureStageDetailRepository stageDetailRepo;
 
-    @Autowired
-    private ManufactureProcessService processService;
+  @Autowired
+  private ManufactureProcessService processService;
 
-    @Autowired
-    private BOMRepository bomRepo;
+  @Autowired
+  private BOMRepository bomRepo;
 
-    public ManufactureOrderDto createOrder(ManuOrderRequest orderRequest) {
-        BOM bom = bomRepo.findByItem_ItemId(orderRequest.getItemId());
-        if (bom == null) {
-            throw new CustomException("BOM không tồn tại", HttpStatus.NOT_FOUND);
-        }
-        ManufactureStage stage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
-        if (stage == null) {
-            throw new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND);
-        }
-    
-
-        ManufactureOrder order = new ManufactureOrder();
-        order.setMoCode(generateMOCode(orderRequest.getItemId(), orderRequest.getLineId()));    
-        order.setType(orderRequest.getType());
-        order.setQuantity(orderRequest.getQuantity());
-        order.setEstimatedStartTime(orderRequest.getEstimatedStartTime());
-        order.setEstimatedEndTime(orderRequest.getEstimatedEndTime());
-        order.setCreatedBy(orderRequest.getCreatedBy());
-        
-        order.setItem(itemRepo.findById(orderRequest.getItemId()).orElseThrow(() 
-            -> new CustomException("Item không tồn tại", HttpStatus.NOT_FOUND)));
-        order.setLine(lineRepo.findById(orderRequest.getLineId()).orElseThrow(() 
-            -> new CustomException("Line không tồn tại", HttpStatus.NOT_FOUND)));
-        order.setCreatedOn( LocalDateTime.now());
-        order.setLastUpdatedOn( LocalDateTime.now());
-        order.setStatus(orderRequest.getStatus());
-
-        moRepo.save(order);
-        ManufactureStage newStage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
-        List<ManufactureStageDetail> stageDetailList= stageDetailRepo.findByStage_StageId(newStage.getStageId());
-        for(ManufactureStageDetail  stageDetail : stageDetailList) {
-            ManuProcessRequest processRequest = new ManuProcessRequest();
-            processRequest.setMoId(order.getMoId());
-            processRequest.setStageDetailId(stageDetail.getStageDetailId());
-            
-            processService.createManuProcess(processRequest);
-        }
-
-        throw new CustomException("Tạo MO thành công", HttpStatus.OK);
+  public ManufactureOrderDto createOrder(ManuOrderRequest orderRequest) {
+    BOM bom = bomRepo.findByItem_ItemId(orderRequest.getItemId());
+    if (bom == null) {
+      throw new CustomException("Hàng hóa chưa có BOM!", HttpStatus.NOT_FOUND);
+    }
+    ManufactureStage stage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
+    if (stage == null) {
+      throw new CustomException("Chưa thiết lập công đoạn sản xuất cho hàng hóa này!", HttpStatus.NOT_FOUND);
     }
 
-    public List<ManufactureOrderDto> getAllManufactureOrdersbyItemId(Long itemId) {
-        return moRepo.findByItem_ItemId(itemId)
-                     .stream()
-                     .map(this::convertToDto)
-                     .collect(Collectors.toList());
+    ManufactureOrder order = new ManufactureOrder();
+    order.setMoCode(generateMOCode(orderRequest.getItemId(), orderRequest.getLineId()));
+    order.setType(orderRequest.getType());
+    order.setQuantity(orderRequest.getQuantity());
+    order.setEstimatedStartTime(orderRequest.getEstimatedStartTime());
+    order.setEstimatedEndTime(orderRequest.getEstimatedEndTime());
+    order.setCreatedBy(orderRequest.getCreatedBy());
+
+    order.setItem(itemRepo.findById(orderRequest.getItemId())
+        .orElseThrow(() -> new CustomException("Không tìm thấy hàng hóa!", HttpStatus.NOT_FOUND)));
+    order.setLine(lineRepo.findById(orderRequest.getLineId())
+        .orElseThrow(() -> new CustomException("Không tìm thấy dây chuyền sản xuất!", HttpStatus.NOT_FOUND)));
+    order.setCreatedOn(LocalDateTime.now());
+    order.setLastUpdatedOn(LocalDateTime.now());
+    order.setStatus(orderRequest.getStatus());
+
+    moRepo.save(order);
+    ManufactureStage newStage = stageRepo.findByItem_ItemId(orderRequest.getItemId());
+    List<ManufactureStageDetail> stageDetailList = stageDetailRepo.findByStage_StageId(newStage.getStageId());
+    for (ManufactureStageDetail stageDetail : stageDetailList) {
+      ManuProcessRequest processRequest = new ManuProcessRequest();
+      processRequest.setMoId(order.getMoId());
+      processRequest.setStageDetailId(stageDetail.getStageDetailId());
+
+      processService.createManuProcess(processRequest);
     }
 
-    public List<ManufactureOrderDto> getAllManufactureOrdersByCompanyId(Long companyId) {
-        return moRepo.findByItem_Company_CompanyId(companyId)
-                     .stream()
-                     .map(this::convertToDto)
-                     .collect(Collectors.toList());
-    }
+    throw new CustomException("Tạo công lệnh thành công!", HttpStatus.OK);
+  }
 
-    public ManufactureOrderDto getById(Long moId) {
-        ManufactureOrder mo = moRepo.findById(moId)
-                                    .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND));
-        return convertToDto(mo);
-    }
+  public List<ManufactureOrderDto> getAllManufactureOrdersbyItemId(Long itemId) {
+    return moRepo.findByItem_ItemId(itemId)
+        .stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 
-    public ManufactureOrderDto update(Long id, ManuOrderRequest update) {
-        ManufactureOrder mo = moRepo.findById(id)
-                                    .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND));
+  public List<ManufactureOrderDto> getAllManufactureOrdersByCompanyId(Long companyId) {
+    return moRepo.findByItem_Company_CompanyId(companyId)
+        .stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 
-        mo.setType(update.getType());
-        mo.setQuantity(update.getQuantity());
-        mo.setEstimatedStartTime(update.getEstimatedStartTime());
-        mo.setEstimatedEndTime(update.getEstimatedEndTime());
-        mo.setCreatedBy(update.getCreatedBy());
-        mo.setLastUpdatedOn( LocalDateTime.now());
-        mo.setStatus(update.getStatus());
-        
-        return convertToDto(moRepo.save(mo));
-    }
-    public String generateMOCode(Long itemId, Long lineId) {
-        int count = moRepo.countByItemItemIdAndLineLineId(itemId, lineId);
-        return "MO" + itemId  + lineId +  String.format("%d", count + 1);
-    }
-    
+  public ManufactureOrderDto getById(Long moId) {
+    ManufactureOrder mo = moRepo.findById(moId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy công lệnh sản xuất!", HttpStatus.NOT_FOUND));
+    return convertToDto(mo);
+  }
 
-    private ManufactureOrderDto convertToDto(ManufactureOrder mo) {
-        ManufactureOrderDto dto = new ManufactureOrderDto();
-        dto.setMoId(mo.getMoId());
-        dto.setMoCode(mo.getMoCode());
+  public ManufactureOrderDto update(Long id, ManuOrderRequest update) {
+    ManufactureOrder mo = moRepo.findById(id)
+        .orElseThrow(() -> new CustomException("Không tìm thấy công lệnh sản xuất!", HttpStatus.NOT_FOUND));
 
-        dto.setItemId(mo.getItem().getItemId());
-        dto.setItemCode(mo.getItem().getItemCode());
-        dto.setItemName(mo.getItem().getItemName());
+    mo.setType(update.getType());
+    mo.setQuantity(update.getQuantity());
+    mo.setEstimatedStartTime(update.getEstimatedStartTime());
+    mo.setEstimatedEndTime(update.getEstimatedEndTime());
+    mo.setCreatedBy(update.getCreatedBy());
+    mo.setLastUpdatedOn(LocalDateTime.now());
+    mo.setStatus(update.getStatus());
 
-        dto.setLineId(mo.getLine().getLineId());
-        dto.setLineCode(mo.getLine().getLineCode());
-        dto.setLineName(mo.getLine().getLineName());
+    return convertToDto(moRepo.save(mo));
+  }
 
-        dto.setType(mo.getType());
-        dto.setQuantity(mo.getQuantity());
-        dto.setEstimatedStartTime(mo.getEstimatedStartTime());
-        dto.setEstimatedEndTime(mo.getEstimatedEndTime());
-        dto.setCreatedBy(mo.getCreatedBy());
-        dto.setCreatedOn(mo.getCreatedOn());
-        dto.setLastUpdatedOn(mo.getLastUpdatedOn());
-        dto.setStatus(mo.getStatus());
-        return dto;
-    }
+  public String generateMOCode(Long itemId, Long lineId) {
+    int count = moRepo.countByItemItemIdAndLineLineId(itemId, lineId);
+    return "MO" + itemId + lineId + String.format("%d", count + 1);
+  }
+
+  private ManufactureOrderDto convertToDto(ManufactureOrder mo) {
+    ManufactureOrderDto dto = new ManufactureOrderDto();
+    dto.setMoId(mo.getMoId());
+    dto.setMoCode(mo.getMoCode());
+
+    dto.setItemId(mo.getItem().getItemId());
+    dto.setItemCode(mo.getItem().getItemCode());
+    dto.setItemName(mo.getItem().getItemName());
+
+    dto.setLineId(mo.getLine().getLineId());
+    dto.setLineCode(mo.getLine().getLineCode());
+    dto.setLineName(mo.getLine().getLineName());
+
+    dto.setType(mo.getType());
+    dto.setQuantity(mo.getQuantity());
+    dto.setEstimatedStartTime(mo.getEstimatedStartTime());
+    dto.setEstimatedEndTime(mo.getEstimatedEndTime());
+    dto.setCreatedBy(mo.getCreatedBy());
+    dto.setCreatedOn(mo.getCreatedOn());
+    dto.setLastUpdatedOn(mo.getLastUpdatedOn());
+    dto.setStatus(mo.getStatus());
+    return dto;
+  }
 }

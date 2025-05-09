@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,21 +25,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BOM {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bomId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long bomId;
 
-    @OneToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+  @OneToOne
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item;
 
-    @Column(unique = true, nullable = false)
-    private String bomCode;
-    
-    private String description;
-    private String status;
-    
-    @OneToMany(mappedBy = "bom", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<BOMDetail> bomDetails;
+  @Column(unique = true, nullable = false)
+  private String bomCode;
+
+  private String description;
+  private String status;
+
+  @OneToMany(mappedBy = "bom", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<BOMDetail> bomDetails;
 
 }

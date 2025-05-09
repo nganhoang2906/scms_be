@@ -14,6 +14,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,36 +25,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Invoice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long invoiceId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long invoiceId;
 
-    @ManyToOne
-    @JoinColumn(name = "sales_company_id")
-    private Company salesCompany;
+  @ManyToOne
+  @JoinColumn(name = "sales_company_id")
+  private Company salesCompany;
 
-    @ManyToOne
-    @JoinColumn(name = "purchare_company_id")
-    private Company purchaseCompany;
+  @ManyToOne
+  @JoinColumn(name = "purchare_company_id")
+  private Company purchaseCompany;
 
-    @OneToOne
-    @JoinColumn(name = "so_id")
-    private SalesOrder salesOrder;
+  @OneToOne
+  @JoinColumn(name = "so_id")
+  private SalesOrder salesOrder;
 
-    @Column(unique = true, nullable = false)
-    private String invoiceCode;
+  @Column(unique = true, nullable = false)
+  private String invoiceCode;
 
-    private Double subTotal;
-    private Double taxRate;
-    private Double taxAmount;
-    private Double totalAmount;
-    private String paymentMethod;
-    private String createBy;
-    private LocalDateTime createdOn;
+  private Double subTotal;
+  private Double taxRate;
+  private Double taxAmount;
+  private Double totalAmount;
+  private String paymentMethod;
+  private String createBy;
+  private LocalDateTime createdOn;
+  private String status;
 
-    private String status;
-
-    @Lob
-    @Column(name = "file", columnDefinition = "LONGBLOb")
-    private byte[] file;
+  @Lob
+  @Column(name = "file", columnDefinition = "LONGBLOb")
+  private byte[] file;
 }

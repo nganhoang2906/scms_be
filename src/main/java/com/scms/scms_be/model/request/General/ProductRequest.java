@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductRequest {
-    private Long currentCompanyId;
-
-    private Long batchNo;
-    private String qrCode;
+  private Long currentCompanyId;
+  private Long batchNo;
+  private String qrCode;
 }

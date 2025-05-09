@@ -1,14 +1,14 @@
-package com.scms.scms_be.model.request.General;
+package com.scms.scms_be.model.request.Auth;
 
 import java.util.Date;
 
 import lombok.Data;
 
 @Data
-public class CompanyRequest {
-  private String companyCode;
-  private String taxCode;
+public class RegisterCompanyRequest {
+  // Thông tin công ty
   private String companyName;
+  private String taxCode;
   private String address;
   private String country;
   private String companyType;
@@ -18,6 +18,9 @@ public class CompanyRequest {
   private String phoneNumber;
   private String email;
   private String websiteAddress;
-  private String logoUrl;
-  private String status;
+
+  // Thông tin nhân viên
+  private String employeeCode;
+  private String position;
+  private String password;
 }

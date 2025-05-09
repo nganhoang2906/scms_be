@@ -21,38 +21,38 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManufactureOrderController {
 
-    @Autowired
-    private final ManufactureOrderService orderService;
+  @Autowired
+  private final ManufactureOrderService orderService;
 
-    @PostMapping("/user/create-mo")
-    public ResponseEntity<ManufactureOrderDto> createOrder(
-            @RequestBody ManuOrderRequest request) {
-        return ResponseEntity.ok(orderService.createOrder( request));
-    }
+  @PostMapping("/user/create-mo")
+  public ResponseEntity<ManufactureOrderDto> createOrder(
+      @RequestBody ManuOrderRequest request) {
+    return ResponseEntity.ok(orderService.createOrder(request));
+  }
 
-    @GetMapping("/user/get-all-mo-in-item/{itemId}")
-    public ResponseEntity<List<ManufactureOrderDto>> getAllOrders(
-            @PathVariable Long itemId) {
-        return ResponseEntity.ok(orderService.getAllManufactureOrdersbyItemId(itemId));
-    }
+  @GetMapping("/user/get-all-mo-in-item/{itemId}")
+  public ResponseEntity<List<ManufactureOrderDto>> getAllOrders(
+      @PathVariable Long itemId) {
+    return ResponseEntity.ok(orderService.getAllManufactureOrdersbyItemId(itemId));
+  }
 
-    @GetMapping("/user/get-all-mo-in-com/{companyId}")
-    public ResponseEntity<List<ManufactureOrderDto>> getAllOrdersByCompany(
-            @PathVariable Long companyId) {
-        return ResponseEntity.ok(orderService.getAllManufactureOrdersByCompanyId(companyId));
-    }
+  @GetMapping("/user/get-all-mo-in-com/{companyId}")
+  public ResponseEntity<List<ManufactureOrderDto>> getAllOrdersByCompany(
+      @PathVariable Long companyId) {
+    return ResponseEntity.ok(orderService.getAllManufactureOrdersByCompanyId(companyId));
+  }
 
-    @GetMapping("/user/get-mo/{moid}")
-    public ResponseEntity<ManufactureOrderDto> getOrder(
-            @PathVariable Long moid) {
-        return ResponseEntity.ok(orderService.getById(moid));
-    }
+  @GetMapping("/user/get-mo/{moid}")
+  public ResponseEntity<ManufactureOrderDto> getOrder(
+      @PathVariable Long moid) {
+    return ResponseEntity.ok(orderService.getById(moid));
+  }
 
-    @PutMapping("/user/update-mo/{moid}")
-    public ResponseEntity<ManufactureOrderDto> updateOrder(
-            @PathVariable Long moid, 
-            @RequestBody ManuOrderRequest order) {
-        return ResponseEntity.ok(orderService.update(moid, order));
-    }
-    
+  @PutMapping("/user/update-mo/{moid}")
+  public ResponseEntity<ManufactureOrderDto> updateOrder(
+      @PathVariable Long moid,
+      @RequestBody ManuOrderRequest order) {
+    return ResponseEntity.ok(orderService.update(moid, order));
+  }
+
 }

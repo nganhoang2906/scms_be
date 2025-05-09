@@ -25,123 +25,123 @@ import com.scms.scms_be.repository.Purchasing.RequestForQuotationRepository;
 @Service
 public class RequestForQuotationService {
 
-    @Autowired
-    private RequestForQuotationRepository rfqRepo;
+  @Autowired
+  private RequestForQuotationRepository rfqRepo;
 
-    @Autowired
-    private RfqDetailRepository rfqDetailRepo;
+  @Autowired
+  private RfqDetailRepository rfqDetailRepo;
 
-    @Autowired
-    private CompanyRepository companyRepo;
+  @Autowired
+  private CompanyRepository companyRepo;
 
-    @Autowired
-    private ItemRepository itemRepo;
+  @Autowired
+  private ItemRepository itemRepo;
 
-    public RequestForQuotationDto createRFQ(RequestForQuotationRequest request) {
-        Company company = companyRepo.findById(request.getCompanyId())
-                .orElseThrow(() -> new CustomException("Company not found", HttpStatus.NOT_FOUND));
-        Company requestedCompany = companyRepo.findById(request.getRequestedCompanyId())
-                .orElseThrow(() -> new CustomException("Requested company not found", HttpStatus.NOT_FOUND));
+  public RequestForQuotationDto createRFQ(RequestForQuotationRequest request) {
+    Company company = companyRepo.findById(request.getCompanyId())
+        .orElseThrow(() -> new CustomException("Không tìm thấy công ty!", HttpStatus.NOT_FOUND));
+    Company requestedCompany = companyRepo.findById(request.getRequestedCompanyId())
+        .orElseThrow(() -> new CustomException("Không tìm thấy công ty đang yêu cầu báo giá!", HttpStatus.NOT_FOUND));
 
-        RequestForQuotation rfq = new RequestForQuotation();
-        rfq.setCompany(company);
-        rfq.setRequestedCompany(requestedCompany);
-        rfq.setRfqCode(generateRFQCode(company.getCompanyId(), requestedCompany.getCompanyId()));
-        rfq.setNeedByDate(request.getNeedByDate());
-        rfq.setCreatedBy(request.getCreatedBy());
-        rfq.setCreatedOn(LocalDateTime.now());
-        rfq.setLastUpdatedOn(LocalDateTime.now());
-        rfq.setStatus(request.getStatus());
-   
-        RequestForQuotation savedRFQ = rfqRepo.save(rfq);
+    RequestForQuotation rfq = new RequestForQuotation();
+    rfq.setCompany(company);
+    rfq.setRequestedCompany(requestedCompany);
+    rfq.setRfqCode(generateRFQCode(company.getCompanyId(), requestedCompany.getCompanyId()));
+    rfq.setNeedByDate(request.getNeedByDate());
+    rfq.setCreatedBy(request.getCreatedBy());
+    rfq.setCreatedOn(LocalDateTime.now());
+    rfq.setLastUpdatedOn(LocalDateTime.now());
+    rfq.setStatus(request.getStatus());
 
-        if (request.getRfqDetails() == null || request.getRfqDetails().isEmpty()) {
-            throw new CustomException("Danh sách hàng hóa không được để trống", HttpStatus.BAD_REQUEST);
-        }
+    RequestForQuotation savedRFQ = rfqRepo.save(rfq);
 
-        for (RfqDetailRequest d : request.getRfqDetails()) {
-            Item item = itemRepo.findById(d.getItemId())
-                    .orElseThrow(() -> new CustomException("Item not found", HttpStatus.NOT_FOUND));
-            RfqDetail detail = new RfqDetail();
-            detail.setRfq(savedRFQ);
-            detail.setItem(item);
-            detail.setQuantity(d.getQuantity());
-            detail.setNote(d.getNote());
-            rfqDetailRepo.save(detail);
-        }
-
-        return convertToDto(savedRFQ);
+    if (request.getRfqDetails() == null || request.getRfqDetails().isEmpty()) {
+      throw new CustomException("Danh sách hàng hóa không được để trống!", HttpStatus.BAD_REQUEST);
     }
 
-    public List<RequestForQuotationDto> getAllByCompany(Long companyId) {
-        return rfqRepo.findByCompany_CompanyId(companyId)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    for (RfqDetailRequest d : request.getRfqDetails()) {
+      Item item = itemRepo.findById(d.getItemId())
+          .orElseThrow(() -> new CustomException("Không tìm thấy hàng hóa", HttpStatus.NOT_FOUND));
+      RfqDetail detail = new RfqDetail();
+      detail.setRfq(savedRFQ);
+      detail.setItem(item);
+      detail.setQuantity(d.getQuantity());
+      detail.setNote(d.getNote());
+      rfqDetailRepo.save(detail);
     }
 
-    public List<RequestForQuotationDto> getAllByRequestCompany( Long requestedCompanyId) {
-        return rfqRepo.findByRequestedCompany_CompanyId( requestedCompanyId)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+    return convertToDto(savedRFQ);
+  }
 
-    public RequestForQuotationDto getById(Long rfqId) {
-        RequestForQuotation rfq = rfqRepo.findById(rfqId)
-                .orElseThrow(() -> new CustomException("RFQ not found", HttpStatus.NOT_FOUND));
-        return convertToDto(rfq);
-    }
+  public List<RequestForQuotationDto> getAllByCompany(Long companyId) {
+    return rfqRepo.findByCompany_CompanyId(companyId)
+        .stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 
-    public RequestForQuotationDto updateStatus(Long rfqId, String status) {
-        RequestForQuotation rfq = rfqRepo.findById(rfqId)
-                .orElseThrow(() -> new CustomException("RFQ not found", HttpStatus.NOT_FOUND));
-        rfq.setStatus(status);
-        rfq.setLastUpdatedOn(LocalDateTime.now());
-        return convertToDto(rfqRepo.save(rfq));
-    }
+  public List<RequestForQuotationDto> getAllByRequestCompany(Long requestedCompanyId) {
+    return rfqRepo.findByRequestedCompany_CompanyId(requestedCompanyId)
+        .stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 
-    private String generateRFQCode(Long companyId, Long requestedCompanyId) {
-        String prefix = "RFQ" + companyId + requestedCompanyId;
-        String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
-        int count = rfqRepo.countByRfqCodeStartingWith(prefix);
-        return prefix + year + String.format("%04d", count + 1);
-    }
+  public RequestForQuotationDto getById(Long rfqId) {
+    RequestForQuotation rfq = rfqRepo.findById(rfqId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy yêu cầu báo giá!", HttpStatus.NOT_FOUND));
+    return convertToDto(rfq);
+  }
 
-    private RequestForQuotationDto convertToDto(RequestForQuotation rfq) {
-        RequestForQuotationDto dto = new RequestForQuotationDto();
-        dto.setRfqId(rfq.getRfqId());
-        dto.setRfqCode(rfq.getRfqCode());
-        dto.setCompanyId(rfq.getCompany().getCompanyId());
-        dto.setCompanyName(rfq.getCompany().getCompanyName());
-        dto.setRequestedCompanyId(rfq.getRequestedCompany().getCompanyId());
-        dto.setRequestedCompanyName(rfq.getRequestedCompany().getCompanyName());
-        dto.setNeedByDate(rfq.getNeedByDate());
-        dto.setCreatedBy(rfq.getCreatedBy());
-        dto.setCreatedOn(rfq.getCreatedOn());
-        dto.setLastUpdatedOn(rfq.getLastUpdatedOn());
-        dto.setStatus(rfq.getStatus());
+  public RequestForQuotationDto updateStatus(Long rfqId, String status) {
+    RequestForQuotation rfq = rfqRepo.findById(rfqId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy yêu cầu báo giá!", HttpStatus.NOT_FOUND));
+    rfq.setStatus(status);
+    rfq.setLastUpdatedOn(LocalDateTime.now());
+    return convertToDto(rfqRepo.save(rfq));
+  }
 
-        List<RfqDetailDto> rfqDetails = rfqDetailRepo
-                .findByRfq_RfqId(rfq.getRfqId())
-                .stream()
-                .map(this::convertToDetailDto)
-                .collect(Collectors.toList());
-        dto.setRfqDetails(rfqDetails);
-        return dto;
-    }
+  private String generateRFQCode(Long companyId, Long requestedCompanyId) {
+    String prefix = "RFQ" + companyId + requestedCompanyId;
+    String year = String.valueOf(LocalDateTime.now().getYear()).substring(2);
+    int count = rfqRepo.countByRfqCodeStartingWith(prefix);
+    return prefix + year + String.format("%04d", count + 1);
+  }
 
-    public RfqDetailDto convertToDetailDto(RfqDetail rfqDetail) {
-        RfqDetailDto dto = new RfqDetailDto();
-        dto.setRfqDetailId(rfqDetail.getRfqDetailId());
-        dto.setRfqId(rfqDetail.getRfq().getRfqId());
-        dto.setRfqCode(rfqDetail.getRfq().getRfqCode());
-        dto.setItemId(rfqDetail.getItem().getItemId());
-        dto.setItemName(rfqDetail.getItem().getItemName());
-        dto.setItemCode(rfqDetail.getItem().getItemCode());
-        dto.setQuantity(rfqDetail.getQuantity());
-        dto.setNote(rfqDetail.getNote());
-        return dto;
-    }
+  private RequestForQuotationDto convertToDto(RequestForQuotation rfq) {
+    RequestForQuotationDto dto = new RequestForQuotationDto();
+    dto.setRfqId(rfq.getRfqId());
+    dto.setRfqCode(rfq.getRfqCode());
+    dto.setCompanyId(rfq.getCompany().getCompanyId());
+    dto.setCompanyName(rfq.getCompany().getCompanyName());
+    dto.setRequestedCompanyId(rfq.getRequestedCompany().getCompanyId());
+    dto.setRequestedCompanyName(rfq.getRequestedCompany().getCompanyName());
+    dto.setNeedByDate(rfq.getNeedByDate());
+    dto.setCreatedBy(rfq.getCreatedBy());
+    dto.setCreatedOn(rfq.getCreatedOn());
+    dto.setLastUpdatedOn(rfq.getLastUpdatedOn());
+    dto.setStatus(rfq.getStatus());
+
+    List<RfqDetailDto> rfqDetails = rfqDetailRepo
+        .findByRfq_RfqId(rfq.getRfqId())
+        .stream()
+        .map(this::convertToDetailDto)
+        .collect(Collectors.toList());
+    dto.setRfqDetails(rfqDetails);
+    return dto;
+  }
+
+  public RfqDetailDto convertToDetailDto(RfqDetail rfqDetail) {
+    RfqDetailDto dto = new RfqDetailDto();
+    dto.setRfqDetailId(rfqDetail.getRfqDetailId());
+    dto.setRfqId(rfqDetail.getRfq().getRfqId());
+    dto.setRfqCode(rfqDetail.getRfq().getRfqCode());
+    dto.setItemId(rfqDetail.getItem().getItemId());
+    dto.setItemName(rfqDetail.getItem().getItemName());
+    dto.setItemCode(rfqDetail.getItem().getItemCode());
+    dto.setQuantity(rfqDetail.getQuantity());
+    dto.setNote(rfqDetail.getNote());
+    return dto;
+  }
 
 }

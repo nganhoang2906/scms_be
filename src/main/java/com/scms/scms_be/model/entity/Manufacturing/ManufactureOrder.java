@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,29 +24,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManufactureOrder {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long moId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long moId;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+  @ManyToOne
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item;
 
-    @ManyToOne
-    @JoinColumn(name = "line_id", nullable = false)
-    private ManufactureLine line;
+  @ManyToOne
+  @JoinColumn(name = "line_id", nullable = false)
+  private ManufactureLine line;
 
-    @Column(unique = true, nullable = false)
-    private String moCode;
+  @Column(unique = true, nullable = false)
+  private String moCode;
 
-    private String type;
-    private Double quantity;
-
-    private LocalDateTime estimatedStartTime;
-    private LocalDateTime estimatedEndTime;
-
-    private String createdBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
+  private String type;
+  private Double quantity;
+  private LocalDateTime estimatedStartTime;
+  private LocalDateTime estimatedEndTime;
+  private String createdBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 }

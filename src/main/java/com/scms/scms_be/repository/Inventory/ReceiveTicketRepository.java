@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.scms.scms_be.model.entity.Inventory.ReceiveTicket;
 
 public interface ReceiveTicketRepository extends JpaRepository<ReceiveTicket, Long> {
+  
+  List<ReceiveTicket> findByCompany_CompanyId(Long companyId);
 
-    List<ReceiveTicket> findByCompany_CompanyId(Long companyId);
+  int countByTicketCodeStartingWith(String prefix);
 
-    int countByTicketCodeStartingWith(String prefix);
-    
 }

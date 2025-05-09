@@ -7,13 +7,12 @@ import lombok.Data;
 
 @Data
 public class QuotationRequest {
-    private Long companyId;
-    private Long rfqId;
+  private Long companyId;
+  private Long rfqId;
+  private LocalDate availableByDate;
+  private String createdBy;
+  private String status;
 
-    private LocalDate availableByDate;
-    private String createdBy;
-    private String status;
-    
-    private List<QuotationDetailRequest> quotationDetails;
+  private List<QuotationDetailRequest> quotationDetails;
 
 }

@@ -22,46 +22,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManufactureStageController {
 
-    @Autowired 
-    private  ManufactureStageService stageService;
+  @Autowired
+  private ManufactureStageService stageService;
 
-    @PostMapping("/user/create-stage")
-    public ResponseEntity<ManufactureStageDto> createStage(
-            @RequestBody ManuStageRequest stage) {
-        return ResponseEntity.ok(stageService.createStage(stage));
-    }
+  @PostMapping("/user/create-stage")
+  public ResponseEntity<ManufactureStageDto> createStage(
+      @RequestBody ManuStageRequest stage) {
+    return ResponseEntity.ok(stageService.createStage(stage));
+  }
 
-    @GetMapping("/user/get-stage-by-item/{itemId}")
-    public ResponseEntity<ManufactureStageDto> getStagesByItemId(
-            @PathVariable Long itemId) {
-        return ResponseEntity.ok(stageService.getStagesByItemId(itemId));
-    }
+  @GetMapping("/user/get-stage-by-item/{itemId}")
+  public ResponseEntity<ManufactureStageDto> getStagesByItemId(
+      @PathVariable Long itemId) {
+    return ResponseEntity.ok(stageService.getStagesByItemId(itemId));
+  }
 
-    @GetMapping("/user/get-stage-by-id/{stageId}")
-    public ResponseEntity<ManufactureStageDto> getStage(
-            @PathVariable Long stageId) {
-        return ResponseEntity.ok(stageService.getStageById(stageId));
-    }
+  @GetMapping("/user/get-stage-by-id/{stageId}")
+  public ResponseEntity<ManufactureStageDto> getStage(
+      @PathVariable Long stageId) {
+    return ResponseEntity.ok(stageService.getStageById(stageId));
+  }
 
-    @GetMapping("/user/get-all-stage-in-company/{companyId}")
-    public ResponseEntity<List<ManufactureStageDto>> getAllStageInCompany(
-            @PathVariable Long companyId) {
-        return ResponseEntity.ok(stageService.getAllStagesInCompany(companyId));
-    }
+  @GetMapping("/user/get-all-stage-in-com/{companyId}")
+  public ResponseEntity<List<ManufactureStageDto>> getAllStageInCompany(
+      @PathVariable Long companyId) {
+    return ResponseEntity.ok(stageService.getAllStagesInCompany(companyId));
+  }
 
-    @PutMapping("/user/update-stage/{stageId}")
-    public ResponseEntity<ManufactureStageDto> updateStage(
-            @PathVariable Long stageId, 
-            @RequestBody ManuStageRequest stage) {
-        return ResponseEntity.ok(stageService.updateStage(stageId, stage));
-    }
+  @PutMapping("/user/update-stage/{stageId}")
+  public ResponseEntity<ManufactureStageDto> updateStage(
+      @PathVariable Long stageId,
+      @RequestBody ManuStageRequest stage) {
+    return ResponseEntity.ok(stageService.updateStage(stageId, stage));
+  }
 
-    @DeleteMapping("/user/delete-stage/{stageId}")
-    public ResponseEntity<String> deleteStage(
-        @PathVariable Long stageId) {
-        stageService.deleteStage(stageId);
-        return  ResponseEntity.ok("Đã xoá công đoạn sản xuất thành công");
-    }
-
+  @DeleteMapping("/user/delete-stage/{stageId}")
+  public ResponseEntity<String> deleteStage(
+      @PathVariable Long stageId) {
+    stageService.deleteStage(stageId);
+    return ResponseEntity.ok("Đã xoá công đoạn sản xuất thành công");
+  }
 
 }

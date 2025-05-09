@@ -9,7 +9,9 @@ import com.scms.scms_be.model.entity.Manufacturing.BOMDetail;
 
 @Repository
 public interface BOMDetailRepository extends JpaRepository<BOMDetail, Long> {
-    void deleteByBom_BomId(Long bomId);
-    List<BOMDetail> findByBom_BomId(Long bomId);
+
+  void deleteByBom_BomId(Long bomId);
+
+  List<BOMDetail> findByBom_BomId(Long bomId);
 
 }

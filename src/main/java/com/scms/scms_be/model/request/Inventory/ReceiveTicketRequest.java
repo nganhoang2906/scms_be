@@ -6,21 +6,14 @@ import lombok.Data;
 
 @Data
 public class ReceiveTicketRequest {
-
-    private Long companyId;
-
-    private Long warehouseId;
-
-    private LocalDateTime receiveDate;
-
-    private String reason;
-    private String receiveType; // mo/po/ticket
-    private String referenceCode;
-
-    private String createdBy;
-    
-    private String status;
-    private String file;
-
-    private String note;
+  private Long companyId;
+  private Long warehouseId;
+  private LocalDateTime receiveDate;
+  private String reason;
+  private String receiveType; // mo/po/tt
+  private String referenceCode;
+  private String createdBy;
+  private String status;
+  private String file;
+  private String note;
 }

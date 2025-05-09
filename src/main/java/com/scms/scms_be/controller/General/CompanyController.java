@@ -25,39 +25,40 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CompanyController {
 
-    @Autowired
-    private CompanyService companyService;
+  @Autowired
+  private CompanyService companyService;
 
-    @GetMapping("/user/get-company/{id}")
-    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id) {
-        CompanyDto company = companyService.getCompanyById(id);
-        return ResponseEntity.ok(company);
+  @GetMapping("/user/get-company/{id}")
+  public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id) {
+    CompanyDto company = companyService.getCompanyById(id);
+    return ResponseEntity.ok(company);
+  }
+
+  @GetMapping("/user/get-all-companies")
+  public ResponseEntity<List<CompanyDto>> getAllCompanies() {
+    List<CompanyDto> companies = companyService.getAllCompanies();
+    return ResponseEntity.ok(companies);
+  }
+
+  @PutMapping("/comsys/update-company/{companyId}")
+  public ResponseEntity<CompanyDto> updateCompany(
+      @PathVariable Long companyId,
+      @RequestBody CompanyRequest companyDto) {
+    CompanyDto updatedCompany = companyService.updateCompany(companyId, companyDto);
+    return ResponseEntity.ok(updatedCompany);
+  }
+
+  @PutMapping("/comsys/update-company-logo/{id}")
+  public ResponseEntity<String> updateCompanyLogo(
+      @PathVariable Long id,
+      @RequestParam("logo") MultipartFile logoFile) {
+
+    try {
+      String logoUrl = companyService.updateCompanyLogo(id, logoFile);
+      return ResponseEntity.ok(logoUrl);
+    } catch (IOException e) {
+      throw new CustomException("Cập nhật logo thất bại!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @GetMapping("/user/get-all-companies")
-    public ResponseEntity<List<CompanyDto>> getAllCompanies() {
-        List<CompanyDto> companies = companyService.getAllCompanies();
-        return ResponseEntity.ok(companies);
-    }
-
-    @PutMapping("/comsys/update-company/{companyId}")
-    public ResponseEntity<CompanyDto> updateCompany(
-            @PathVariable Long companyId, 
-            @RequestBody CompanyRequest companyDto) {
-        CompanyDto updatedCompany = companyService.updateCompany(companyId, companyDto);
-        return ResponseEntity.ok(updatedCompany);
-    }
-
-    @PutMapping("/comsys/update-company-logo/{id}")
-    public ResponseEntity<String> updateCompanyLogo(
-            @PathVariable Long id,
-            @RequestParam("logo") MultipartFile logoFile) {
-
-        try {
-            String logoUrl = companyService.updateCompanyLogo(id, logoFile);
-            return ResponseEntity.ok(logoUrl);
-        } catch (IOException e) {
-            throw new CustomException("Upload logo thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+  }
+  
 }

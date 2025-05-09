@@ -17,18 +17,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DepartmentController {
 
-    @Autowired
-    private DepartmentService departmentService;
+  @Autowired
+  private DepartmentService departmentService;
 
-    @GetMapping("/user/get-all-department-in-company/{companyId}")
-    public ResponseEntity<List<DepartmentDto>> getAllDepartments(@PathVariable Long companyId) {
-        List<DepartmentDto> departments = departmentService.getAllDepartmentInCompany(companyId);
-        return ResponseEntity.ok(departments);
-    }
+  @GetMapping("/user/get-all-department-in-com/{companyId}")
+  public ResponseEntity<List<DepartmentDto>> getAllDepartments(@PathVariable Long companyId) {
+    List<DepartmentDto> departments = departmentService.getAllDepartmentInCompany(companyId);
+    return ResponseEntity.ok(departments);
+  }
 
-    @GetMapping("/user/get-department/{departmentId}")
-    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable Long departmentId) {
-        DepartmentDto department = departmentService.getDepartmentById(departmentId);
-        return ResponseEntity.ok(department);
-    }
+  @GetMapping("/user/get-department/{departmentId}")
+  public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable Long departmentId) {
+    DepartmentDto department = departmentService.getDepartmentById(departmentId);
+    return ResponseEntity.ok(department);
+  }
+  
 }

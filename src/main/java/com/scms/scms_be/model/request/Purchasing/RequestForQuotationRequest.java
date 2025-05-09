@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 public class RequestForQuotationRequest {
-    private Long companyId;
-    private Long requestedCompanyId;
-    private LocalDateTime needByDate;
-    private String createdBy;
-    private String status;
+  private Long companyId;
+  private Long requestedCompanyId;
+  private LocalDateTime needByDate;
+  private String createdBy;
+  private String status;
 
-    private List<RfqDetailRequest> rfqDetails;
+  private List<RfqDetailRequest> rfqDetails;
 }

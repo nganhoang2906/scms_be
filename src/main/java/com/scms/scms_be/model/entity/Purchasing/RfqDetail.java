@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,18 +20,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RfqDetail {
-     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long RfqDetailId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long RfqDetailId;
 
-    @ManyToOne
-    @JoinColumn(name = "rfq_id", nullable = false)
-    private RequestForQuotation rfq;
+  @ManyToOne
+  @JoinColumn(name = "rfq_id", nullable = false)
+  private RequestForQuotation rfq;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
-    
-    private Double quantity;
-    private String note;
+  @ManyToOne
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item;
+
+  private Double quantity;
+  private String note;
 }

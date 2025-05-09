@@ -8,16 +8,16 @@ import org.springframework.stereotype.Repository;
 import com.scms.scms_be.model.entity.Inventory.TransferTicket;
 
 @Repository
-public interface TransferTicketRepository extends JpaRepository<TransferTicket,Long> {
+public interface TransferTicketRepository extends JpaRepository<TransferTicket, Long> {
 
-    List<TransferTicket> findByCompanyCompanyId(Long companyId);
+  List<TransferTicket> findByCompanyCompanyId(Long companyId);
 
-    List<TransferTicket> findByFromWarehouseWarehouseId(Long warehouseId);
+  List<TransferTicket> findByFromWarehouseWarehouseId(Long warehouseId);
 
-    int countByTicketCodeStartingWith(String prefix);
+  int countByTicketCodeStartingWith(String prefix);
 
-    TransferTicket findByTicketCode(String ticketCode);
+  TransferTicket findByTicketCode(String ticketCode);
 
-    TransferTicket findByTicketId(Long referenceId);
+  TransferTicket findByTicketId(Long referenceId);
 
 }

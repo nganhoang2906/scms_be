@@ -22,19 +22,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long departmentId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long departmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    @Column(unique = true, nullable = false)
-    private String departmentCode;
+  @Column(unique = true, nullable = false)
+  private String departmentCode;
 
-    private String departmentName;
-     
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Employee> employees;
+  private String departmentName;
+
+  @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Employee> employees;
 }

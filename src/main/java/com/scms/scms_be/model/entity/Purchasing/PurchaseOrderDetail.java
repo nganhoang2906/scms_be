@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,20 +20,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseOrderDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long purchaseOrderDetailId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long purchaseOrderDetailId;
 
-    @ManyToOne
-    @JoinColumn(name = "purchase_order_id", nullable = false)
-    private PurchaseOrder po;
+  @ManyToOne
+  @JoinColumn(name = "purchase_order_id", nullable = false)
+  private PurchaseOrder po;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+  @ManyToOne
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item;
 
-    private Double quantity;
-    private Double itemPrice;
-    private String note;
-    
+  private Double quantity;
+  private Double itemPrice;
+  private String note;
+
 }

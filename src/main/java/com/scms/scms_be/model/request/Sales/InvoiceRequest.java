@@ -4,9 +4,7 @@ import lombok.Data;
 
 @Data
 public class InvoiceRequest {
-    private Long soId;
-
-    private String paymentMethod;
-    private String status;
+  private Long soId;
+  private String paymentMethod;
+  private String status;
 }
-

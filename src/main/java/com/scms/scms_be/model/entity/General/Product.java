@@ -17,17 +17,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
-    
-    private Long currentCompanyId;
-    private String serialNumber;
-    private Long batchNo;
-    private String qrCode;
+  @ManyToOne
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item;
+
+  private Long currentCompanyId;
+  private String serialNumber;
+  private Long batchNo;
+  private String qrCode;
 }
-

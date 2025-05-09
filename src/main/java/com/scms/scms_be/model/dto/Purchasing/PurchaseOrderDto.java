@@ -4,20 +4,17 @@ import java.util.List;
 
 import lombok.Data;
 
-
 @Data
 public class PurchaseOrderDto {
-    private Long poId;
-    private String poCode;
+  private Long poId;
+  private String poCode;
+  private Long companyId;
+  private String companyName;
+  private Long suplierCompanyId;
+  private String suplierCompanyName;
+  private String description;
+  private String createdBy;
+  private String status;
 
-    private Long companyId;
-    private String companyName;
-    private Long suplierCompanyId;
-    private String suplierCompanyName;
-
-    private String description;
-    private String createdBy;
-    private String status;
-
-    private List<PurchaseOrderDetailDto> purchaseOrderDetails;
+  private List<PurchaseOrderDetailDto> purchaseOrderDetails;
 }

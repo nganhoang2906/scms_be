@@ -4,10 +4,7 @@ import lombok.Data;
 
 @Data
 public class IssueTicketDetailRequest {
-
-    private Long itemId;
-
-    private Double quantity;
-    
-    private String note;
+  private Long itemId;
+  private Double quantity;
+  private String note;
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,28 +27,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestForQuotation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rfqId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long rfqId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    @Column(nullable = false, unique = true)
-    private String rfqCode;
+  @Column(nullable = false, unique = true)
+  private String rfqCode;
 
-    @ManyToOne
-    @JoinColumn(name = "requested_company_id", nullable=false)
-    private Company requestedCompany;
+  @ManyToOne
+  @JoinColumn(name = "requested_company_id", nullable = false)
+  private Company requestedCompany;
 
-    private LocalDateTime needByDate;
-    private String createdBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
+  private LocalDateTime needByDate;
+  private String createdBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
 
-    private String status;
+  private String status;
 
-    @OneToMany(mappedBy = "rfq", orphanRemoval = true,cascade = CascadeType.ALL)
-    private List<RfqDetail> rfqDetails;
+  @OneToMany(mappedBy = "rfq", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<RfqDetail> rfqDetails;
 }

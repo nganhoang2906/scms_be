@@ -21,30 +21,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManufacturePlantController {
 
-    @Autowired
-    private ManufacturePlantService plantService;
+  @Autowired
+  private ManufacturePlantService plantService;
 
-    @PostMapping("/comad/create-mf-plant/{companyId}")
-    public ResponseEntity<ManufacturePlantDto> createPlant(
-            @PathVariable Long companyId,
-            @RequestBody ManuPlantRequest plant) {
-        return ResponseEntity.ok(plantService.createPlant(companyId, plant));
-    }
+  @PostMapping("/comad/create-mf-plant/{companyId}")
+  public ResponseEntity<ManufacturePlantDto> createPlant(
+      @PathVariable Long companyId,
+      @RequestBody ManuPlantRequest plant) {
+    return ResponseEntity.ok(plantService.createPlant(companyId, plant));
+  }
 
-    @GetMapping("/user/get-all-mf-plant-in-com/{companyId}")
-    public ResponseEntity<List<ManufacturePlantDto>> getAllPlants(@PathVariable Long companyId) {
-        return ResponseEntity.ok(plantService.getAllPlantsInCompany(companyId));
-    }
+  @GetMapping("/user/get-all-mf-plant-in-com/{companyId}")
+  public ResponseEntity<List<ManufacturePlantDto>> getAllPlants(@PathVariable Long companyId) {
+    return ResponseEntity.ok(plantService.getAllPlantsInCompany(companyId));
+  }
 
-    @GetMapping("/user/get-mf-plant/{plantId}")
-    public ResponseEntity<ManufacturePlantDto> getPlantById(@PathVariable Long plantId) {
-        return ResponseEntity.ok(plantService.getPlantById(plantId));
-    }
+  @GetMapping("/user/get-mf-plant/{plantId}")
+  public ResponseEntity<ManufacturePlantDto> getPlantById(@PathVariable Long plantId) {
+    return ResponseEntity.ok(plantService.getPlantById(plantId));
+  }
 
-    @PutMapping("/comad/update-mf-plant/{plantId}")
-    public ResponseEntity<ManufacturePlantDto> updatePlant(
-            @PathVariable Long plantId,
-            @RequestBody ManuPlantRequest plant) {
-        return ResponseEntity.ok(plantService.updatePlant(plantId, plant));
-    }
+  @PutMapping("/comad/update-mf-plant/{plantId}")
+  public ResponseEntity<ManufacturePlantDto> updatePlant(
+      @PathVariable Long plantId,
+      @RequestBody ManuPlantRequest plant) {
+    return ResponseEntity.ok(plantService.updatePlant(plantId, plant));
+  }
+  
 }

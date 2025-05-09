@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class DeliveryProcessRequest {
-    private Long deliveryProcessId;
-    private Long doId;
-    private String location;
-    private LocalDateTime arrivalTime;
-    private String note;
+  private Long deliveryProcessId;
+  private Long doId;
+  private String location;
+  private LocalDateTime arrivalTime;
+  private String note;
 }

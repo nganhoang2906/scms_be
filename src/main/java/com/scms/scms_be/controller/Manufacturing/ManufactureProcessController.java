@@ -21,31 +21,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManufactureProcessController {
 
-    @Autowired
-    private final ManufactureProcessService processService;
-    
-    @PostMapping("/user/create-process")
-    public ResponseEntity<ManufactureProcessDto> createProcess(
-        @RequestBody ManuProcessRequest process) {
-        return ResponseEntity.ok(processService.createManuProcess( process));
-    }
+  @Autowired
+  private final ManufactureProcessService processService;
 
-    @GetMapping("/user/get-all-process-in-mo/{moId}")
-    public ResponseEntity<List<ManufactureProcessDto>> getAllProcesses(
-        @PathVariable Long moId) {
-        return ResponseEntity.ok(processService.getAllByMoId(moId));
-    }
+  @PostMapping("/user/create-process")
+  public ResponseEntity<ManufactureProcessDto> createProcess(
+      @RequestBody ManuProcessRequest process) {
+    return ResponseEntity.ok(processService.createManuProcess(process));
+  }
 
-    @GetMapping("/user/get-process/{processId}")
-    public ResponseEntity<ManufactureProcessDto> getProcess(
-        @PathVariable Long processId) {
-        return ResponseEntity.ok(processService.getById(processId));
-    }
+  @GetMapping("/user/get-all-process-in-mo/{moId}")
+  public ResponseEntity<List<ManufactureProcessDto>> getAllProcesses(
+      @PathVariable Long moId) {
+    return ResponseEntity.ok(processService.getAllByMoId(moId));
+  }
 
-    @PutMapping("/user/update-process/{processId}")
-    public ResponseEntity<ManufactureProcessDto> updateProcess(
-        @PathVariable Long processId, 
-        @RequestBody ManuProcessRequest process) {
-        return ResponseEntity.ok(processService.update(processId, process));
-    }
+  @GetMapping("/user/get-process/{processId}")
+  public ResponseEntity<ManufactureProcessDto> getProcess(
+      @PathVariable Long processId) {
+    return ResponseEntity.ok(processService.getById(processId));
+  }
+
+  @PutMapping("/user/update-process/{processId}")
+  public ResponseEntity<ManufactureProcessDto> updateProcess(
+      @PathVariable Long processId,
+      @RequestBody ManuProcessRequest process) {
+    return ResponseEntity.ok(processService.update(processId, process));
+  }
 }

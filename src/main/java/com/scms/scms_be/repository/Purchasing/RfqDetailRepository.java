@@ -8,6 +8,6 @@ import com.scms.scms_be.model.entity.Purchasing.RfqDetail;
 
 public interface RfqDetailRepository extends JpaRepository<RfqDetail, Long> {
 
-    List<RfqDetail> findByRfq_RfqId(Long rfqId);
+  List<RfqDetail> findByRfq_RfqId(Long rfqId);
 
 }

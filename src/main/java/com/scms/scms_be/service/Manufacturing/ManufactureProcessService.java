@@ -18,65 +18,64 @@ import com.scms.scms_be.repository.Manufacturing.ManufactureStageDetailRepositor
 @Service
 public class ManufactureProcessService {
 
-    @Autowired 
-    private ManufactureProcessRepository processRepo;
-    @Autowired 
-    private ManufactureOrderRepository orderRepo;
-    @Autowired 
-    private ManufactureStageDetailRepository stageDetailRepo;
+  @Autowired
+  private ManufactureProcessRepository processRepo;
+  @Autowired
+  private ManufactureOrderRepository orderRepo;
+  @Autowired
+  private ManufactureStageDetailRepository stageDetailRepo;
 
-    public ManufactureProcessDto createManuProcess( ManuProcessRequest processRequest) {
-        ManufactureProcess process = new ManufactureProcess();
-        process.setStartedOn(processRequest.getStartedOn());
-        process.setFinishedOn(processRequest.getFinishedOn());
-        process.setStatus("Chưa thực hiện");
-        
+  public ManufactureProcessDto createManuProcess(ManuProcessRequest processRequest) {
+    ManufactureProcess process = new ManufactureProcess();
+    process.setStartedOn(processRequest.getStartedOn());
+    process.setFinishedOn(processRequest.getFinishedOn());
+    process.setStatus("Chưa thực hiện");
 
-        process.setOrder(orderRepo.findById(processRequest.getMoId())
-            .orElseThrow(() -> new CustomException("MO không tồn tại", HttpStatus.NOT_FOUND)));
-        process.setStageDetail(stageDetailRepo.findById(processRequest.getStageDetailId())
-            .orElseThrow(() -> new CustomException("Stage không tồn tại", HttpStatus.NOT_FOUND)));
-        
-            return convertToDto(processRepo.save(process));
-    }
+    process.setOrder(orderRepo.findById(processRequest.getMoId())
+        .orElseThrow(() -> new CustomException("Không tìm thấy công lệnh sản xuất!", HttpStatus.NOT_FOUND)));
+    process.setStageDetail(stageDetailRepo.findById(processRequest.getStageDetailId())
+        .orElseThrow(() -> new CustomException("Chưa thiết lập công đoạn sản xuất cho hàng hóa này!", HttpStatus.NOT_FOUND)));
 
-    public List<ManufactureProcessDto> getAllByMoId(Long moId) {
-        List<ManufactureProcess> processes = processRepo.findByOrder_MoId(moId);
-        return processes.stream()
-            .map(this::convertToDto)
-            .collect(Collectors.toList());
-    }
+    return convertToDto(processRepo.save(process));
+  }
 
-    public ManufactureProcessDto getById(Long id) {
-        ManufactureProcess process = processRepo.findById(id)
-            .orElseThrow(() -> new CustomException("Process không tồn tại", HttpStatus.NOT_FOUND));
-        return convertToDto(process);
-    }
+  public List<ManufactureProcessDto> getAllByMoId(Long moId) {
+    List<ManufactureProcess> processes = processRepo.findByOrder_MoId(moId);
+    return processes.stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 
-    public ManufactureProcessDto update(Long id, ManuProcessRequest processUpdate) {
-        ManufactureProcess process = processRepo.findById(id)
-            .orElseThrow(() -> new CustomException("Process không tồn tại", HttpStatus.NOT_FOUND));
-        process.setStartedOn(processUpdate.getStartedOn());
-        process.setFinishedOn(processUpdate.getFinishedOn());
-        process.setStatus(processUpdate.getStatus());
-        return convertToDto(processRepo.save(process));
-    }
+  public ManufactureProcessDto getById(Long id) {
+    ManufactureProcess process = processRepo.findById(id)
+        .orElseThrow(() -> new CustomException("Không tìm thấy quá trình sản xuất!", HttpStatus.NOT_FOUND));
+    return convertToDto(process);
+  }
 
-    private ManufactureProcessDto convertToDto(ManufactureProcess process) {
-        ManufactureProcessDto dto = new ManufactureProcessDto();
-        dto.setId(process.getId());
+  public ManufactureProcessDto update(Long id, ManuProcessRequest processUpdate) {
+    ManufactureProcess process = processRepo.findById(id)
+        .orElseThrow(() -> new CustomException("Không tìm thấy quá trình sản xuất!", HttpStatus.NOT_FOUND));
+    process.setStartedOn(processUpdate.getStartedOn());
+    process.setFinishedOn(processUpdate.getFinishedOn());
+    process.setStatus(processUpdate.getStatus());
+    return convertToDto(processRepo.save(process));
+  }
 
-        dto.setMoId(process.getOrder().getMoId());
-        dto.setMoCode(process.getOrder().getMoCode());
+  private ManufactureProcessDto convertToDto(ManufactureProcess process) {
+    ManufactureProcessDto dto = new ManufactureProcessDto();
+    dto.setId(process.getId());
 
-        dto.setStageDetailId(process.getStageDetail().getStageDetailId());
-        dto.setStageDetailName(process.getStageDetail().getStageName());
-        dto.setStageDetailOrder(process.getStageDetail().getStageOrder());
+    dto.setMoId(process.getOrder().getMoId());
+    dto.setMoCode(process.getOrder().getMoCode());
 
-        dto.setStartedOn(process.getStartedOn());
+    dto.setStageDetailId(process.getStageDetail().getStageDetailId());
+    dto.setStageDetailName(process.getStageDetail().getStageName());
+    dto.setStageDetailOrder(process.getStageDetail().getStageOrder());
 
-        dto.setFinishedOn(process.getFinishedOn());
-        dto.setStatus(process.getStatus());
-        return dto;
-    }
+    dto.setStartedOn(process.getStartedOn());
+
+    dto.setFinishedOn(process.getFinishedOn());
+    dto.setStatus(process.getStatus());
+    return dto;
+  }
 }

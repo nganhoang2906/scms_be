@@ -23,37 +23,37 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long companyId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long companyId;
 
-    @Column(unique = true, nullable = false)
-    private String companyCode;
+  @Column(unique = true, nullable = false)
+  private String companyCode;
 
-    @Column(unique = true, nullable = false)
-    private String taxCode;
+  @Column(unique = true, nullable = false)
+  private String taxCode;
 
-    private String companyName;
-    private String address;
-    private String country;
-    private String companyType;
-    private String mainIndustry;
-    private String representativeName;
+  private String companyName;
+  private String address;
+  private String country;
+  private String companyType;
+  private String mainIndustry;
+  private String representativeName;
 
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+  @Temporal(TemporalType.DATE)
+  private Date startDate;
 
-    @Temporal(TemporalType.DATE)
-    private Date joinDate;
+  @Temporal(TemporalType.DATE)
+  private Date joinDate;
 
-    private String phoneNumber;
-    private String email;
-    private String websiteAddress;
+  private String phoneNumber;
+  private String email;
+  private String websiteAddress;
 
-    private String logo;
+  private String logo;
 
-    private String status;
-    
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Department> departments;
+  private String status;
+
+  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Department> departments;
 }

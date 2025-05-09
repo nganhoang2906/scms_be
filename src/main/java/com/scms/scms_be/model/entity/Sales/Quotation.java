@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,28 +28,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Quotation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long quotationId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long quotationId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id")
+  private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "rfq_id")
-    private RequestForQuotation rfq;
+  @ManyToOne
+  @JoinColumn(name = "rfq_id")
+  private RequestForQuotation rfq;
 
-    @Column(unique = true, nullable = false)
-    private String quotationCode;
+  @Column(unique = true, nullable = false)
+  private String quotationCode;
 
-    private Double totalPrice;
-    private LocalDate availableByDate;
-    private String createdBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
+  private Double totalPrice;
+  private LocalDate availableByDate;
+  private String createdBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 
- @OneToMany(mappedBy = "quotation", orphanRemoval = true , cascade = CascadeType.ALL)
-    private List<QuotationDetail> quotationDetails;
+  @OneToMany(mappedBy = "quotation", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<QuotationDetail> quotationDetails;
 }

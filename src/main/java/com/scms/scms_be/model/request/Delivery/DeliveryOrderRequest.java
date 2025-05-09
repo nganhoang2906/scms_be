@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class DeliveryOrderRequest {
+  private Long soId;
+  private String status;
 
-    private Long soId;
-    private String status;
-    
-} 
+}

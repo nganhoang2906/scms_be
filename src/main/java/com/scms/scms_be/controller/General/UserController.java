@@ -22,40 +22,40 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @GetMapping("/sysad/get-all-users")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
+  @GetMapping("/sysad/get-all-users")
+  public ResponseEntity<List<UserDto>> getAllUsers() {
+    return ResponseEntity.ok(userService.getAllUsers());
+  }
 
-    @GetMapping("/comsys/get-all-users-in-com/{companyId}")
-    public ResponseEntity<List<UserDto>> getAllUsersInCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(userService.getAllUsersByCompanyId(companyId));
-    }
+  @GetMapping("/comsys/get-all-users-in-com/{companyId}")
+  public ResponseEntity<List<UserDto>> getAllUsersInCompany(@PathVariable Long companyId) {
+    return ResponseEntity.ok(userService.getAllUsersByCompanyId(companyId));
+  }
 
-    @GetMapping("/user/get-user-by-employeeId/{employeeId}")
-    public ResponseEntity<UserDto> getUserByEmployeeId(@PathVariable Long employeeId) {
-        return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
-    }
+  @GetMapping("/user/get-user-by-employeeId/{employeeId}")
+  public ResponseEntity<UserDto> getUserByEmployeeId(@PathVariable Long employeeId) {
+    return ResponseEntity.ok(userService.getUserByEmployeeId(employeeId));
+  }
 
-    @GetMapping("/user/get-user-by-userId/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserById(userId));
-    }
+  @GetMapping("/user/get-user-by-userId/{userId}")
+  public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+    return ResponseEntity.ok(userService.getUserById(userId));
+  }
 
-    @PutMapping("/all/update-user/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UpdateInfoRequest newUser) {
-        return ResponseEntity.ok(userService.updateUser(userId, newUser));
-    }
+  @PutMapping("/all/update-user/{userId}")
+  public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UpdateInfoRequest newUser) {
+    return ResponseEntity.ok(userService.updateUser(userId, newUser));
+  }
 
-    @PostMapping("/users/update-password/{userId}")
-    public ResponseEntity<String> updatePassword(
-            @PathVariable Long userId,
-            @RequestBody UpdatePasswordRequest request) {
-        userService.updatePassword(userId, request);
-        return ResponseEntity.ok("Cập nhật mật khẩu thành công");
-    }
+  @PostMapping("/users/update-password/{userId}")
+  public ResponseEntity<String> updatePassword(
+      @PathVariable Long userId,
+      @RequestBody UpdatePasswordRequest request) {
+    userService.updatePassword(userId, request);
+    return ResponseEntity.ok("Cập nhật mật khẩu thành công");
+  }
 
 }

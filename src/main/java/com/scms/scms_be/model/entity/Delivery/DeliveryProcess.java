@@ -18,15 +18,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeliveryProcess {
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Long deliveryProcessId;
+  @Id
+  @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+  private Long deliveryProcessId;
 
-    @ManyToOne
-    @JoinColumn(name = "do_id", nullable = false)
-    private DeliveryOrder deliveryOrder;
+  @ManyToOne
+  @JoinColumn(name = "do_id", nullable = false)
+  private DeliveryOrder deliveryOrder;
 
-    private String location;
-    private LocalDateTime arrivalTime;
-    private String note;
+  private String location;
+  private LocalDateTime arrivalTime;
+  private String note;
 }

@@ -23,52 +23,52 @@ import com.scms.scms_be.service.General.UserDetailService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UserDetailService ourUserDetailService;
+  @Autowired
+  private UserDetailService ourUserDetailService;
 
-    @Autowired
-    private JWTAuthFilter jwtAuthFilter;
+  @Autowired
+  private JWTAuthFilter jwtAuthFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                                    ).permitAll()
-                        .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
-                        .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
-                        .requestMatchers("/comsys/**").hasAnyAuthority("C-ADMIN","S-ADMIN")
-                        .requestMatchers("/user/**").hasAnyAuthority("USER","C-ADMIN")
-                        .requestMatchers("/all/**").hasAnyAuthority("USER","C-ADMIN","S-ADMIN")
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()   )
-                .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
-                );
-        return httpSecurity.build();
-    }
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(ourUserDetailService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(request -> request
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html")
+            .permitAll()
+            .requestMatchers("/sysad/**").hasAnyAuthority("S-ADMIN")
+            .requestMatchers("/comad/**").hasAnyAuthority("C-ADMIN")
+            .requestMatchers("/comsys/**").hasAnyAuthority("C-ADMIN", "S-ADMIN")
+            .requestMatchers("/user/**").hasAnyAuthority("USER", "C-ADMIN")
+            .requestMatchers("/all/**").hasAnyAuthority("USER", "C-ADMIN", "S-ADMIN")
+            .requestMatchers("/auth/**").permitAll()
+            .anyRequest().authenticated())
+        .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authenticationProvider(authenticationProvider()).addFilterBefore(
+            jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    return httpSecurity.build();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setUserDetailsService(ourUserDetailService);
+    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+    return daoAuthenticationProvider;
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+      throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
+  
 }

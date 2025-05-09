@@ -24,32 +24,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long employeeId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long employeeId;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
+  @ManyToOne
+  @JoinColumn(name = "department_id", nullable = false)
+  private Department department;
 
-    @Column(unique = true, nullable = false)
-    private String employeeCode;
+  @Column(unique = true, nullable = false)
+  private String employeeCode;
 
-    private String employeeName;
-    private String position;
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
-    private String gender;
-    
-    private String address;
-    private String email;
-    private String phoneNumber;
+  private String employeeName;
+  private String position;
+  
+  @Temporal(TemporalType.DATE)
+  private Date dateOfBirth;
+  
+  private String gender;
+  private String address;
+  private String email;
+  private String phoneNumber;
+  private String avatar;
+  private String status;
 
-    private String avatar;
+  @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+  private User user;
 
-    private String status;
-    
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private User user;
-    
 }

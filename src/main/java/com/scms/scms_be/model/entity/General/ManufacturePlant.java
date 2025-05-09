@@ -18,19 +18,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManufacturePlant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long plantId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long plantId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    @Column(unique = true, nullable = false)
-    private String plantCode;
+  @Column(unique = true, nullable = false)
+  private String plantCode;
 
-    @Column(nullable = false)
-    private String plantName;
+  @Column(nullable = false)
+  private String plantName;
 
-    private String description;
+  private String description;
 }

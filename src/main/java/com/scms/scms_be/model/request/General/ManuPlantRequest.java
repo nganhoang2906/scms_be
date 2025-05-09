@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ManuPlantRequest {
-    private String plantCode;
-    private String plantName;
-    private String description;
+  private String plantCode;
+  private String plantName;
+  private String description;
 }

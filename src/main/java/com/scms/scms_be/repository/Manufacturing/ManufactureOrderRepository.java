@@ -10,16 +10,14 @@ import com.scms.scms_be.model.entity.Manufacturing.ManufactureOrder;
 @Repository
 public interface ManufactureOrderRepository extends JpaRepository<ManufactureOrder, Long> {
 
+  List<ManufactureOrder> findByItem_ItemId(Long itemId);
 
-    List<ManufactureOrder> findByItem_ItemId(Long itemId);
+  List<ManufactureOrder> findByItem_Company_CompanyId(Long companyId);
 
-    List<ManufactureOrder> findByItem_Company_CompanyId(Long companyId);
+  ManufactureOrder findByMoCode(String moCode);
 
-    ManufactureOrder findByMoCode(String moCode);
+  int countByItemItemIdAndLineLineId(Long itemId, Long lineId);
 
-    int countByItemItemIdAndLineLineId(Long itemId, Long lineId);
-
-    ManufactureOrder findByMoId(Long referenceId);
-
+  ManufactureOrder findByMoId(Long referenceId);
 
 }

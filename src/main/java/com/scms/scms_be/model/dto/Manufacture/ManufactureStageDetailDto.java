@@ -4,13 +4,10 @@ import lombok.Data;
 
 @Data
 public class ManufactureStageDetailDto {
-    private Long stageDetailId;
-
-    private Long stageId;
-    private String stageName;
-    private Integer stageOrder;
-    
-    private Long estimatedTime; 
-
-    private String description;
+  private Long stageDetailId;
+  private Long stageId;
+  private String stageName;
+  private Integer stageOrder;
+  private Long estimatedTime;
+  private String description;
 }

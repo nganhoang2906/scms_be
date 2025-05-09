@@ -7,6 +7,9 @@ import java.util.List;
 
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
-    List<Warehouse> findByCompanyCompanyId(Long companyId);
-    boolean existsByWarehouseCode(String warehouseCode);
+  
+  List<Warehouse> findByCompanyCompanyId(Long companyId);
+
+  boolean existsByWarehouseCode(String warehouseCode);
+  
 }

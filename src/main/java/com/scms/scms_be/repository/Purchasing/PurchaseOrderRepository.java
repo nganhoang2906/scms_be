@@ -8,16 +8,18 @@ import org.springframework.stereotype.Repository;
 import com.scms.scms_be.model.entity.Purchasing.PurchaseOrder;
 
 @Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder,Long> {
+public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
 
-    PurchaseOrder findByPoCode(String poCode);
+  PurchaseOrder findByPoCode(String poCode);
 
-    int countByPoCodeStartingWith(String prefix);
+  int countByPoCodeStartingWith(String prefix);
 
-    List<PurchaseOrder> findByCompany_CompanyId(Long companyId);
-    List<PurchaseOrder> findBySuplierCompany_CompanyId(Long supplierCompanyId);
+  List<PurchaseOrder> findByCompany_CompanyId(Long companyId);
 
-    List<PurchaseOrder> findByCompany_CompanyIdAndSuplierCompany_CompanyId(Long companyId, Long supplierCompanyId);
+  List<PurchaseOrder> findBySuplierCompany_CompanyId(Long supplierCompanyId);
 
-    PurchaseOrder findByPoId(Long referenceId);
+  List<PurchaseOrder> findByCompany_CompanyIdAndSuplierCompany_CompanyId(Long companyId, Long supplierCompanyId);
+
+  PurchaseOrder findByPoId(Long referenceId);
+  
 }

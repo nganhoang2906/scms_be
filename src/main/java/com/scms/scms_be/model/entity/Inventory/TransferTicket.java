@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,33 +26,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferTicket {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticketId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long ticketId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    private String ticketCode;
+  private String ticketCode;
 
-    @ManyToOne
-    @JoinColumn(name = "from_warehouse_id", nullable = false)
-    private Warehouse fromWarehouse;
+  @ManyToOne
+  @JoinColumn(name = "from_warehouse_id", nullable = false)
+  private Warehouse fromWarehouse;
 
-    @ManyToOne
-    @JoinColumn(name = "to_warehouse_id",nullable = false)
-    private Warehouse toWarehouse;
+  @ManyToOne
+  @JoinColumn(name = "to_warehouse_id", nullable = false)
+  private Warehouse toWarehouse;
 
-    private String reason;
-    private String createdBy;
+  private String reason;
+  private String createdBy;
 
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    
-    private String status;
-    private String file;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
 
-    @OneToMany(mappedBy = "ticket", orphanRemoval = true , cascade = CascadeType.ALL)
-    private List<TransferTicketDetail> transferTicketDetails;
+  private String status;
+  private String file;
+
+  @OneToMany(mappedBy = "ticket", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<TransferTicketDetail> transferTicketDetails;
 }

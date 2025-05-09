@@ -19,78 +19,78 @@ import com.scms.scms_be.repository.General.WarehouseRepository;
 @Service
 public class WarehouseService {
 
-    @Autowired
-    private WarehouseRepository warehouseRepo;
+  @Autowired
+  private WarehouseRepository warehouseRepo;
 
-    @Autowired
-    private CompanyRepository companyRepo;
+  @Autowired
+  private CompanyRepository companyRepo;
 
-    public WarehouseDto createWarehouse(Long companyId, WarehouseRequest newWarehouse) {
-        Company company = companyRepo.findById(companyId)
-                .orElseThrow(() -> new CustomException("Công ty không tồn tại!", HttpStatus.NOT_FOUND));
+  public WarehouseDto createWarehouse(Long companyId, WarehouseRequest newWarehouse) {
+    Company company = companyRepo.findById(companyId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy công ty!", HttpStatus.NOT_FOUND));
 
-        if (warehouseRepo.existsByWarehouseCode(newWarehouse.getWarehouseCode())) {
-            throw new CustomException("Mã kho đã tồn tại!", HttpStatus.BAD_REQUEST);
-        }
-        Warehouse warehouse = new Warehouse();
-        warehouse.setCompany(company);
-        warehouse.setWarehouseCode(newWarehouse.getWarehouseCode());
-        warehouse.setWarehouseName(newWarehouse.getWarehouseName());
-        warehouse.setDescription(newWarehouse.getDescription());
-        warehouse.setMaxCapacity(newWarehouse.getMaxCapacity());
-        warehouse.setWarehouseType(newWarehouse.getWarehouseType());
-        warehouse.setStatus(newWarehouse.getStatus());
-        return convertToDto(warehouseRepo.save(warehouse));
+    if (warehouseRepo.existsByWarehouseCode(newWarehouse.getWarehouseCode())) {
+      throw new CustomException("Mã kho đã được sử dụng!", HttpStatus.BAD_REQUEST);
+    }
+    Warehouse warehouse = new Warehouse();
+    warehouse.setCompany(company);
+    warehouse.setWarehouseCode(newWarehouse.getWarehouseCode());
+    warehouse.setWarehouseName(newWarehouse.getWarehouseName());
+    warehouse.setDescription(newWarehouse.getDescription());
+    warehouse.setMaxCapacity(newWarehouse.getMaxCapacity());
+    warehouse.setWarehouseType(newWarehouse.getWarehouseType());
+    warehouse.setStatus(newWarehouse.getStatus());
+    return convertToDto(warehouseRepo.save(warehouse));
+  }
+
+  public List<WarehouseDto> getAllWarehousesInCompany(Long companyId) {
+    List<Warehouse> warehouses = warehouseRepo.findByCompanyCompanyId(companyId);
+    return warehouses.stream().map(this::convertToDto).collect(Collectors.toList());
+  }
+
+  public WarehouseDto getWarehouseById(Long warehouseId) {
+    Warehouse warehouse = warehouseRepo.findById(warehouseId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy kho!", HttpStatus.NOT_FOUND));
+    return convertToDto(warehouse);
+  }
+
+  public WarehouseDto updateWarehouse(Long warehouseId, WarehouseRequest warehouse) {
+    Warehouse existingWarehouse = warehouseRepo.findById(warehouseId)
+        .orElseThrow(() -> new CustomException("Không tìm thấy kho!", HttpStatus.NOT_FOUND));
+
+    if (!existingWarehouse.getWarehouseCode().equals(warehouse.getWarehouseCode())
+        && warehouseRepo.existsByWarehouseCode(warehouse.getWarehouseCode())) {
+      throw new CustomException("Mã kho đã được sử dụng!", HttpStatus.BAD_REQUEST);
     }
 
-    public List<WarehouseDto> getAllWarehousesInCompany(Long companyId) {
-        List<Warehouse> warehouses = warehouseRepo.findByCompanyCompanyId(companyId);
-        return warehouses.stream().map(this::convertToDto).collect(Collectors.toList());
+    existingWarehouse.setWarehouseName(warehouse.getWarehouseName());
+    existingWarehouse.setDescription(warehouse.getDescription());
+    existingWarehouse.setMaxCapacity(warehouse.getMaxCapacity());
+    existingWarehouse.setWarehouseType(warehouse.getWarehouseType());
+    existingWarehouse.setStatus(warehouse.getStatus());
+
+    return convertToDto(warehouseRepo.save(existingWarehouse));
+  }
+
+  public boolean deleteWarehouse(Long warehouseId) {
+    Optional<Warehouse> warehouse = warehouseRepo.findById(warehouseId);
+    if (warehouse.isPresent()) {
+      warehouseRepo.delete(warehouse.get());
+      return true;
     }
+    return false;
+  }
 
-    public WarehouseDto getWarehouseById(Long warehouseId) {
-        Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new CustomException("Kho không tồn tại!", HttpStatus.NOT_FOUND));
-        return convertToDto(warehouse);
-    }
-
-    public WarehouseDto updateWarehouse(Long warehouseId, WarehouseRequest warehouse) {
-        Warehouse existingWarehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new CustomException("Kho không tồn tại!", HttpStatus.NOT_FOUND));
-
-        if (!existingWarehouse.getWarehouseCode().equals(warehouse.getWarehouseCode())
-                && warehouseRepo.existsByWarehouseCode(warehouse.getWarehouseCode())) {
-            throw new CustomException("Mã kho đã tồn tại!", HttpStatus.BAD_REQUEST);
-        }
-
-        existingWarehouse.setWarehouseName(warehouse.getWarehouseName());
-        existingWarehouse.setDescription(warehouse.getDescription());
-        existingWarehouse.setMaxCapacity(warehouse.getMaxCapacity());
-        existingWarehouse.setWarehouseType(warehouse.getWarehouseType());
-        existingWarehouse.setStatus(warehouse.getStatus());
-
-        return convertToDto(warehouseRepo.save(existingWarehouse));
-    }
-
-    public boolean deleteWarehouse(Long warehouseId) {
-        Optional<Warehouse> warehouse = warehouseRepo.findById(warehouseId);
-        if (warehouse.isPresent()) {
-            warehouseRepo.delete(warehouse.get());
-            return true;
-        }
-        return false;
-    }
-
-    private WarehouseDto convertToDto(Warehouse warehouse) {
-        WarehouseDto dto = new WarehouseDto();
-        dto.setWarehouseId(warehouse.getWarehouseId());
-        dto.setCompanyId(warehouse.getCompany().getCompanyId());
-        dto.setWarehouseCode(warehouse.getWarehouseCode());
-        dto.setWarehouseName(warehouse.getWarehouseName());
-        dto.setDescription(warehouse.getDescription());
-        dto.setMaxCapacity(warehouse.getMaxCapacity());
-        dto.setWarehouseType(warehouse.getWarehouseType());
-        dto.setStatus(warehouse.getStatus());
-        return dto;
-    }
+  private WarehouseDto convertToDto(Warehouse warehouse) {
+    WarehouseDto dto = new WarehouseDto();
+    dto.setWarehouseId(warehouse.getWarehouseId());
+    dto.setCompanyId(warehouse.getCompany().getCompanyId());
+    dto.setWarehouseCode(warehouse.getWarehouseCode());
+    dto.setWarehouseName(warehouse.getWarehouseName());
+    dto.setDescription(warehouse.getDescription());
+    dto.setMaxCapacity(warehouse.getMaxCapacity());
+    dto.setWarehouseType(warehouse.getWarehouseType());
+    dto.setStatus(warehouse.getStatus());
+    return dto;
+  }
 }

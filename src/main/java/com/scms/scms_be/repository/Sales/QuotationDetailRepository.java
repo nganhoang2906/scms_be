@@ -8,6 +8,6 @@ import com.scms.scms_be.model.entity.Sales.QuotationDetail;
 
 public interface QuotationDetailRepository extends JpaRepository<QuotationDetail, Long> {
 
-    List<QuotationDetail> findByQuotation_QuotationId(Long quotationId);
+  List<QuotationDetail> findByQuotation_QuotationId(Long quotationId);
 
 }

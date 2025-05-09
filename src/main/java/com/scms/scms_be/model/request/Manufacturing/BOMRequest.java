@@ -6,9 +6,9 @@ import java.util.List;
 
 @Data
 public class BOMRequest {
-    private Long itemId;
-    private String description;
-    private String status;
+  private Long itemId;
+  private String description;
+  private String status;
 
-    private List<BOMDetailRequest> bomDetails;
+  private List<BOMDetailRequest> bomDetails;
 }

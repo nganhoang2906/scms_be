@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.scms.scms_be.model.entity.Sales.SalesOrder;
 
 public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
-    SalesOrder findBySoCode(String soCode);
+  
+  SalesOrder findBySoCode(String soCode);
 
-    List<SalesOrder> findByCompany_CompanyId(Long companyId);
-    int countBySoCodeStartingWith(String prefix);
+  List<SalesOrder> findByCompany_CompanyId(Long companyId);
 
-    List<SalesOrder> findByPurchaseOrder_PoId(Long poId);
+  int countBySoCodeStartingWith(String prefix);
 
-    SalesOrder findBySoId(Long referenceId);
+  List<SalesOrder> findByPurchaseOrder_PoId(Long poId);
+
+  SalesOrder findBySoId(Long referenceId);
+  
 }

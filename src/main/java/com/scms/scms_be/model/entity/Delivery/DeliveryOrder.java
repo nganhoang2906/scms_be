@@ -22,19 +22,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryOrder {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long doId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long doId;
 
-    @Column(unique = true, nullable = false)
-    private String doCode;
+  @Column(unique = true, nullable = false)
+  private String doCode;
 
-    @OneToOne
-    @JoinColumn(name = "so_id",nullable = false)
-    private SalesOrder salesOrder;
-    
-    private String createBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
+  @OneToOne
+  @JoinColumn(name = "so_id", nullable = false)
+  private SalesOrder salesOrder;
+
+  private String createBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 }

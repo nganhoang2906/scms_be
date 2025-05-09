@@ -6,13 +6,12 @@ import lombok.Data;
 
 @Data
 public class DeliveryOrderDto {
-    private Long doId;
-    private String doCode;
-    private Long soId;
-    private String soCode;
-    
-    private String createBy;
-    private LocalDateTime createdOn;
-    private LocalDateTime lastUpdatedOn;
-    private String status;
+  private Long doId;
+  private String doCode;
+  private Long soId;
+  private String soCode;
+  private String createBy;
+  private LocalDateTime createdOn;
+  private LocalDateTime lastUpdatedOn;
+  private String status;
 }

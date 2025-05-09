@@ -18,22 +18,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itemId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long itemId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", nullable = false)
+  private Company company;
 
-    @Column(unique = true, nullable = false)
-    private String itemCode;
+  @Column(unique = true, nullable = false)
+  private String itemCode;
 
-    private String itemName;
-    private String itemType;
-    private String uom;
-    private String technicalSpecifications;
-    private Double importPrice;
-    private Double exportPrice;
-    private String description;
+  private String itemName;
+  private String itemType;
+  private String uom;
+  private String technicalSpecifications;
+  private Double importPrice;
+  private Double exportPrice;
+  private String description;
 }

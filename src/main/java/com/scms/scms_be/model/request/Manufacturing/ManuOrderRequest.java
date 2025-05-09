@@ -6,15 +6,12 @@ import lombok.Data;
 
 @Data
 public class ManuOrderRequest {
-    private Long itemId;
-    private Long lineId;
-    private String type;
-    private Double quantity;
-
-    private LocalDateTime estimatedStartTime;
-    private LocalDateTime estimatedEndTime;
-
-    private String createdBy;
-
-    private String status;
+  private Long itemId;
+  private Long lineId;
+  private String type;
+  private Double quantity;
+  private LocalDateTime estimatedStartTime;
+  private LocalDateTime estimatedEndTime;
+  private String createdBy;
+  private String status;
 }
